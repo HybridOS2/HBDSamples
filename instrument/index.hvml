@@ -1,0 +1,987 @@
+<!DOCTYPE hvml SYSTEM 'f: MATH'>
+<hvml target="html">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>仪表</title>
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/index.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/player.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/drive.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/calling.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/carStatus.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/carUnderpan.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/carRadar.css" />
+        <update on="$TIMERS" to="unite">
+            [
+                {"id":"state-time","interval":1000,"active":"yes"}
+            ]
+        </update>        
+        <!-- 系统运行时间戳 -->
+        <init as "systemTimestamp" at="_runner">
+            {
+                timestamp:0
+            }
+        </init>
+        <!-- 当前页面 -->
+        <init as "page" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <init as "pages" at="_runner">
+            [
+                {
+                    value:"playerInfo",
+                },{
+                    value:"driveInfo",
+                },{
+                    value:"callingInfo"
+                },{
+                    value:"carStatusInfo"
+                },{
+                    value:"carUnderpanInfo"
+                },{
+                    value:"carRadarInfo"
+                }
+            ]
+        </init>
+        <!-- 车辆温度 -->
+        <init as "temp" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆档位 P,N,R,D -->
+        <init as "gear" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆偏移 -->
+        <init as "shifting" at="_runner">
+            {
+                value:"null"
+            }
+        </init>
+        <!-- ********************** 开门 *************************** -->
+        <init as "openDoor" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <!-- ********************** 关门 *************************** -->
+        <init as "closeDoor" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <!-- *********************雷达信息 **************************** -->
+        <init as "radars" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <!-- **********************提示信息 *************************** -->
+        <init as "label_text" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <!-- **********************胎压信息*************************** -->
+        <init as "tire_info" at="_runner">
+            {
+                value:""
+            }
+        </init>
+        <!-- ***********************报警灯 开始************************* -->
+        <!-- ABS报警 -->
+        <init as 'warningABS' at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 安全气囊报警 -->
+        <init as 'warningAirbag' at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 电池报警 -->
+        <init as "warningBattery" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 制动故障报警 -->
+        <init as "warningBrakingFault" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 引擎温度报警 -->
+        <init as "warningEngineTemp" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 安全带报警 -->
+        <init as "warningSafetyBelt" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 胎压警告 -->
+        <init as "warningTirePressure" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 近光灯 -->
+        <init as "lowBeam" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 远光灯 -->
+        <init as "highBeam" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 左转向灯 -->
+        <init as "leftBeam" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- 右转向灯 -->
+        <init as "rightBeam" at="_runner">
+            {
+                value:false
+            }
+        </init>
+        <!-- ***********************报警灯 结束************************* -->
+
+        <!-- ***********************车辆仪表 开始*********************** -->
+        <!-- 车辆运行模式 -->
+        <init as "sysType" at="_runner">
+            {
+                value:'sport'
+            }
+        </init>
+        <!-- 车辆速度 -->
+        <init as "speed" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆加速度 -->
+        <init as "speed_acc" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆里程 -->
+        <init as "mileage" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆里程增量速度 -->
+        <init as "mileage_acc" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆引擎转速 -->
+        <init as "rev" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆引擎转速增量 -->
+        <init as "rev_acc" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆引擎温度 -->
+        <init as "engine_temp" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- 车辆引擎温度变化速度 -->
+        <init as "engine_temp_acc" at="_runner">
+            {
+                value:0
+            }
+        </init>
+        <!-- ***********************车辆仪表 结束*********************** -->
+
+        <!-- ***********************电话 开始************************** -->
+        <init as "calling_type" at="_runner">
+            {
+                value:"calling"
+            }
+        </init>
+        <init as "calling_types" at="_runner">
+            [
+                {
+                    value:"calling",
+                },{
+                    value:"ending",
+                },{
+                    value:"speaking"
+                }
+            ]
+        </init>
+        <!-- ***********************电话 结束************************** -->
+
+        <!-- 车辆状态机 -->
+        <init as "timeState" at="_runner">
+            [
+                {
+                    timestamp:0,
+                    action:{
+                        sysType:"eco",
+                        page:"carUnderpanInfo",
+                        label_text:"""
+                            <p>开机自检</p>
+                        """,
+                        tire_info:"RightRear-2.5-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningABS:true,
+                        warningAirbag:true,
+                        warningBattery:true,
+                        warningBrakingFault:true,
+                        warningEngineTemp:true,
+                        warningSafetyBelt:true,
+                        lowBeam:false,
+                        highBeam:false,
+                        leftBeam:false,
+                        rightBeam:false,
+                        temp:25,
+                        gear:'P',
+
+                        speed:0,
+                        speed_acc:0,
+                        mileage:0,
+                        mileage_acc:0,
+                        rev:0,
+                        rev_acc:0,
+                        engine_temp:0,
+                        engine_temp_acc:0     
+                    }
+                },{
+                    timestamp:1,
+                    action:{
+                        tire_info:"RightRear-2.4-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningABS:false,
+
+                        speed:50,
+                        speed_acc:30,
+                        mileage:120,
+                        mileage_acc:30,
+                        rev:3,
+                        rev_acc:30,
+                        engine_temp:33,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:2,
+                    action:{
+                        tire_info:"RightRear-2.3-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningAirbag:false,
+
+                        speed:100,
+                        speed_acc:30,
+                        mileage:240,
+                        mileage_acc:30,
+                        rev:5,
+                        rev_acc:30,
+                        engine_temp:66,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:3,
+                    action:{
+                        sysType:"standard",
+                        tire_info:"RightRear-2.2-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningBattery:false,
+
+                        speed:150,
+                        speed_acc:30,
+                        mileage:360,
+                        mileage_acc:30,
+                        rev:8,
+                        rev_acc:30,
+                        engine_temp:100,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:4,
+                    action:{
+                        tire_info:"RightRear-2.1-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningBrakingFault:false,
+
+                        speed:100,
+                        speed_acc:30,
+                        mileage:240,
+                        mileage_acc:30,
+                        rev:5,
+                        rev_acc:30,
+                        engine_temp:66,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:5,
+                    action:{
+                        sysType:"sport",
+                        tire_info:"RightRear-2.0-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningEngineTemp:false,
+
+                        speed:50,
+                        speed_acc:30,
+                        mileage:240,
+                        mileage_acc:30,
+                        rev:3,
+                        rev_acc:30,
+                        engine_temp:33,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:6,
+                    action:{
+                        sysType:"eco",
+                        tire_info:"RightRear-1.8-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningSafetyBelt:false,
+
+                        speed:0,
+                        speed_acc:30,
+                        mileage:240,
+                        mileage_acc:30,
+                        rev:0,
+                        rev_acc:30,
+                        engine_temp:32,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:7,
+                    action:{
+                        tire_info:"RightRear-1.8-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningTirePressure:true,
+                        label_text:"""
+                            <p>右后轮胎压异常!</p>
+                        """,
+
+                        speed:0,
+                        speed_acc:30,
+                        mileage:240,
+                        mileage_acc:30,
+                        rev:0,
+                        rev_acc:30,
+                        engine_temp:33,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:8,
+                    action:{
+                        tire_info:"RightRear-2.0-34,RightFront-2.5-34,LeftRear-2.5-34,LeftFront-2.5-34",
+                        warningTirePressure:false,  
+                    }
+                },{
+                    timestamp:9,
+                    action:{
+                        page:"carStatusInfo",
+                        label_text:"""
+                            <p>车灯开启状态</p>
+                            <p style="visibility:hidden">车门开启请注意</p>
+                        """,
+                    }
+                },{
+                    timestamp:10,
+                    action:{
+                        openDoor:"LeftFront",
+                        closeDoor:"",
+                        label_text:"""
+                            <p>车灯开启状态</p>
+                            <p>车门开启请注意!</p>
+                        """,
+                    }
+                },{
+                    timestamp:13,
+                    action:{
+                        openDoor:"",
+                        closeDoor:"LeftFront",
+                        label_text:"""
+                            <p>车灯开启状态</p>
+                            <p style="visibility:hidden">车门开启请注意</p>
+                        """,
+                    }
+                },{
+                    timestamp:14,
+                    action:{
+                        page:"driveInfo",
+                        label_text:"",
+                        gear:'D',
+                        lowBeam:true,
+
+                        speed:20,
+                        speed_acc:300,
+                        mileage:240,
+                        mileage_acc:300,
+                        rev:2,
+                        rev_acc:300,
+                        engine_temp:40,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:18,
+                    action:{
+                        label_text:"",
+                        leftBeam:true,
+
+                        speed:40,
+                        speed_acc:300,
+                        mileage:240,
+                        mileage_acc:300,
+                        rev:3,
+                        rev_acc:300,
+                        engine_temp:50,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:20,
+                    action:{
+                        sysType:"standard",
+                        label_text:"",
+                        leftBeam:false,
+
+                        speed:60,
+                        speed_acc:300,
+                        mileage:239,
+                        mileage_acc:30,
+                        rev:4,
+                        rev_acc:300,
+                        engine_temp:55,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:22,
+                    action:{
+                        label_text:"""
+                            <p>限速80，请按规定行驶</p>
+                            <p style="color: #EFAC4A;">您已偏航，请注意安全</p>
+                        """,
+                        lowBeam:false,
+                        highBeam:true,
+                        shifting:"left",
+
+                        speed:70,
+                        speed_acc:300,
+                        mileage:238,
+                        mileage_acc:30,
+                        rev:5,
+                        rev_acc:300,
+                        engine_temp:60,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:24,
+                    action:{
+                        sysType:"sport",
+                        label_text:"""
+                            <p>限速80，请按规定行驶</p>
+                            
+                        """,
+                        shifting:"null",
+
+                        speed:80,
+                        speed_acc:300,
+                        mileage:237,
+                        mileage_acc:30,
+                        rev:6,
+                        rev_acc:300,
+                        engine_temp:65,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:26,
+                    action:{
+                        label_text:"""
+                            <p>限速80，请按规定行驶</p>
+                        """,
+                        speed:90,
+                        speed_acc:300,
+                        mileage:236,
+                        mileage_acc:30,
+                        rev:6,
+                        rev_acc:300,
+                        engine_temp:60,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:28,
+                    action:{
+                        sysType:"standard",
+                        label_text:"""
+                            <p>限速80，请按规定行驶</p>
+                            <p style="color: #EFAC4A;">已超速，请减速</p>
+                        """,
+                        speed:100,
+                        speed_acc:300,
+                        mileage:235,
+                        mileage_acc:30,
+                        rev:7,
+                        rev_acc:300,
+                        engine_temp:70,
+                        engine_temp_acc:30     
+                    }
+                },{
+                    timestamp:29,
+                    action:{
+                        page:"playerInfo",
+                        
+
+                        speed:60,
+                        speed_acc:300,
+                        mileage:234,
+                        mileage_acc:30,
+                        rev:5,
+                        rev_acc:30,
+                        engine_temp:60,
+                        engine_temp_acc:300     
+                    }
+                },{
+                    timestamp:33,
+                    action:{
+                        page:"callingInfo",
+                        calling_type:"calling",
+
+                        speed:55,
+                        speed_acc:300,
+                        mileage:230,
+                        mileage_acc:30,
+                        rev:4,
+                        rev_acc:30,
+                        engine_temp:50,
+                        engine_temp_acc:300     
+                    }
+                },{
+                    timestamp:36,
+                    action:{
+                        calling_type:"speaking",
+
+                        speed:50,
+                        speed_acc:300,
+                        mileage:229,
+                        mileage_acc:30,
+                        rev:3,
+                        rev_acc:30,
+                        engine_temp:50,
+                        engine_temp_acc:300     
+                    }
+                },{
+                    timestamp:46,
+                    action:{
+                        calling_type:"ending",
+
+                        speed:55,
+                        speed_acc:300,
+                        mileage:228,
+                        mileage_acc:30,
+                        rev:4,
+                        rev_acc:30,
+                        engine_temp:50,
+                        engine_temp_acc:300    
+                    }
+                },{
+                    timestamp:48,
+                    action:{
+                        page:"playerInfo",
+
+                        speed:50,
+                        speed_acc:300,
+                        mileage:225,
+                        mileage_acc:30,
+                        rev:5,
+                        rev_acc:30,
+                        engine_temp:60,
+                        engine_temp_acc:300    
+                    }
+                },{
+                    timestamp:49,
+                    action:{
+                        highBeam:false,
+                        leftBeam:true,
+
+                        speed:0,
+                        speed_acc:300,
+                        rev:0,
+                        rev_acc:100,
+                        engine_temp:30,
+                        engine_temp_acc:300    
+                    }
+                },{
+                    timestamp:58,
+                    action:{
+                        page:"carRadarInfo",
+                        radars:"1-1,1-2,1-3,1-4,2-1,2-2,2-3,2-4,3-1,3-2,3-3,3-4",
+                        label_text:"""
+                            <p>1.5米，倒车请注意车距</p>
+                        """,
+                        gear:"R",
+                        speed:10,
+                        speed_acc:300,
+                        rev:1,
+                        rev_acc:100,
+                    }
+                },{
+                    timestamp:59,
+                    action:{
+                        radars:"1-1,1-2,1-3,1-4,2-1,2-2,2-3,2-4,3-3,3-4",
+                        label_text:"""
+                            <p>1.2米，倒车请注意车距</p>
+                        """,
+                        gear:"R",
+                        speed:10,
+                        speed_acc:300,
+                        rev:1,
+                        rev_acc:100,
+                    }
+                },{
+                    timestamp:61,
+                    action:{
+                        radars:"1-1,1-2,1-3,1-4,2-1,2-2,2-3,2-4",
+                        label_text:"""
+                            <p>1.0米，倒车请注意车距</p>
+                        """,
+                        gear:"R",
+                        speed:10,
+                        speed_acc:300,
+                        rev:1,
+                        rev_acc:100,
+                    }
+                },{
+                    timestamp:63,
+                    action:{
+                        gear:"P",
+                        radars:"1-1,1-2,1-3,1-4",
+                        label_text:"""
+                            <p>0.4米，倒车请注意车距</p>
+                        """,
+                        speed:0,
+                        speed_acc:30,
+                        rev:0,
+                        rev_acc:30,
+                    }
+                },
+            ]
+        </init>
+
+    </head>
+
+    <body>
+        <div class="main" id="main-index">
+            <div class="header">
+                <div class="alarms">
+                    <div id="abs-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/abs.svg">
+                    </div>
+                    <div id="airbag-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/air-bag.svg">
+                    </div>
+                    <div id="battery-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/battery.svg">
+                    </div>
+                    <div id="braking-fault-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/braking-fault.svg">
+                    </div>
+                    <div id="engine-temperature-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/engine-temperature.svg">
+                    </div>
+                    <div id="safety-belt-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/safety-belt.svg">
+                    </div>
+                    <div id="tire-pressure-warning" class="icon">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/tire-pressure.svg">
+                    </div>
+                    <div id="low-beam" class="icon hidden">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/low-beam.svg">
+                    </div>
+                    <div id="high-beam" class="icon hidden">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/high-beam.svg">
+                    </div>
+                    <div id="left-beam" class="icon hidden">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/left.svg">
+                    </div>
+                    <div id="right-beam" class="icon hidden">
+                        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/right.svg">
+                    </div>
+                </div>
+                <div class="digital">
+                    <div><span id="time-span">$DATETIME.fmttime('%H:%M')</span></div>
+                    <div style="font-size: 40px;font-weight: bolder;"><span id="gear-span">P</span></div>
+                    <div><span id="temp-span">24</span><span>°C</span></div>
+                </div>
+                <div class="mode">
+                    <img id="mode-icon" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/standard.svg">
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="left-instrument">
+                    <canvas class="circle canvasArcCir"></canvas>
+                    <canvas class="circle canvasRadian"></canvas>
+                    <div class="speed-data">
+                        <div class="speed-number">0</div>
+                        <div class="speed-unit">KM/H</div>
+                    </div>
+                    <div class="mileage">
+                        <div class="mileage-number">360</div>
+                        <div class="mileage-unit">km</div>
+                        <div class="mileage-icon">
+                            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/tank.svg">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <define as="playerInfo" from="file://$SYS.cwd/player.hvml" />
+                    <div class="playerInfo hidden">
+                        <include with="$playerInfo" />
+                    </div>
+                    
+                    
+                    <define as="driveInfo" from="file://$SYS.cwd/drive.hvml" />
+                    <div class="driveInfo hidden">
+                        <include with="$driveInfo" />
+                    </div>
+
+                    <define as="callingInfo" from="file://$SYS.cwd/calling.hvml" />
+                    <div class="callingInfo hidden">
+                        <include with="$callingInfo" />
+                    </div>
+
+                    <define as="carStatusInfo" from="file://$SYS.cwd/carStatus.hvml" />
+                    <div class="carStatusInfo hidden">
+                        <include with="$carStatusInfo" />
+                    </div>
+
+                    <define as="carUnderpanInfo" from="file://$SYS.cwd/carUnderpan.hvml" />
+                    <div class="carUnderpanInfo hidden">
+                        <include with="$carUnderpanInfo" />
+                    </div>
+
+                    <define as="carRadarInfo" from="file://$SYS.cwd/carRadar.hvml" />
+                    <div class="carRadarInfo hidden">
+                        <include with="$carRadarInfo" />
+                    </div>
+                </div>
+
+                <div class="right-instrument">
+                    <canvas class="circle canvasArcCir"></canvas>
+                    <canvas class="circle canvasRadian"></canvas>
+                    <div class="Rev-data">
+                        <div class="Rev-number">11.7</div>
+                        <div class="Rev-unit">x1000r/min</div>
+                    </div>
+                    <div class="temp">
+                        <div class="temp-icon">
+                            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/icon/engine-temperature.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+        <observe on "$TIMERS" for="expired:state-time">
+            <iterate on="0" onlyif $L.lt($0<,$DATA.count($timeState)) with $DATA.arith('+',$0<,1) nosetotail>
+                <init as "index" with $? />
+                <test with $L.eq($systemTimestamp.timestamp,$timeState[$index].timestamp)>
+                    <inherit>
+                        $STREAM.stdout.writelines($DATA.serialize($timeState[$index]))
+                    </inherit>
+                    <iterate on=$timeState[$index].action by="KEY: ALL FOR KV" >
+                        <update on="$$?.k" at=".value" with="$?.v" />
+                    </iterate>
+                </test>
+                <test with $L.eq($systemTimestamp.timestamp,66)>
+                    <update on="$systemTimestamp" at=".timestamp" with = -1 />
+                </test>
+            </iterate>
+            <update on="#time-span" at="textContent" with="$DATETIME.fmttime('%H:%M')" />
+            <update on="$systemTimestamp" at=".timestamp" with += 1 />
+        </observe>
+
+        <observe on $speed for "change">
+            <test with $L.ne('0',$speed_acc.value)>
+                <request on="#main-index" to="call:changeSpeed($speed.value,$speed_acc.value); return true;" />
+            </test>
+        </observe>
+
+        <observe on $mileage for "change">
+            <test with $L.ne(0,$mileage_acc.value)>
+                <request on="#main-index" to="call:changeMileage($mileage.value,$mileage_acc.value); return true;" />
+            </test>
+        </observe>
+
+        <observe on $rev for "change">
+            <test with $L.ne(0,$rev_acc.value)>
+                <request on="#main-index" to="call:changeRev($rev.value,$rev_acc.value);return true;" />
+            </test>
+        </observe>
+
+        <observe on $engine_temp for "change">
+            <test with $L.ne(0,$engine_temp_acc.value)>
+                <request on="#main-index" to="call:changeTemp($engine_temp.value,$engine_temp_acc.value); return true;" />
+            </test>
+        </observe>
+
+        <observe on $sysType for "change">
+            <init as text with="$DATA.serialize($sysType)" />
+            <request on="#main-index" to="call:changeSysType($text); return true;" />
+        </observe>
+
+        <observe on $temp for "change">
+            <update on="#temp-span" at="textContent" with="$temp.value" />
+        </observe>
+
+        <observe on $gear for "change">
+            <update on="#gear-span" at="textContent" with="$gear.value" />
+        </observe>
+
+
+        <!-- *************************信号灯状态监听 开始*************************** -->
+        <observe on $warningABS for "change">
+            <test with $L.eq($warningABS.value,true)>
+                <update on="#abs-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#abs-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningAirbag for "change">
+            <test with $L.eq($warningAirbag.value,true)>
+                <update on="#airbag-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#airbag-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningBattery for "change">
+            <test with $L.eq($warningBattery.value,true)>
+                <update on="#battery-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#battery-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningBrakingFault for "change">
+            <test with $L.eq($warningBrakingFault.value,true)>
+                <update on="#braking-fault-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#braking-fault-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningEngineTemp for "change">
+            <test with $L.eq($warningEngineTemp.value,true)>
+                <update on="#engine-temperature-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#engine-temperature-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningSafetyBelt for "change">
+            <test with $L.eq($warningSafetyBelt.value,true)>
+                <update on="#safety-belt-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#safety-belt-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $warningTirePressure for "change">
+            <test with $L.eq($warningTirePressure.value,true)>
+                <update on="#tire-pressure-warning" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#tire-pressure-warning" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $lowBeam for "change">
+            <test with $L.eq($lowBeam.value,true)>
+                <update on="#low-beam" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#low-beam" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $highBeam for "change">
+            <test with $L.eq($highBeam.value,true)>
+                <update on="#high-beam" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#high-beam" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $leftBeam for "change">
+            <test with $L.eq($leftBeam.value,true)>
+                <update on="#left-beam" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#left-beam" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $rightBeam for "change">
+            <test with $L.eq($rightBeam.value,true)>
+                <update on="#right-beam" at="attr.class" with="icon" />
+                <differ>
+                    <update on="#right-beam" at="attr.class" with="icon hidden" />
+                </differ>
+            </test>
+        </observe>
+
+        <!-- *************************信号灯状态监听 开始*************************** -->
+
+        <observe on $page for "change">
+            <test with $L.strne('case',$page.value,"")>
+                <iterate on $pages>
+                    <update on="$DOC.query($STR.join('.',$?.value))" at="attr.class" with="$STR.join($?.value,' ','hidden')" />
+                </iterate>
+                <update on="$DOC.query('.main-content .content')" at="attr.class" with="content" />
+                <test with $L.streq('case',$page.value,"carUnderpanInfo")>
+                    <update on="$DOC.query('.main-content .content')" at="attr.class" with="content grid" />
+                </test>
+                <test with $L.streq('case',$page.value,"carStatusInfo")>
+                    <update on="$DOC.query('.main-content .content')" at="attr.class" with="content grid" />
+                </test>
+                <test with $L.streq('case',$page.value,"carRadarInfo")>
+                    <update on="$DOC.query('.main-content .content')" at="attr.class" with="content grid" />
+                </test>
+                <update on="$DOC.query($STR.join('.',$page.value))" at="attr.class" with="$STR.join($page.value,' ','show')" />
+            </test>
+        </observe>
+
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/index.js"></script>
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/drive.js"></script>
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/calling.js"></script>
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/carStatus.js"></script>
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/carRadar.js"></script>
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/carUnderpan.js"></script>
+    </body>
+</hvml>

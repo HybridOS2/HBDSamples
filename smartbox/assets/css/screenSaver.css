@@ -1,0 +1,60 @@
+.screen-saver .head-container {
+    justify-content: space-between;
+    padding: 83 120 154;
+    font-size: 40px;
+    font-family:heavt;
+}
+
+.screen-saver .header-icon{
+    float:left;
+}
+
+.screen-saver{
+    font-family: Impact;
+    color: #fff;
+    background: url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/screensaver/13.jpg");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    box-shadow: inset 0 0 600px #000;
+}
+
+.screen-saver .bg{
+    position: absolute;
+    background: url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/mask-shadow.png");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.screen-saver .content{
+    position:absolute;
+    top:290px;
+    left:350px;
+}
+
+.screen-saver .content .time{
+    font-size: 300px;
+    font-style: italic;
+    letter-spacing: 50px;
+    line-height: 300px; 
+}
+
+.screen-saver .content .date-info{
+    display: flex;
+    font-size: 54px;
+    font-family:heavt;
+    font-style: italic;
+    margin-top: 90px;
+    letter-spacing: 15px;
+}
+
+.screen-saver .content .date-info .weather{
+    margin-right: 100px;
+}
+
+
+@font-face {
+    font-family: 'Impact';
+    src: url('hvml://localhost/_system/_filesystem/-/app/smartbox/assets/impact-2.ttf');
+}

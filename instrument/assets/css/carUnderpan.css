@@ -1,0 +1,85 @@
+.carUnderpan{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.carUnderpan .label{
+    text-align: center;
+    font-size: 1.45vw;
+    font-weight: bold;
+}
+.carUnderpan .model{
+    position: relative;
+    width: 9.58vw;
+    max-height: 50.6vh;
+    margin: 30px auto;
+}
+.carUnderpan .model .carBody{
+    width: 100%;
+    height: 100%;
+}
+.carUnderpan .model .carTireLeftFront{
+    position: absolute;
+    top: 12%;
+    left: 6%;
+    width: 1.6vw;
+}
+.carUnderpan .model .carTireLeftRear{
+    position: absolute;
+    top: 70%;
+    left: 6%;
+    width: 1.6vw;
+}
+.carUnderpan .model .carTireRightFront{
+    position: absolute;
+    top: 12%;
+    left: 76%;
+    width: 1.6vw;
+}
+.carUnderpan .model .carTireRightRear{
+    position: absolute;
+    top: 70%;
+    left: 76%;
+    width: 1.6vw;
+}
+.carUnderpan .model .carTireLeftFrontLabel{
+    position: absolute;
+    font-size: 1.5vw;
+    font-weight: bold;
+    top: 12%;
+    left: -66%;
+    width: 6.25vw;
+}
+.carUnderpan .model .carTireLeftRearLabel{
+    position: absolute;
+    font-size: 1.5vw;
+    font-weight: bold;
+    top: 12%;
+    left: 126%;
+    width: 6.25vw;
+}
+.carUnderpan .model .carTireRightFrontLabel{
+    position: absolute;
+    font-size: 1.5vw;
+    font-weight: bold;
+    top: 75%;
+    left: -66%;
+    width: 6.25vw;
+}
+.carUnderpan .model .carTireRightRearLabel{
+    position: absolute;
+    font-size: 1.5vw;
+    font-weight: bold;
+    top: 75%;
+    left: 126%;
+    width: 6.25vw;
+}
+.carUnderpan .model p{
+    margin: 0px;
+}
+.carUnderpan .model p.warn{
+    color: #FF3737;
+}
+.carUnderpan .model p.temp{
+    position: initial;
+}

@@ -1,0 +1,130 @@
+<div class="tools-top" hvml-events="click" >
+    <div class="set-control">
+        <div class="tools-container">
+            <div class="tools-select"></div>
+            <div class="icon">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/brightness.png" />
+            </div>
+        </div>
+
+        <div class="tools-container">
+            <div class="tools-select"></div>
+            <div class="icon">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/volume.png" />
+            </div>
+        </div>
+
+        <div class="button-group">
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/mute.png" />
+            </div>
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/night.png" />
+            </div>
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            </div>
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/home.png" />
+            </div>
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/children.png" />
+            </div>
+            <div class="button-item">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/power.png" />
+            </div>
+        </div>
+    </div>
+    <div class="music-control">
+        <div class="cover">
+            <img id="muiscTool-cover" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/muisc-icon-default.png" />
+        </div>
+        <div class="song-info">
+            <div id="muiscTool-title" class="song-title">Zone of Zen</div>
+            <div id="muiscTool-author" class="song-auth">SHING02 安念真吾</div>
+        </div>
+        <div class="music-tool-group">
+            <div class="music-tool-item">
+                <div id="muiscTool-last" hvml-events="click"  class="button last-song">
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/last-song.png" />
+                </div>
+            </div>
+            <div class="music-tool-item">
+                <div class="button pause">
+                    <img id="muisc-tool-img" hvml-events="click" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+                </div>
+            </div>
+            <div class="music-tool-item">
+                <div id="muiscTool-next" hvml-events="click" class="button next-song">
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/next-song.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<observe on=".tools-top" for="click">
+    <update on="$DOC.query('.toolsTop')" at="attr.class" with="dialog toolsTop popOut show" />
+</observe>
+
+<observe on="#muisc-tool-img" for="muiscplay">
+    <test with="$currentMuisc.isPlaying">
+        <update on="$currentMuisc" at=".isPlaying" with false />
+        <differ>
+            <update on="$currentMuisc" at=".isPlaying" with true />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#muiscTool-last" for="click">
+   
+    <init as "muisceListIndex" >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$playerMuisc.id,$muisceList[$?].id)">
+            <update on="$muisceListIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with $L.lt($muisceListIndex.index,1)>
+        <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.sub($DATA.count($muisceList),1)]" />
+        <differ>
+            <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.sub($muisceListIndex.index,1)]" />
+        </differ>
+    </test>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentMuisc))
+        $STREAM.stdout.writelines($DATA.serialize($playerMuisc))
+    </inherit>
+    
+    <update on="#muisc-player-audio-source" at="attr.src" with="$playerMuisc.url" />
+    <request on="#muisc-player-audio" to="call:muiscPlay(); return true;" />
+</observe>
+
+<observe on="#muiscTool-next" for="click">
+    <init as "muisceListIndex" >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$playerMuisc.id,$muisceList[$?].id)">
+            <update on="$muisceListIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with $L.gt($muisceListIndex.index,$MATH.sub($DATA.count($muisceList),2))>
+        <update on="$playerMuisc" to="displace" with="$muisceList[0]" />
+        <differ>
+            <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.add($muisceListIndex.index,1)]" />
+        </differ>
+    </test>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentMuisc))
+        $STREAM.stdout.writelines($DATA.serialize($playerMuisc))
+    </inherit>
+
+    <update on="#muisc-player-audio-source" at="attr.src" with="$playerMuisc.url" />
+    <request on="#muisc-player-audio" to="call:muiscPlay(); return true;" />
+</observe>

@@ -1,0 +1,38 @@
+<init as "photoData" at="_runner" from "file://$SYS.cwd/json/photo-data.json" />
+<init as "currentPhoto" at="_runner" with {} />
+<archetype name="photo_item">
+    <div id="$?.id" hvml-events="click" class="$?.class">
+        <img src="$?.tmp" />
+    </div>
+</archetype>
+<div class="photo-list">
+    <div id="photo-list-goBack" class="goBack" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div id="photo-content-group" class="photo-content">
+        <iterate on $photoData in="#photo-content-group">
+            <update on="$@" to="append" with="$photo_item" />
+        </iterate>
+    </div>
+</div>
+<observe on="#photo-list-goBack" for="click">
+    <update on="$DOC.query('.photoList')" at="attr.class" with="dialog photoList popOut show" />
+</observe>
+
+<define as="photoView" from="file://$SYS.cwd/photoView.hvml" />
+<div class="dialog photoView">
+    <include with="$photoView" />
+</div>
+
+<observe on=".photo-list .photo-content .photo-item" for="click">
+    <init as index with $?.targetId />
+    
+    <iterate on="$photoData">
+        <update on="$currentPhoto" to="displace" with="$?" />
+        <test with="$L.streq('case',$index,$currentPhoto.id)">
+            <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
+        </test>
+    </iterate>
+    
+    <update on="$DOC.query('.photoView')" at="attr.class" with="dialog photoView popIn show" />
+</observe>

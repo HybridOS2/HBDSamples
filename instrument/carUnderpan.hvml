@@ -1,0 +1,32 @@
+<div class="carUnderpan">
+    <div class="info">
+        <div class="label label-text">右后轮胎压异常</div>
+    </div>
+    <div class="model">
+        <img class="carBody" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-underpan.png" />
+        <div class="carTireLeftFrontLabel">
+            <p class="bar"><span class="bar-text">2.5</span>bar</p>
+            <p class="temp"><span class="temp-text">34</span>°C</p>
+        </div>
+        <img class="carTireLeftFront" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-tire.png" />
+        <div class="carTireLeftRearLabel">
+            <p class="bar"><span class="bar-text">2.5</span>bar</p>
+            <p class="temp"><span class="temp-text">34</span>°C</p>
+        </div>
+        <img class="carTireLeftRear" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-tire.png" />
+        <div class="carTireRightFrontLabel">
+            <p class="bar"><span class="bar-text">2.5</span>bar</p>
+            <p class="temp"><span class="temp-text">34</span>°C</p>
+        </div>
+        <img class="carTireRightFront" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-tire.png" />
+        <div class="carTireRightRearLabel">
+            <p class="bar"><span class="bar-text">2.5</span>bar</p>
+            <p class="temp"><span class="temp-text">34</span>°C</p>
+        </div>
+        <img class="carTireRightRear" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-tire.png" />
+    </div>
+</div>
+<observe on="$tire_info" for "change">
+    <init as str with="$DATA.serialize($tire_info)" />
+    <request on="#main-index" to="call:setTire($str); return true;" />
+</observe>

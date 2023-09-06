@@ -1,0 +1,127 @@
+.music-player{
+    width:100%;
+    color: #fff;
+}
+
+.music-player .bg{
+    position: absolute;
+    background: url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/test-photo.jpg");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.music-player .inner{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.90);
+}
+
+.music-player .cover{
+    display: flex;
+    height: 66%;
+}
+
+.music-player .go-back{
+    position: absolute;
+    top:80;
+    left: 60;
+    width:200px;
+    height:100px;
+    text-align:center;
+}
+
+.music-player .cover .record-bg{
+    margin: auto;
+    width: 650px;
+    height: 650px;
+    border-radius: 100%;
+    background: rgba(255,255,255,0.15);
+}
+
+.music-player .cover .record-bg .record{
+    width: 600px;
+    height: 600px;
+    border-radius: 100%;
+    position: relative;
+    top: 25;
+    left: 25;
+    object-fit: cover;
+}
+
+.music-player .cover .record-bg .record img:after{
+
+    content: '';
+
+    position: absolute;
+
+    left: 0;
+
+    top: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background: url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/muisc-icon-default.png");
+
+}
+
+.music-player .label{
+    height: 16%;
+    text-align: center;
+}
+
+.music-player .label .title{
+    font-size: 53px;
+    font-family:heavt;
+}
+
+.music-player .label .author{
+    font-size: 35px;
+}
+
+.music-player .tools{
+    display: flex;
+    height: calc(18% - 17px);
+    font-size: 100px;
+    justify-content: space-between;
+}
+
+.music-player .tools .play-type{
+    margin-left: 230px;
+}
+
+.music-player .tools .last-song{
+    margin-left: 300px;
+}
+
+.music-player .tools .pause{
+    margin: 0 110px;
+}
+
+.music-player .tools .play{
+    margin: 0 110px;
+}
+
+.music-player .tools .next-song{
+    margin-right: 300px;
+}
+
+.music-player .tools .like{
+    margin-right: 230px;
+}
+
+.music-player .progress{
+    background: rgba(255,255,255,0.4);
+}
+
+.music-player .progress .progress-bar{
+    background: rgba(243,242,242,0.3);
+}
+
+.music-player .hidden{
+    display:none;
+}

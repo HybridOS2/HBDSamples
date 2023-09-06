@@ -1,0 +1,757 @@
+<init as 'globalState' with {wifi:'',ssid:'',isConnected:false} />
+<init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
+<init as 'scanTimes' at="_root" with 1 />
+<init as 'wifiList' with [] />
+<init as 'wifiMyList' with [] />
+<init as 'wifiInfo'>
+{
+    isWifiOpen:true,
+    isConnected:false,
+    canDeviceChange:true
+}
+</init>
+<init as="delayTime">
+    {
+        isShow:false,
+        count:0
+    }
+</init>
+
+<archetype name="wifi_item">
+    <div class="setting-item wifi-item" id="$?.bssid" hvml-events="click">
+        <div class="wifi-icon">
+        </div>
+        <div class="$?.statusClass">
+            <div class="wifi-name">$?.ssid</div>
+            <!-- <div class="wifi-status">$?.statusText</div> -->
+        </div>
+        <div class="icon">
+            <img src="$?.levelIcon" />
+        </div>
+    </div>
+</archetype>
+
+<archetype name="wifi_my_item">
+    <div class="setting-item wifi-item" id="$?.bssid" hvml-events="click">
+        <div id="wi-$?.bssid" class="wifi-icon">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/link.png" />
+        </div>
+        <div class="$?.statusClass">
+            <div class="wifi-name">$?.ssid</div>
+            <!-- <div class="wifi-status">$?.statusText</div> -->
+        </div>
+        <div class="icon">
+            <img src="$?.levelIcon" />
+        </div>
+    </div>
+</archetype>
+
+<div class="setting-wifi">
+    <div id="setting-wifi-goBack" class="go-back" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="setting-header">
+        <div class="setting-title">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            <span>获取网络</span>
+        </div>
+    </div>
+    <div class="setting-content">
+        <div class="setting-item">
+            <div class="wifi-icon">
+            </div>
+            <div class="label">
+                <span>无线局域网</span>
+            </div>
+            <div style="display: flex;flex-direction: column;justify-content: center;margin-left:80px;">
+                <span id="loading-icon" style="display:none;">
+                    <img style="width:100px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/loading.gif" />
+                </span>
+            </div>
+            <div id="openWifiSwitch" hvml-events="click" class="icon">
+                <img id="open-wifi-switch-img" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-on.png" />
+            </div>
+        </div>
+
+        <div id="wifi-list-group" style="display:none;">
+            <div id="wifi-my-content" style="display:none">
+                <div class="wifi-label">我的网络</div>
+
+                <div id="wifi-my-group">
+                    <iterate on="$wifiMyList" in="#wifi-my-group">
+                        <update on="$@" to="append" with="$wifi_my_item" />
+                    </iterate>
+                </div>
+            </div>
+
+            <div id="wifi-other-content" style="display:none">
+                <div class="wifi-label">其他网络</div>
+
+                <div id="wifi-other-group">
+                    <iterate on="$wifiList" in="#wifi-other-group">
+                        <update on="$@" to="append" with="$wifi_item" />
+                    </iterate>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<observe on="#setting-wifi-goBack" for="click">
+    <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog settingWifi popOut show" />
+</observe>
+
+<define as 'showResult'>
+    <test with $L.eq($?.result.retCode,200)>
+        <return with $DATA.parse($2?.result.retValue) />
+        <differ>
+            $STREAM.stdout.writelines("Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg")
+            <return with false />
+        </differ>
+    </test>
+</define>
+
+<define as 'getInetdResult'>
+    <test with $L.eq($?.result.retCode,200) >
+        <init as 'retValue' with $DATA.parse($2?.result.retValue) temp />
+        <test with $L.eq($retValue.errCode,0) >
+            <return with {{ $retValue.data || null }} silently />
+            <differ>
+                <return with undefined />
+            </differ>
+        </test>
+        <differ>
+            <return with false />
+        </differ>
+    </test>
+</define>
+
+<define as 'showBubbleData'>
+    <init as 'bubbleData' with $DATA.parse($?.bubbleData) temp />
+    <return with $bubbleData />
+</define>
+
+<!-- *************WiFi列表渲染*********** -->
+<define as 'loadWifiList'>
+    <test with "$L.gt($DATA.count($?),0)">
+        <update on "$wifiList" to "displace" with [] />
+        <update on "$wifiMyList" to "displace" with [] />
+        <update on "#wifi-other-group" at "content" to="displace" with ' ' />
+    </test>
+    <inherit>
+        $STREAM.stdout.writelines("测试我的wifi列表1");
+        $STREAM.stdout.writelines($DATA.serialize($?));
+    </inherit>
+
+    <iterate on $?>
+        <test with="$L.eq($?.isSaved,false)">
+            <update on "$wifiList" to "append" with $2? />
+            <differ>
+                <update on "$wifiMyList" to "append" with $3? />
+            </differ>
+        </test>
+    </iterate>
+
+    <inherit>
+        $STREAM.stdout.writelines($STR.join("wifiList",$DATA.serialize($DATA.count($wifiList))));
+        $STREAM.stdout.writelines($STR.join("wifiMyList",$DATA.serialize($DATA.count($wifiMyList))));
+    </inherit>
+    
+    <sort on=$wifiList against="signalLevel" descendingly>
+        <iterate on $?>
+            <init as="wifiItem">
+            {
+                ssid:$?.ssid,
+                bssid:$?.bssid,
+                frequency:$?.frequency,
+                signalLevel:$?.signalLevel,
+                capabilities:$?.capabilities,
+                isSaved:$?.isSaved,
+                isConnected:$?.isConnected,
+                levelIcon:"",
+                statusText:"",
+                statusClass:"label"
+            }
+            </init>
+
+            <!-- *****************wifi信号强度******************* -->
+            <test with="$L.ge($wifiItem.signalLevel,-33)">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
+            </test>
+
+            <test with="$L.le($wifiItem.signalLevel,-66)">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
+            </test>
+
+            <test with="$L.and($L.lt($wifiItem.signalLevel,-33),$L.gt($wifiItem.signalLevel,-66))">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
+            </test>
+            <!-- *****************wifi信号强度******************* -->
+
+            
+
+            <update on "$?" to "displace" with $wifiItem />
+            
+            <update on "#wifi-other-group" at "content" to "append" with $wifi_item />
+        </iterate>
+    </sort>
+
+    
+    <sort on=$wifiMyList against="signalLevel" descendingly>
+        <iterate on $?>
+            <init as="wifiItem">
+            {
+                ssid:$?.ssid,
+                bssid:$?.bssid,
+                frequency:$?.frequency,
+                signalLevel:$?.signalLevel,
+                capabilities:$?.capabilities,
+                isSaved:$?.isSaved,
+                isConnected:$?.isConnected,
+                levelIcon:"",
+                statusText:"",
+                statusClass:"label"
+            }
+            </init>
+
+            <!-- *****************wifi信号强度******************* -->
+            <test with="$L.ge($wifiItem.signalLevel,-33)">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
+            </test>
+
+            <test with="$L.le($wifiItem.signalLevel,-66)">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
+            </test>
+
+            <test with="$L.and($L.lt($wifiItem.signalLevel,-33),$L.gt($wifiItem.signalLevel,-66))">
+                <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
+            </test>
+            <!-- *****************wifi信号强度******************* -->
+
+            <!-- *****************wifi状态信息******************* -->
+            <test with="$L.eq($wifiItem.isConnected,true)">
+                <update on "$wifiItem" at ".statusText" with "已连接" />
+                <update on "$wifiItem" at ".statusClass" with "label link" />
+            </test>
+            <!-- *****************wifi状态信息******************* -->
+
+            <update on "$?" to "displace" with $wifiItem />
+            
+            <update on "#wifi-my-group" at "content" to "append" with $wifi_my_item />
+        </iterate>
+    </sort>
+    
+    <test with "$L.gt($DATA.count($wifiMyList),0)">
+        <request on="#wifi-my-content" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+    </test>
+
+    <test with "$L.gt($DATA.count($wifiList),0)">
+        <request on="#wifi-other-content" to="call:ELEMENT.style.display=ARG;return true" with "block" />
+    </test>
+
+    <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "none" />
+
+</define>
+<!-- *************WiFi列表渲染*********** -->
+
+<!-- ***********WiFi连接渲染************** -->
+<define as 'connectedWifi'>
+    <init as 'wifiListTmp' with [] />
+    <!--
+    <init as="weatherSource" at="_runner" from="https://v0.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+    -->
+    <iterate on $wifiList>
+        
+        <test with="$L.streq('case',$?.bssid,$2?.bssid)">
+            <update on "$2?" at ".isConnected" with "true" />
+            
+        </test>
+        <update on="$wifiListTmp" to="append" with="$?" />
+    </iterate>
+    <update on="$currentWifiInfo" to="displace" with="$?" />
+    <!-- ****************修改wifi图标和文字***************** -->
+    <update on="#wifi-bluetooth-text" at="textContent" with="已连接" />
+    <!-- ****************修改wifi图标和文字***************** -->
+    <call on $loadWifiList with $wifiListTmp />
+</define>
+<!-- ***********WiFi连接渲染************** -->
+
+<!-- ***********WiFi断开渲染************** -->
+<define as 'disconnectedWifi'>
+    <init as 'wifiListTmp' with [] />
+    <iterate on $wifiList>
+        <test with $L.and($L.streq('case',$2?.bssid,$?.bssid),$L.eq($?.isConnected,true))>
+            <update on "$2?" at ".isConnected" with "false" />
+        </test>
+        <update on="$wifiListTmp" to="append" with="$?" />
+    </iterate>
+
+    <!-- ****************修改wifi图标和文字***************** -->
+    <update on="#wifi-bluetooth-text" at="textContent" with="未连接" />
+    <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-0.png" />
+    <!-- ****************修改wifi图标和文字***************** -->
+    
+    <update on "#wifi-my-group" at "content" to="displace" with ' ' />
+    <call on $wifiDialog with "WiFI断开连接" />
+    <fire on "#openWifiSwitch" for 'click' />
+</define>
+<!-- ***********WiFi断开渲染************** -->
+
+<!-- ***************消息提示************** -->
+<define as 'wifiDialog'>
+    <!-- 隐藏标题 -->
+    <request on="#dialog-header" to="call:ELEMENT.style['display']=ARG; return true" with "none" />
+    <!-- 隐藏结尾 -->
+    <request on="#dialog-footer" to="call:ELEMENT.style['display']=ARG; return true" with "none" />
+    <!-- 修改内容 -->
+    <update on="#dialog-body" at="textContent" with="$?" />
+
+    <update on="$delayTime" at=".isShow" with = "true" />
+
+    <update on="$DOC.query('.showDialog')" at="attr.class" with="dialog showDialog popIn show" />
+</define>
+<!-- ***************消息提示************** -->
+
+<observe on="$TIMERS" for="expired:time-span">
+    <test with="$L.eq($delayTime.isShow,true)">
+        <update on="$delayTime" at=".count" with += 1 />
+        
+        <test with="$L.gt($delayTime.count,3)">
+            <update on="$delayTime" at=".isShow" with = "false" />
+            <update on="$DOC.query('.showDialog')" at="attr.class" with="dialog showDialog popOut show" />
+        </test>
+
+        <differ>
+            <update on="$delayTime" at=".count" with = "0" />
+        </differ>
+    </test>
+</observe>
+
+<!-- ***********wifi搜索事件************* -->
+<observe on $globalState for 'scanHotspots'>
+    <test with $databus.call($hbdinetdMain,'wifiStartScan',"{device: '$globalState.wifi', waitSeconds: 2}") >
+        <!-- ******************HBDBus事件监听******************** -->
+        <observe on $databus for 'result:wifiStartScan'>
+            <forget on $databus for "result:wifiStartScan" />
+            <inherit>
+                $STREAM.stdout.writelines("wifiStartScan")
+            </inherit>
+            <call on $getInetdResult with {edpt:$hbdinetdMain,method:'wifiStartScan',result:$?} >
+
+                <!-- *******************网络设备发生变化 开始********************** -->
+                <observe on $databus for 'event:DeviceChanged'>
+                    <inherit>
+                        $STREAM.stdout.writelines('DeviceChanged')
+                    </inherit>
+                </observe>
+                <!-- *******************网络设备发生变化 结束********************** -->
+
+                <!-- ***********适配器设置完成************* -->
+                <observe on $databus for 'event:DeviceConfigured'>
+                    <inherit>
+                        $STREAM.stdout.writelines('DeviceConfigured')
+                    </inherit>
+                    <call on $showBubbleData with $? >
+                        <inherit>
+                            $STREAM.stdout.writelines($DATA.serialize($?))
+                            $STREAM.stdout.writelines("开始调用天气接口")
+                            $STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))
+                            <init as 'weatherSource' at='_runner' with undefined />
+                            <init as="weatherSource" at="_runner" from="https://v0.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+                            <request on="#muisc-player-audio" to="call:reloadImg(); return true;" />
+                        </inherit>
+                    </call>
+                </observe>
+                <!-- ***********适配器设置完成************* -->
+
+                <!-- **************适配器设置失败***************** -->
+                <observe on $databus for 'event:DeviceConfigFailed'>
+                    <inherit>
+                        $STREAM.stdout.writelines('DeviceConfigFailed')
+                    </inherit>
+                    <call on $showBubbleData with $? >
+                        
+                    </call>
+                </observe>
+                <!-- **************适配器设置失败***************** -->
+
+                <!-- ***********搜索wifi节点************* -->
+                <observe on $databus for 'event:WiFiScanFinished'>
+                    <inherit>
+                        $STREAM.stdout.writelines('WiFiScanFinished')
+                    </inherit>
+                    <call on $showBubbleData with $?>
+                        <test with $L.eq($?.success,true)>
+                            <update on "#wifi-my-group" at "content" to="displace" with ' ' />
+                            <call on $loadWifiList with $2?.hotspots />
+                        </test>
+                    </call>
+                </observe>
+                <!-- ***********搜索wifi节点************* -->
+
+                <!-- ***********WiFi热点丢失************** -->
+                <observe on $databus for 'event:WiFiHotspotLost'>
+                    <call on $showBubbleData with $?>
+                        <inherit>
+                            $STREAM.stdout.writelines("WiFi热点丢失")
+                        </inherit>
+                    </call>
+                </observe>
+                <!-- ***********WiFi热点丢失************** -->
+
+                <!-- ***********找到WiFi热点************** -->
+                <observe on $databus for 'event:WiFiHotspotFound'>
+                    <call on $showBubbleData with $?>
+                        <inherit>
+                            $STREAM.stdout.writelines("找到WiFi热点")
+                        </inherit>
+                    </call>
+                </observe>
+                <!-- ***********找到WiFi热点************** -->
+
+                <!-- ***********WiFi连接************** -->
+                <observe on $databus for 'event:WiFiConnected'>
+                    <call on $showBubbleData with $?>
+                        <update on $globalState at '.ssid' with $?.ssid />
+                        <update on $wifiInfo at '.isConnected' with true />
+                        <inherit>
+                            $STREAM.stdout.writelines($DATA.serialize($?))
+                        </inherit>
+                        <call on $connectedWifi with $? />
+                    </call>
+                </observe>
+                <!-- ***********WiFi连接************** -->
+                
+                <!-- ****************WiFi热点已断开*************** -->
+                <observe on $databus for 'event:WiFiDisconnected'>
+                    <call on $showBubbleData with $?>
+                        <inherit>
+                            $STREAM.stdout.writelines($STR.join("WiFi热点已断开",$DATA.serialize($?)))
+                        </inherit>
+                        <update on $wifiInfo at '.isConnected' with false />
+                        <call on $disconnectedWifi with $? />
+                    </call>
+                </observe>
+                <!-- ****************WiFi热点已断开*************** -->
+
+                <!-- ****************WiFi网络连接尝试失败***************** -->
+                <observe on $databus for 'event:WiFiFailedConnAttempt'>
+                    <call on $showBubbleData with $?>
+                        <inherit>
+                            $STREAM.stdout.writelines("WiFi网络连接尝试失败")
+                        </inherit>
+                    </call>
+                </observe>
+                <!-- ****************WiFi网络连接尝试失败***************** -->
+
+                <!-- ****************无线信号强度发生变化********************* -->
+                <observe on $databus for 'event:WiFiSignalLevelChanged'>
+                    <call on $showBubbleData with $?>
+                        $STREAM.stdout.writelines("无线信号强度发生变化")
+                        <inherit>
+                            $STREAM.stdout.writelines($DATA.serialize($?))
+                        </inherit>
+                        
+                        <!-- ****************修改wifi图标和文字***************** -->
+                        <test with="$L.ge($?.signalLevel,-33)">
+                            <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
+                        </test>
+
+                        <test with="$L.le($?.signalLevel,-66)">
+                            <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
+                        </test>
+
+                        <test with="$L.and($L.lt($?.signalLevel,-33),$L.gt($?.signalLevel,-66))">
+                            <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
+                        </test>
+                        <!-- ****************修改wifi图标和文字***************** -->
+                    </call>
+                </observe>
+                <!-- ****************无线信号强度发生变化********************* -->
+
+            </call>
+        </observe>
+        <!-- ******************HBDBus事件监听******************** -->
+    </test>
+</observe>
+<!-- ***********wifi搜索事件************* -->
+
+<!-- ***********wifi停止搜索事件********** -->
+<observe on $globalState for 'stopHotspots'>
+    <test with $databus.call($hbdinetdMain,'wifiStopScan',"{device: '$globalState.wifi'}") >
+        <observe on $databus for 'result:wifiStartScan'>
+           
+        </observe>
+    </test>
+    <test with $databus.call($hbdinetdMain, 'wifiDisconnect',"{device: '$globalState.wifi'}") >
+        $STREAM.stdout.writelines("Calling $hbdinetdMain/method/wifiDisconnect...")
+        <observe on $databus for 'result:wifiDisconnect'>
+            <call on $showResult with { edpt: $hbdinetdMain, method: 'wifiDisconnect', result: $? } >
+                $STREAM.stdout.writelines($DATA.serialize($?))
+            </call>
+        </observe>
+    </test> 
+</observe>
+<!-- ***********wifi停止搜索事件********** -->
+
+<!-- ***********wifi连接开启************* -->
+<observe on $globalState for 'wifiConnect'>
+    <inherit>
+        $STREAM.stdout.writelines($STR.join('连接：',$DATA.serialize($?)))
+        $STREAM.stdout.writelines($DATA.serialize("{device:'$globalState.wifi',ssid:'$?.ssid',bssid:'$?.bssid',keymgmt:'WPA2-PSK',passphrase:'$?.passphrase'}"))
+    </inherit>
+
+    <test with $databus.call($hbdinetdMain,'wifiConnect',"{device:'$globalState.wifi',ssid:'$?.ssid',bssid:'$?.bssid',keymgmt:'WPA2-PSK',passphrase:'$?.passphrase'}") >
+        <observe on $databus for 'result:wifiConnect'>
+            <call on $showResult with {edpt:$hbdinetdMain,method:'wifiConnect',result:$?} >
+                <inherit>
+                    $STREAM.stdout.writelines($DATA.serialize($?))
+                    <forget on $databus for "result:wifiConnect" />
+                </inherit>
+                <test with="$L.or($L.eq($?.errCode,'0'),$L.eq($?.errCode,'-4'))">
+                    <differ>
+                        <call on $wifiDialog with "$3?.errMsg" />
+                    </differ>
+                </test>
+            </call>
+        </observe>
+    </test>
+</observe>
+<!-- ***********wifi连接开启************* -->
+
+<!-- ****************WIFI连接断开**************** -->
+<observe on $globalState for "wifiDisconnect">
+    <inherit>
+        $STREAM.stdout.writelines($STR.join('断开：',$DATA.serialize($?)))
+    </inherit>
+    <test with $databus.call($hbdinetdMain,'wifiDisconnect',"{device:'$globalState.wifi'}")>
+        <observe on $databus for 'result:wifiDisconnect'>
+            <call on $showResult with {edpt:$hbdinetdMain,method:'wifiDisconnect',result:$?}>
+                <inherit>
+                    $STREAM.stdout.writelines($DATA.serialize($?))
+                    <forget on $databus for "result:wifiDisconnect" />
+                </inherit>
+            </call>
+        </observe>
+    </test>
+</observe>
+<!-- ****************WIFI连接断开**************** -->
+
+<!-- ***********打开网络适配器************* -->
+<observe on $globalState for 'GotWiFiDevice'>
+    <test with $databus.call($hbdinetdMain,'openDevice',"{device:'$globalState.wifi'}")>
+        <observe on $databus for 'result:openDevice'>
+            <inherit>$STREAM.stdout.writelines("openDevice")</inherit>
+            <forget on $databus for "result:openDevice" />
+            <call on $getInetdResult with {edpt:$hbdinetdMain,method:'openDevice',result:$? } >
+                <test with $L.strne('case',$DATA.type($?),'undefined')>
+                    <!-- ********************订阅HBDbus事件********************* -->
+                    <iterate on [
+                        'DeviceConfigured', 
+                        'DeviceConfigFailed', 
+                        'WiFiScanFinished', 
+                        'WiFiHotspotLost', 
+                        'WiFiHotspotFound',
+                        'WiFiConnected', 
+                        'WiFiDisconnected', 
+                        'WiFiFailedConnAttempt', 
+                        'WiFiSignalLevelChanged'
+                    ] >
+                        <test with $databus.subscribe($hbdinetdMain,$?) silently >
+                            <differ>
+                                $STREAM.stdout.writelines("Failed to subscribe $hbdinetdMain/bubble/$2?...")
+                            </differ>
+                        </test>
+                    </iterate>
+                    <!-- ********************订阅HBDbus事件********************* -->
+                    <update on "$wifiInfo" at=".canDeviceChange" with="true" />
+                    <fire on $globalState for 'scanHotspots' />
+                </test>
+            </call>
+        </observe>
+    </test>
+</observe>
+<!-- ***********打开网络适配器************* -->
+
+<!-- ***********关闭网络适配器************ -->
+<observe on $globalState for 'closeDevice'>
+    <test with $databus.call($hbdinetdMain,'closeDevice',"{device: '$globalState.wifi'}") >
+        $STREAM.stdout.writelines("Calling $hbdinetdMain/method/closeDevice...")
+        <observe on $databus for 'result:closeDevice'>
+            <forget on $databus for "result:closeDevice" />
+            <inherit>
+                $STREAM.stdout.writelines($DATA.serialize($?))
+            </inherit>
+            <iterate on [
+                'DeviceChanged',
+                'DeviceConfigured', 
+                'DeviceConfigFailed', 
+                'WiFiScanFinished', 
+                'WiFiHotspotLost', 
+                'WiFiHotspotFound',
+                'WiFiConnected', 
+                'WiFiDisconnected', 
+                'WiFiFailedConnAttempt', 
+                'WiFiSignalLevelChanged'
+            ]>
+                <forget on $databus for "event:$?" />
+            </iterate>
+
+            <update on "$wifiInfo" at=".canDeviceChange" with="true" />
+            <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "none" />
+            <!-- ****************修改wifi图标和文字***************** -->
+            <update on="#wifi-bluetooth-text" at="textContent" with="未连接" />
+            <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-0.png" />
+            <!-- ****************修改wifi图标和文字***************** -->
+
+            <update on "#wifi-other-group" at "content" to="displace" with ' ' />
+            <update on "#wifi-my-group" at "content" to="displace" with ' ' />
+
+            <request on="#wifi-my-content" to="call:ELEMENT.style.display=ARG; return true" with "none" />
+            <request on="#wifi-other-content" to="call:ELEMENT.style.display=ARG;return true" with "none" />
+
+            
+        </observe>
+    </test>
+</observe>
+<!-- ***********关闭网络适配器************ -->
+
+<define as 'onHBDBusReady'>
+    <!-- ************网络适配器列表************ -->
+    <test with $databus.call($hbdinetdMain,'getDeviceStatus','{device:"*"}')>
+        <observe on $databus for 'result:getDeviceStatus'>
+            <call on $showResult with {edpt:$hbdinetdMain,method:'getDeviceStatus',result:$? }>
+                <test with $?>
+                    <iterate on $2?.data>
+                        <test with $L.streq('caseless',$?.type,'wifi')>
+                            <!-- ***********找到一个可连接的适配器后跳出循环*********** -->
+                            <update on $globalState at '.wifi' with $2?.device />
+
+                            <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+                            <request on "#wifi-list-group" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+                            <update on="#open-wifi-switch-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-on.png" />
+                            <fire on $globalState for 'GotWiFiDevice' />
+                            <back to '_nexttolast' />
+                        </test>
+                    </iterate>
+                </test>
+            </call>
+        </observe>
+        <differ>
+            $STREAM.stdout.writelines("Failed to call $hbdinetdMain/method/getDeviceStatus")
+        </differ>
+    </test>
+    <!-- ************网络适配器列表************ -->
+</define>
+
+<init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock','default','hbdbus')>
+    <observe on $databus for 'state:ready'>
+        <inherit>
+            $STREAM.stdout.writelines("Connection to HBDBus is now ready.")
+        </inherit>
+        <call on $onHBDBusReady />
+    </observe>
+
+    <observe on $databus for 'state:LostEventGenerator'>
+        <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
+            <inherit>
+                $STREAM.stdout.writelines("HBDInetd disconnected from HBDBus")
+            </inherit>
+            <call on $wifiDialog with "HBDInetd disconnected from HBDBus" />
+        </test>
+    </observe>
+
+    <observe on $databus for 'close'>
+        <inherit>
+            $STREAM.stdout.writelines("HBDBus is closed")
+        </inherit>
+    </observe>
+
+    <observe on $databus for 'error:hbdbus'>
+        <inherit>
+            $STREAM.stdout.writelines("Error when using HBDBus: $?.retMsg($?.retCode)")
+        </inherit>
+    </observe>
+
+    <catch for `ANY`>
+        <inherit>
+            $STREAM.stdout.writelines("Failed to connected to HBDBus")
+        </inherit>
+    </catch>
+</init>
+
+<!-- *************切换wifi************ -->
+<observe on="#openWifiSwitch" for="click">
+    <test with="$L.eq($wifiInfo.canDeviceChange,true)">
+        <test with $L.strne('case',$globalState.wifi,'')>
+            <update on $wifiInfo at=".canDeviceChange" with="false" />
+            <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+            <test with="$L.not($wifiInfo.isWifiOpen)">
+                <update on $wifiInfo at=".isWifiOpen" with="true" />
+                <request on "#wifi-list-group" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+                <update on="#open-wifi-switch-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-on.png" />
+                <differ>
+                    <request on "#wifi-list-group" to="call:ELEMENT.style.display=ARG; return true" with "none" />
+                    <update on $wifiInfo at=".isWifiOpen" with="false" />
+                    <update on="#open-wifi-switch-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-off.png" />
+                </differ>
+            </test>
+            <test with="$wifiInfo.isWifiOpen">
+                <!-- <fire on $globalState for 'scanHotspots' /> -->
+                <fire on $globalState for 'GotWiFiDevice' />
+                <differ>
+                    <fire on $globalState for 'closeDevice' /> 
+                </differ>
+            </test>
+        </test>
+    </test>
+</observe>
+<!-- *************切换wifi************ -->
+
+<!-- ****************WIFI连接按钮**************** -->
+<observe on=".wifi-item" for="click">
+    <inherit>$STREAM.stdout.writelines($DATA.serialize($wifiMyList))</inherit>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($wifiList)) with $DATA.arith('+',$0<,1) nosetotail>
+        
+        <test with="$L.streq('case',$wifiList[$?]['bssid'],$2?.targetId)">
+            <update on="$currentWifiInfo" to="displace" with="$wifiList[$2?]" />
+            <inherit>$STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))</inherit>
+            <test with="$L.eq($wifiList[$2?]['isSaved'],false)">                
+                <update on="$DOC.query('.settingWifiPassword')" at="attr.class" with="dialog settingWifiPassword popIn show" />
+                <!--
+                <differ>
+                    <fire on $globalState for 'wifiConnect' with $wifiList[$4?] />
+                </differ>
+                -->
+            </test>
+            
+            <!-- <fire on $globalState for 'wifiConnect' with $wifiList[$2?] /> -->
+        </test>
+    </iterate>
+</observe>
+<!-- ****************WIFI连接按钮**************** -->
+
+<define as="settingWifiPassword" from="file://$SYS.cwd/settingWifiPassword.hvml" />
+<div class="dialog settingWifiPassword">
+    <include with="$settingWifiPassword" />
+</div>
+
+<observe on="#keyboardEnter" for="keyboardClick">
+    <update on="$currentWifiInfo" at=".passphrase" with="$?.keyboardContent" />
+    <inherit>$STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))</inherit>
+    <fire on $globalState for 'wifiConnect' with $currentWifiInfo />
+    <update on="$DOC.query('.settingWifiPassword')" at="attr.class" with="dialog settingWifiPassword popOut show" />
+</observe>
+
+<observe on="#keyboardSubmit" for="keyboardClick">
+    <update on="$currentWifiInfo" at=".passphrase" with="$?.keyboardContent" />
+    <inherit>$STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))</inherit>
+    <fire on $globalState for 'wifiConnect' with $currentWifiInfo />
+    <update on="$DOC.query('.settingWifiPassword')" at="attr.class" with="dialog settingWifiPassword popOut show" />
+</observe>
+
+
+
+
+

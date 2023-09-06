@@ -1,0 +1,24 @@
+<div class="carRadar">
+    <div class="info">
+        <div class="label label-text">1.5米，倒车请注意车距</div>
+    </div>
+    <div class="model">
+        <img class="carFull" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-full.png" />
+        <img class="radar-line radar-level-1 radar-left-1" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-1-1.png" />
+        <img class="radar-line radar-level-1 radar-left-2" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-1-2.png" />
+        <img class="radar-line radar-level-1 radar-left-3" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-1-3.png" />
+        <img class="radar-line radar-level-1 radar-left-4" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-1-4.png" />
+        <img class="radar-line radar-level-2 radar-left-1" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-2-1.png" />
+        <img class="radar-line radar-level-2 radar-left-2" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-2-2.png" />
+        <img class="radar-line radar-level-2 radar-left-3" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-2-3.png" />
+        <img class="radar-line radar-level-2 radar-left-4" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-2-4.png" />
+        <img class="radar-line radar-level-3 radar-left-1" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-3-1.png" />
+        <img class="radar-line radar-level-3 radar-left-2" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-3-2.png" />
+        <img class="radar-line radar-level-3 radar-left-3" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-3-3.png" />
+        <img class="radar-line radar-level-3 radar-left-4" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-radar-3-4.png" />
+    </div>
+</div>
+<observe on "$radars" for="change">
+    <init as type with="$DATA.serialize($radars)" />
+    <request on="#main-index" to="call:radarShow($type); return true;" />
+</observe>

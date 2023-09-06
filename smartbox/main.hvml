@@ -1,0 +1,310 @@
+<!DOCTYPE hvml SYSTEM 'f: MATH'>
+<hvml target="html">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <link rel="stylesheet" href="//localhost/_renderer/_builtin/-/assets/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.8.3/bootstrap-icons.css" />
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/animation.css" />
+        <script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/js/main.js"></script>  
+
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/index.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/clockEdit.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/clocking.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/clockList.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/muiscList.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/muiscPlayer.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/photoList.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/photoView.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/screenSaver.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/setting.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingBluetooth.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingScreen.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingUser.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingWifi.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingWifiBluetooth.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/settingWifiPassword.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/showDialog.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/toolsTop.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/videoList.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/videoPlayer.css" />
+        <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/weatherInfo.css" />
+        <style>
+            body{
+                font-family: Unicode;
+            }
+            .dialog{
+                display: none;
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .show{
+                display:flex;
+            }
+            .dialog{
+                z-index:9999;
+            }
+            @font-face {
+                font-family: 'Unicode';
+                src: url('hvml://localhost/_system/_filesystem/-/app/smartbox/assets/siyuan-medium.otf');
+            }
+            @font-face {
+                font-family: 'heavt';
+                src: url('hvml://localhost/_system/_filesystem/-/app/smartbox/assets/siyuan-heavt.otf');
+            }
+        </style>
+
+        <update on="$TIMERS" to="unite">
+            [
+                {"id":"time-span","interval":1000,"active":"yes"},
+                {"id":"load","interval":1,"active":"yes"}
+            ]
+        </update>
+
+        <!-- 播放器当前歌曲 -->
+        <init as "currentMuisc" at="_runner">
+            {
+                "id":-1,
+                "title": "",
+                "author": "",
+                "url":"",
+                "cover":"",
+                "length":"",
+                "isPlaying":false
+            }
+        </init>
+
+        <!-- 播放器显示歌曲 -->
+        <init as "playerMuisc" at="_runner" >
+            {
+                "id":-1,
+                "title": "",
+                "author": "",
+                "url":"",
+                "cover":"",
+                "length":"",
+                "isPlaying":false
+            }
+        </init>
+        
+        <!-- 歌曲列表 -->
+        <init as "muisceList" with="[]" at="_runner" />
+
+        <!-- 当前时间信息 -->
+        <init as "currentTimeInfo" at="_runner">
+            {
+                "hourMin":"00:00",
+                "day":"01-01",
+                "wday":"1",
+            }
+        </init>
+
+        <!-- 当前wifi信息 -->
+        <init as "currentWifiInfo" at="_runner">
+            {
+                "ssid":"",
+                "bssid":"",
+                "password":""
+            }
+        </init>
+
+        <!-- 闹钟数据 -->
+        <init as "clockData" at="_runner" from "file://$SYS.cwd/json/clock-data.json"></init>
+        <init as "clockUrl" at="_runner" with "https://files.fmsoft.cn/hvml/smartbox/mp3/clocking.mp3"></init>
+
+        <!-- 天气接口 -->
+        <!--
+        <init as="weatherSource" at="_runner" from="https://v0.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async ></init>
+        -->
+    </head>
+    
+    <body id="all-body" hvml-events="click">
+
+        <init as "clickTime">
+            {
+                timestamp:$SYS.time,
+                freetime:0,
+                settingFreeTime:3600,
+                nowTimestamp:$SYS.time
+            }
+        </init>
+
+        <!-- <define as="keyboard" from="file://$SYS.cwd/keyboard.hvml" /> -->
+        
+        <define as="index" from="file://$SYS.cwd/index.hvml" />
+        <div class="mian show">
+            <include with="$index" />
+        </div>
+
+        <define as="weatherInfo" from="file://$SYS.cwd/weatherInfo.hvml" />
+        <div class="dialog weatherInfo">
+            <include with="$weatherInfo" />
+        </div>
+
+        <define as="muiscList" from="file://$SYS.cwd/muiscList.hvml" />
+        <div class="dialog muiscList">
+            <include with="$muiscList" />
+        </div>
+
+        <define as="photoList" from="file://$SYS.cwd/photoList.hvml" />
+        <div class="dialog photoList">
+            <include with="$photoList" />
+        </div>
+       
+        <define as="videoList" from="file://$SYS.cwd/videoList.hvml" />
+        <div class="dialog videoList">
+            <include with="$videoList" />
+        </div>
+
+    
+        <define as="setting" from="file://$SYS.cwd/setting.hvml" />
+        <div class="dialog setting">
+            <include with="$setting" />
+        </div>
+
+             
+        <define as="clockList" from="file://$SYS.cwd/clockList.hvml" />
+        <div class="dialog clockList">
+            <include with="$clockList" />
+        </div>
+
+        <define as="toolsTop" from="file://$SYS.cwd/toolsTop.hvml" />
+        <div class="dialog toolsTop">
+            <include with="$toolsTop" />
+        </div>
+
+        <define as="screenSaver" from="file://$SYS.cwd/screenSaver.hvml" />
+        <div class="dialog screenSaver">
+            <include with="$screenSaver" />
+        </div>
+
+        <define as="clockingInfo" from="file://$SYS.cwd/clocking.hvml" />
+        <div class="dialog clockingInfo">
+            <include with="$clockingInfo" />
+        </div>
+
+        <define as="showDialog" from="file://$SYS.cwd/showDialog.hvml" />
+        <div class="dialog showDialog">
+            <include with="$showDialog" />
+        </div>
+        
+         
+
+        <!-- <div class="dialog keyboard">
+            <include with="$keyboard" />
+        </div> -->
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+        <observe on "#all-body" for="click">
+            <update on="$clickTime" at=".timestamp" with="$SYS.time" />
+        </observe>
+
+        <!--
+        <observe on "#all-body" for="newClick">
+            <inherit>$STREAM.stdout.writelines($DATA.serialize($?))</inherit>
+        </observe>
+        -->
+
+
+        <!-- **********************屏保事件 开始************************** -->
+        <observe on "$TIMERS" for="expired:time-span">
+            <update on="$clickTime" at=".nowTimestamp" with="$SYS.time" />
+            <update on="$clickTime" at=".freetime" with "$MATH.sub($clickTime.nowTimestamp,$clickTime.timestamp)" />
+            <!-- <inherit>
+                $STREAM.stdout.writelines( $DATA.stringify($clickTime))
+                $STREAM.stdout.writelines("$MATH.sub($clickTime.nowTimestamp,$clickTime.timestamp)")
+            </inherit> -->
+            <test with="$L.gt($clickTime.freetime,$clickTime.settingFreeTime)" >
+                <update on="$DOC.query('.screenSaver')" at="attr.class" with="dialog screenSaver popIn show" />
+            </test>
+            <update on="$currentTimeInfo" to="displace" with {hourMin:$DATETIME.fmttime('%H:%M'),day:$DATETIME.fmttime("%m月%d日"),wday:$DATETIME.utctime().wday } />
+        </observe>
+        <!-- **********************屏保事件 结束************************** -->
+
+        <!-- **********************闹钟事件 开始************************** -->
+        <observe on "$TIMERS" for="expired:time-span">
+            <test with $L.gt($DATA.count($clockData),0)>
+                <iterate on="0" onlyif $L.lt($0<,$DATA.count($clockData)) with $DATA.arith('+',$0<,1) nosetotail>
+                    <test with $L.streq('case',$clockData[$?].open,'on')>
+                        <iterate on="0" onlyif $L.lt($0<,$DATA.count($clockData[$2?]["week"])) with $DATA.arith('+',$0<,1) nosetotail>
+                            <test with $L.eq($clockData[$3?][week][$?],$DATETIME.utctime().wday)>
+                                <test with $L.streq('case',$DATA.stringify($clockData[$4?].time),$DATA.stringify($DATETIME.fmttime('%H:%M')))>
+                                    <!--
+                                    <update on="$DOC.query('.clockingInfo')" at="attr.class" with="dialog clockingInfo popIn show" />
+                                    <update on="#muisc-player-audio-source" at="attr.src" with="$clockUrl" />
+                                    <request on="#muisc-player-audio" to="call:muiscPlay(); return true;" />
+                                    -->
+                                </test>
+                            </test>
+                        </iterate>
+                    </test>
+                </iterate>
+            </test>
+        </observe>
+        <!-- **********************闹钟事件 结束************************** -->
+
+        <!-- **********************加载页面 开始************************** -->
+        <init as "loadPages">
+            [
+                
+            ]
+        </init>
+        <init as "loadPageNumber">
+            {
+                number:0,
+                per:0
+            }
+        </init>
+
+        <observe on "$TIMERS" for="expired:load">
+            
+            <test with="$L.ge($loadPageNumber.number,$DATA.count($loadPages))">
+                <update on="$TIMERS" to="unite">
+                    [
+                        {"id":"load","active":"off"}
+                    ]
+                </update>
+
+                <request on="#all-body" to="call:keyboardReady(); return true;" />
+
+                <request on="#bottom-load" to="call:ELEMENT.style.visibility=ARG; return true" with "hidden" />
+            </test>
+            
+            <test with="$L.lt($loadPageNumber.number,$DATA.count($loadPages))">
+                <init as="urlTmp" with="$loadPages[$loadPageNumber.number].url" />
+
+                <inherit>
+                    $STREAM.stdout.writelines($urlTmp)
+                </inherit>
+
+                <define as="pageTmp" from="$loadPages[$loadPageNumber.number].url" />
+                <div class="dialog $loadPages[$loadPageNumber.number].name">
+                    <include with="$pageTmp" />
+                </div>
+
+                <update on="$loadPageNumber" at=".number" with += 1 />
+
+                <update on="$loadPageNumber" at=".per" with = $MATH.mul($MATH.div($DATA.numerify($loadPageNumber.number),$DATA.numerify($DATA.count($loadPages))),100) />
+            
+                <request on="#load-progress-bar" to="call:ELEMENT.style.width=ARG; return true" with "$loadPageNumber.per%" />
+                <inherit>
+                    $STREAM.stdout.writelines($DATA.serialize($loadPageNumber))
+                </inherit>
+            
+            </test>
+        </observe>
+        <!-- **********************加载页面 结束************************** -->
+
+
+
+
+            
+    </body>
+</hvml>

@@ -1,0 +1,77 @@
+<init as="weatherData">
+    {
+        city:"",
+        current:{},
+        weeks:[]
+    }
+</init>
+
+<archetype name="weather_item">
+    <div class="item-weather">
+        <div class="content">
+            <span>$STR.substr($weatherSource.data[$?].date,5)</span>
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[$?].wea_img.svg" />
+            <span>$STR.join($weatherSource.data[$?].tem_day,'-',$weatherSource.data[$?].tem_night,'°C')</span>
+        </div>
+    </div>
+</archetype>
+
+<div id="weather-info" class="weather-info">
+    <div id="weather-info-goBack" hvml-events="click" class="goBack">
+        <img style="width:100px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back-icon.png" />
+    </div>
+    <div class="weather-content">
+        <div class="weather-today">
+            <div class="weather-icon">
+                <img id="weather-info-icon" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/sunny.svg">
+            </div>
+            <!-- <div class="temp">
+                13
+            </div> -->
+            <div class="info">
+                <div style="line-height:40px" id="weather-info-city">$weatherData.city</div>
+                <div>$DATETIME.fmttime("%m月%d日")</div>
+                <div style="font-size: 60px;font-family:heavt;">
+                    <span id="weather-info-tem">27-18°C</span>
+                    <span id="weather-info-wea">阴转晴</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="weather-week-group" class="weather-week">
+        <iterate on $weatherData.weeks in="#weather-week-group">
+           
+        </iterate>
+    </div>
+</div>
+
+
+<observe against="weatherSource" for="change:displaced" in="#weather-week-group">
+    <inherit>
+        $STREAM.stdout.writelines("天气wifi结果监听")
+    </inherit>
+    <init as="weatherData">
+        {
+            city:"",
+            current:{},
+            weeks:[]
+        }
+    </init>
+    <update on="$weatherData" at=".city" with="$weatherSource.city" />
+    <update on="$weatherData" at=".current" to="displace" with="$weatherSource.data[0]" />
+    <update on "#weather-week-group" at "content" with ' ' />
+    <iterate on="1" onlyif $L.lt($0<,$DATA.count($weatherSource.data)) with $DATA.arith('+',$0<,1) nosetotail>
+        <update on="$weatherData" at=".weeks"  to="append" with="$weatherSource.data[$?]" />
+        <update on $@ to 'append' with $weather_item />
+    </iterate>
+
+    <update on="#weather-info-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherData.current.wea_img.svg" />
+    <update on="#weather-info-city" at="textContent" with="$weatherData.city" />
+    <update on="#weather-info-tem" at="textContent" with="$STR.join($weatherData.current.tem_day,'-',$weatherData.current.tem_night,'°C')" />
+    <update on="#weather-info-wea" at="textContent" with="$weatherData.current.wea" />
+    <request on="#weather-info" to="call:ELEMENT.style.background=ARG; return true" with "url('hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/background-$weatherData.current.wea_img.jpg')" />
+</observe>
+
+<observe on="#weather-info-goBack" for="click">
+    <update on="$DOC.query('.weatherInfo')" at="attr.class" with="dialog weatherInfo popOut show" />
+</observe>

@@ -1,0 +1,167 @@
+<init as="weatherMainData">
+    {
+        city:"",
+        current:{},
+        weeks:[]
+    }
+</init>
+
+<archetype name="weather_main_item">
+    <div class="item-weather">
+        <div>$STR.substr($weatherSource.data[$?].date,5)</div>
+        <div><img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[$?].wea_img.svg" /></div>
+        <div>$STR.join($weatherSource.data[$?].tem_day,'-',$weatherSource.data[$?].tem_night,'°C')</div>
+    </div>
+</archetype>
+
+<div class="main-index">
+    <div class="head-container" hvml-events="click" >
+        
+        <div class="header-icon">
+            <span><img id="main-index-wifi-icon" hvml-events="click"  style="width:120px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-0.png" /></span>
+        </div>
+
+        <div><span id="time-span" class="time-span">$DATETIME.fmttime('%H:%M')</span></div>
+    </div>
+    <div class="main-container popIn">
+        <div class="menu">
+            <div class="menu-item card menu-music" hvml-events="click" ></div>
+            <div class="menu-item card menu-weather" hvml-events="click" ></div>
+            <div class="menu-item card menu-video" hvml-events="click" ></div>
+            <div class="menu-item card menu-time" hvml-events="click" ></div>
+            <div class="menu-item card menu-photo" hvml-events="click" ></div>
+            <div class="menu-item card menu-setting" hvml-events="click" ></div>
+        </div>
+        <div class="card-container">
+            <div id="muiscCard" hvml-events="muiscplay" class="card" style="margin-left:0">
+                <div class="card-music">
+                    <img id="muiscIndex-targer" class="targer" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/targer.png" />
+                    <img id="muiscIndex-cover" class="record" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/muisc-icon-default.png" />
+                    <div class="title">
+                        <span id="muiscIndex-title">上海一九四三</span>
+                    </div>
+                </div>
+            </div>
+            <div id="weatherCard" hvml-events="click" class="card">
+                <div class="current-weather">
+                    <div class="content">
+                        <img id="main-weather-icon" style="filter: invert(1);height:200px" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/qing.svg" />
+                        <div style="margin: 20 0 0 32px;">
+                            <div style="font-size: 30px;">
+                                <div id="main-weather-city" style="line-height:45px;">武汉市</div>
+                                <div>$DATETIME.fmttime("%m月%d日")</div>
+                            </div>
+                            <div style="font-size: 40px;font-family:heavt;">
+                                <span id="main-weather-tem">20-13°C </span>
+                                <span id="main-weather-wea">阵雨转大雨</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="week-weather-group" class="week-weather">
+                    <iterate on $weatherMainData.weeks in="#week-weather-group">
+                    
+                    </iterate>
+                </div>
+            </div>
+            <div id="photoCard" style="margin-right:78px" hvml-events="click" class="card" >
+                <div class="card-photo">
+                    <div class="shadow">
+                        <div class="foot">
+                            <div>
+                                <img style="width: 81px;height: 81px;margin-right: 33px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/menu-photo-icon.png" />
+                                <span style="font-size: 35px;font-family:heavt;">本地相册</span>
+                            </div>
+                            <div style="display: grid;margin: 20px 0;">
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="bottom-load" class="bottom-load">
+        <div class="progress">
+            <div id="load-progress-bar" class="progress-bar" style="width: 0%;"></div>
+        </div>
+    </div>
+</div>
+
+<observe on="$TIMERS" for="expired:time-span">
+    <update on="#time-span" at="textContent" with="$DATETIME.fmttime('%H:%M')" />
+</observe>
+
+<observe on=".main-index .head-container" for="click">
+    <update on="$DOC.query('.toolsTop')" at="attr.class" with="dialog toolsTop popIn show" />
+</observe>
+
+
+<!-- **************音乐卡片事件开始******************* -->
+<observe on="#muiscCard" for="muiscplay">
+    <test with="$currentMuisc.isPlaying">
+        <update on="$currentMuisc" at=".isPlaying" with false />
+        <differ>
+            <update on="$currentMuisc" at=".isPlaying" with true />
+        </differ>
+    </test>
+</observe>
+<!-- **************音乐卡片事件结束******************* -->
+
+<!-- **************天气卡片点击 开始****************** -->
+<observe on="#weatherCard" for="click">
+    <update on="$DOC.query('.weatherInfo')" at="attr.class" with="dialog weatherInfo popIn show" />
+</observe>
+<!-- **************天气卡片点击 结束****************** -->
+
+<!-- **************相册卡片点击 开始******************* -->
+<observe on="#photoCard" for="click">
+    <inherit>$STREAM.stdout.writelines("1111111111")</inherit>
+    <update on="$DOC.query('.photoList')" at="attr.class" with="dialog photoList popIn show" />
+</observe>
+<!-- **************相册卡片点击 开始******************* -->
+
+<!-- **************天气接口事件 开始******************* -->
+<observe against="weatherSource" for="change:displaced" in="#week-weather-group">
+    <inherit>
+        $STREAM.stdout.writelines("天气接口事件")
+    </inherit>
+    <update on="$weatherMainData" at=".city" with="$weatherSource.city" />
+    <update on="$weatherMainData" at=".current" to="displace" with="$weatherSource.data[0]" />
+    <update on "#week-weather-group" at "content" with ' ' />
+    <iterate on="1" onlyif $L.lt($0<,5) with $DATA.arith('+',$0<,1) nosetotail>
+        <update on="$weatherMainData" at=".weeks" to="append" with="$weatherSource.data[$?]" />
+        <update on $@ to "append" with $weather_main_item />
+    </iterate>
+
+    <update on="#main-weather-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherMainData.current.wea_img.svg" />
+    <update on="#main-weather-city" at="textContent" with="$weatherMainData.city" />
+    <update on="#main-weather-tem" at="textContent" with="$STR.join($weatherMainData.current.tem_day,'-',$weatherMainData.current.tem_night,'°C')" />
+    <update on="#main-weather-wea" at="textContent" with="$weatherMainData.current.wea" />
+</observe>
+<!-- **************天气接口事件 结束******************* -->
+
+<!-- ****************目录路由***************** -->
+<observe on=".menu-music" for="click">
+    <update on="$DOC.query('.muiscList')" at="attr.class" with="dialog muiscList popIn show" />
+</observe>
+<observe on=".menu-weather" for="click">
+    <update on="$DOC.query('.weatherInfo')" at="attr.class" with="dialog weatherInfo popIn show" />
+</observe>
+<observe on=".menu-photo" for="click">
+    <update on="$DOC.query('.photoList')" at="attr.class" with="dialog photoList popIn show" />
+</observe>
+<observe on=".menu-video" for="click">
+    <update on="$DOC.query('.videoList')" at="attr.class" with="dialog videoList popIn show" />
+</observe>
+<observe on=".menu-setting" for="click">
+    <update on="$DOC.query('.setting')" at="attr.class" with="dialog setting popIn show" />
+</observe>
+<observe on=".menu-time" for="click">
+    <update on="$DOC.query('.clockList')" at="attr.class" with="dialog clockList popIn show" />
+</observe>
+<observe on="#main-index-wifi-icon" for="click">
+    <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog clockList popIn show" />
+</observe>

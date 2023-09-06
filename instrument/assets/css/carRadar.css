@@ -1,0 +1,84 @@
+.carRadar{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+.carRadar .label{
+    text-align: center;
+    font-size: 1.45vw;
+    font-weight: bold;
+}
+.carRadar .model{
+    position: relative;
+    width: 8.02vw;
+    height: 18.22vw;
+    max-width: 154px;
+    max-height: 349px;
+    margin: 4.1vh auto;
+}
+.carRadar .model .carFull{
+    width: 100%;
+}
+.carRadar .model .radar-line{
+    position: absolute;
+}
+.carRadar .model .radar-left-1{
+    height: 8.75vh;
+}
+.carRadar .model .radar-left-1.radar-level-1{
+    top: 92%;
+    left: -26%;
+}
+.carRadar .model .radar-left-1.radar-level-2{
+    top: 100%;
+    left: -38%;
+}
+.carRadar .model .radar-left-1.radar-level-3{
+    top: 110%;
+    left: -47%;
+}
+.carRadar .model .radar-left-2{
+    height: 7.36vh;
+}
+.carRadar .model .radar-left-2.radar-level-1{
+    top: 102%;
+    left: -1%;
+}
+.carRadar .model .radar-left-2.radar-level-2{
+    top: 112%;
+    left: -4%;
+}
+.carRadar .model .radar-left-2.radar-level-3{
+    top: 122%;
+    left: -10%;
+}
+.carRadar .model .radar-left-3{
+    height: 7.36vh;
+}
+.carRadar .model .radar-left-3.radar-level-1{
+    top: 102%;
+    left: 40%;
+}
+.carRadar .model .radar-left-3.radar-level-2{
+    top: 112%;
+    left: 48%;
+}
+.carRadar .model .radar-left-3.radar-level-3{
+    top: 122%;
+    left: 55%;
+}
+.carRadar .model .radar-left-4{
+    height: 8.75vh;
+}
+.carRadar .model .radar-left-4.radar-level-1{
+    top: 90%;
+    left: 88%;
+}
+.carRadar .model .radar-left-4.radar-level-2{
+    top: 100%;
+    left: 105%;
+}
+.carRadar .model .radar-left-4.radar-level-3{
+    top: 110%;
+    left: 116%;
+}

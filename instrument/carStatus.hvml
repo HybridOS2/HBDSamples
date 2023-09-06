@@ -1,0 +1,24 @@
+<div class="carStatus">
+    <div class="info">
+        <div class="label label-text">车门开启请注意!</div>
+        <!-- <div class="label">车灯开启状态</div> -->
+    </div>
+    <div class="model">
+        <img class="carLightLeft" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-light-left.png" />
+        <img class="carLightRight" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-light-right.png" />
+        <img class="carBody" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-body.png" />
+        <img class="carDoorLeftFrontSelected" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-door-left-front.png" />
+        <img class="carDoorLeftRearSelected" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-door-left-rear.png" />
+        <img class="carDoorRightFrontSelected" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-door-right-front.png" />
+        <img class="carDoorRightRearSelected" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-door-right-rear.png" />
+        <img class="carDoorTrunkSelected" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/car-door-trunk.png" />
+    </div>
+</div>
+<observe on $openDoor for "change">
+    <init as type with="$DATA.serialize($openDoor)" />
+    <request on="#main-index" to="call:openDoor($type); return true;" />
+</observe>
+<observe on $closeDoor for "change">
+    <init as type with="$DATA.serialize($closeDoor)" />
+    <request on="#main-index" to="call:closeDoor($type); return true;" />
+</observe>

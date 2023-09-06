@@ -1,0 +1,25 @@
+<div class="setting-bluetooth">
+    <div  class="go-back" hvml-events="click">
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="setting-header">
+        <div class="setting-title">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            <span>蓝牙设置</span>
+        </div>
+    </div>
+    <div class="setting-content">
+        <div class="setting-item">
+            <div class="label">
+                <div>蓝牙</div>
+                <div class="desc">蓝牙开启15分钟内无设备连接，该功能将关闭</div>
+            </div>
+            <div class="icon">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-off.png" />
+            </div>
+        </div>
+    </div>
+</div>
+<observe on=".setting-bluetooth .go-back" for="click">
+    <update on="$DOC.query('.settingBluetooth')" at="attr.class" with="dialog settingBluetooth popOut show" />
+</observe>

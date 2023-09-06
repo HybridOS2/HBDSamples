@@ -1,0 +1,58 @@
+.content .drive{
+    width:100%;
+    height: 100%;
+}
+.content .drive .info{
+    margin-bottom: 10vh;
+}
+.content .drive .label{
+    position: absolute;
+    text-align: center;
+    font-size: 1.45vw;
+    width: 100%;
+}
+.content .drive .label p{
+    margin: 0;
+}
+.content .drive .road{
+    position: absolute;
+    bottom: 0px;
+    left: calc((100% - 48.9vw)/2);
+    width: 48.9vw;
+    height: 70%;
+}
+.content .drive .road-car{
+    position: absolute;
+    bottom: 10vh;
+    left: 34%;
+    width: 33%;
+    transition: 2s;
+}
+.content .drive .road-car.shifting-left{
+    transform: translateX(-30px);
+}
+.content .drive .road-car.shifting-right{
+    transition: 2s;
+    transform: translateX(30px);
+}
+.content .drive .road-sign{
+    position: absolute;
+    bottom: 20vh;
+    right: 12vw;
+}
+.content .drive .road-sign span{
+    color: #000;
+    width: 100%;
+    font-size: 1.3vw;
+    text-align: center;
+    position: absolute;
+    top:1.01vh;
+}
+.content .drive .tips-content{
+    text-align: center;
+    font-size: 1.45vw;
+    /* margin-top: 100px; */
+}
+.content .drive .tips-content p{
+    margin: 0;
+}

@@ -1,0 +1,146 @@
+<init as "muisceData" at="_runner" from "file://$SYS.cwd/json/muisc-data.json"></init>
+<init as "muiscLatelyData" at="_runner" with [] />
+<init as "muiscLikeData" at="_runner" with [] />
+<define as="initMuisceData">
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <init as "index" with $? />
+        <test with="$muisceData[$index].isLately">
+            <update on="$muiscLatelyData" to="append" with="$muisceData[$index]" />
+        </test>
+        <test with="$muisceData[$index].isLike">
+            <update on="$muiscLikeData" to="append" with="$muisceData[$index]" />
+        </test>
+    </iterate>
+</define>
+<include with="$initMuisceData" />
+
+<archetype name="muisc_item">
+    <li class="list-group-item" id="$?.id" hvml-events="click" value="$?.title">
+        <div class="content-item">
+            <img src="$?.cover" />
+            <div class="author">
+                <div>$?.title</div>
+                <div style="font-size:35px">$?.author</div>
+            </div>
+            <div id="$?.id-icon" class="icon hidden">
+                <img id="$?.id-icon-img" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/pause.png">
+            </div>
+        </div>
+    </li>
+</archetype>
+<div class="music-list">
+    <aside>
+        <div id="music-list-goBack" class="goBack" hvml-events="click" >
+            <img style="width: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png">
+        </div>
+        <div class="list-group tab">
+            <div id="like-button" hvml-events="click" class="list-group-item tab-item ">歌单</div>
+            <div id="lately-button" hvml-events="click" class="list-group-item tab-item active">最近</div>
+            <div id="collect-button" hvml-events="click" class="list-group-item tab-item ">收藏</div>
+        </div>
+    </aside>
+    <div class="content">
+        <ul id="muisc-list-group" class="list-group">
+            <update on "$muisceList" to="displace" with="$muiscLatelyData" />
+            <iterate on $muisceList in="#muisc-list-group">
+                <update on="$@" to="append" with="$muisc_item" />
+            </iterate>
+        </ul>
+    </div>
+</div>
+
+<define as="muiscPlayer" from="file://$SYS.cwd/muiscPlayer.hvml" />
+<div id="id-muiscPlayer" class="dialog muiscPlayer" >
+    <include with="$muiscPlayer" />
+</div>
+
+<!-- **********************切换歌曲 开始************************** -->
+<define as="changeMuisc">
+    <init as index with $? />
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$index,$muisceList[$?].id)">
+            <update on="$playerMuisc" to="displace" with="$muisceList[$2?]" />
+        </test>
+    </iterate>
+   
+    <!-- **********播放器播放与暂停样式切换 开始********** -->
+    <test with="$L.streq('case',$currentMuisc.id,$playerMuisc.id)" >
+        <test with="$currentMuisc.isPlaying">
+            <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/pause.png" />
+            <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "running" />
+            <differ>
+                <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+                <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "paused" />
+            </differ>
+        </test>
+        <differ>
+            <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+            <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "paused" />
+        </differ>
+    </test>
+    <!-- **********播放器播放与暂停样式切换 结束********** -->
+
+    <!-- ********播放器样式改变 开始************ -->
+    <update on="#muiscplayer-title" at="textContent" with="$playerMuisc.title" />
+    <update on="#muiscplayer-cover" at="attr.src" with="$playerMuisc.cover" />
+    <update on="#muiscplayer-author" at="textContent" with="$playerMuisc.author" />
+    <request on="#muiscplayer-bg" to="call:ELEMENT.style.background=ARG; return true" with "url($playerMuisc.cover)" />
+    <update on="#muisc-player-audio-source" at="attr.src" with="$playerMuisc.url" />
+    <test with="$playerMuisc.isLike">
+        <update on="#muisc-player-like-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/like-selected.png" />
+        <differ>
+            <update on="#muisc-player-like-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/like.png" />
+        </differ>
+    </test>
+    <!-- ********播放器样式改变 结束************ -->
+</define>
+<!-- **********************切换歌曲 结束************************** -->
+
+<observe on=".content .list-group .list-group-item" for="click">
+    <include with="$changeMuisc" on="$?.targetId" />
+    <update on="$DOC.query('.muiscPlayer')" at="attr.class" with="dialog muiscPlayer popIn show" />
+</observe>
+
+<observe on="#music-list-goBack" for="click">
+    <update on="$DOC.query('.muiscList')" at="attr.class" with="dialog muiscList popOut show" />
+</observe>
+
+<define as="refreshList">
+    <update on "#muisc-list-group" at "content" with ' ' />
+    <iterate on $muisceList >
+        <update on "#muisc-list-group" at "content" to "append" with $muisc_item />
+    </iterate>
+</define>
+
+<!-- *******音乐列表TAB切换 开始********** -->
+<observe on="#like-button" for="click">
+    <update on="$DOC.query('#like-button')" at="attr.class" with="list-group-item tab-item active" />
+    <update on="$DOC.query('#lately-button')" at="attr.class" with="list-group-item tab-item" />
+    <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item" />
+
+    <update on "$muisceList" to="displace" with="$muisceData" />
+    <include with "$refreshList" on="like" />
+</observe>
+<observe on="#lately-button" for="click">
+    <update on="$DOC.query('#like-button')" at="attr.class" with="list-group-item tab-item" />
+    <update on="$DOC.query('#lately-button')" at="attr.class" with="list-group-item tab-item active" />
+    <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item" />
+
+    <update on "$muisceList" to="displace" with="$muiscLatelyData" />
+    <include with "$refreshList" on="lately" />
+</observe>
+<observe on="#collect-button" for="click">
+    <update on="$DOC.query('#like-button')" at="attr.class" with="list-group-item tab-item" />
+    <update on="$DOC.query('#lately-button')" at="attr.class" with="list-group-item tab-item" />
+    <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item active" />
+    <update on "$muisceList" to="displace" with="$muiscLikeData" />
+    <include with "$refreshList" on="collect" />
+</observe>
+<!-- *******音乐列表TAB切换 结束********** -->
+
+<!-- ***********json文件写入 开始************ -->
+<define as="muiscDataJsonWrite">
+    $STREAM.open("file://$SYS.cwd/json/muisc-data.json","read write create truncate").writelines($DATA.serialize($muisceData))
+</define>
+<!-- ***********json文件写入 结束************ -->
+

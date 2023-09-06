@@ -1,0 +1,207 @@
+    body {
+        background: url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/background.jpg");
+        color: #fff;
+    }
+    
+    .main-index .head-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 50 120 50;
+        font-size: 51.74px;
+        font-family:heavt;
+    }
+
+    .main-index .main-container {
+        width: calc(100vw);
+        display: -webkit-inline-box;
+        padding: 0 78;
+        overflow: auto;
+    }
+
+    .main-index .menu {
+        width: 1130px;
+        height: 720px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        flex-direction:column;
+    }
+
+    .main-index .menu-item {
+        width: 340px;
+        height: 340px;
+        border-radius: 54px;
+        background-size:cover;
+    }
+
+    .main-index .menu-music{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-music-icon.png');
+    }
+
+    .main-index .menu-video{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-video-icon.png');
+    }
+
+    .main-index .menu-photo{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-photo-icon.png');
+    }
+
+    .main-index .menu-weather{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-weather-icon.png');
+    }
+
+    .main-index .menu-time{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-time-icon.png');
+    }
+
+    .main-index .menu-setting{
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/menu-setting-icon.png');
+    }
+
+    .main-index .card-container .card {
+        width: 794px;
+        height: 720px;
+        background: transparent;
+        border-radius: 50px;
+        margin-left: 40px;
+        object-fit: cover;
+    }
+
+    .main-index .card-container {
+        display: flex;
+    }
+
+    .main-index .card-music{
+        height: 100%;
+        width: 100%;
+        border-radius:50px;
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/card-music.png');
+        background-size:cover;
+    }
+
+    .main-index .card-music .targer{
+        position: absolute;
+        top:70px;
+        left: 50px;
+        transform: rotate(25deg);
+        transform-origin: bottom;
+        height: 120px;  
+    }
+
+    .main-index .card-music .record{
+        position: absolute;
+        top: 123px;
+        left: 230px;
+        border-radius: 100%;
+        width: 395px;
+        height: 395px;
+        object-fit: cover;
+    }
+
+    .main-index .card-music .title{
+        position: absolute;
+        top: 640px;
+        left: 174px;
+        width: 449px;
+        height: 58px;
+        background: #707479;
+        opacity: 0.40;
+        border-radius: 15px;
+        text-align: center;
+        font-size: 35px;
+        line-height: 40px;
+    }
+
+    .main-index .card-photo{
+        display: flex;
+        flex-flow: column-reverse;
+        height: 100%;
+        width: 100%;
+        border-radius:50px;
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/screensaver/1.jpg');
+    }
+
+    .main-index .card-photo .shadow{
+        height: 200px;
+        background-image: url('hvml://localhost/_system/_filesystem/-/app/smartbox/static/shadow.png');
+        border-radius: 0 0 50px 50px;
+    }
+
+    .main-index .card-photo .foot{
+        display: flex;
+        justify-content: space-between;
+        padding: 50 60;
+    }
+
+    .main-index .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 100%;
+        background: #fff;
+    }
+
+    .main-index .current-weather{
+        height: 440px;
+        border-radius:50px 50px 0 0;
+        background:#59C2E6;
+    }
+
+    .main-index .current-weather .content{
+        width: 750px;
+        display: flex;
+        margin-left:40px;
+        margin-top:120px;
+        letter-spacing: 0px;
+        
+    }
+
+    .main-index .week-weather{
+        height: calc(100% - 440px);
+        background: #fff;
+        border-radius: 0 0 50px 50px;
+        display:flex;
+        justify-content: space-evenly;
+        color: #B6BCC3;
+        font-size:24px;
+    }
+
+    .main-index .week-weather img{
+        opacity: 0.4;
+    }
+
+    .main-index .week-weather .today{
+        color: #4F5F6F;
+    }
+
+    .main-index .week-weather .today img{
+        opacity: 1;
+        filter: invert(0.3);
+    }
+
+    .main-index .item-weather{
+        margin-top: 26.25px;
+        line-height: 52.5px;
+        text-align: center;
+    }
+
+    .main-index .item-weather img {
+        width: 50px;
+        height: 50px;
+    }    
+
+    .main-index .bottom-load{
+        visibility: visible;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        height: 16px;
+        width: 100%;
+    }
+
+    .main-index .bottom-load .progress{
+        background: rgba(255,255,255,0.4);
+    }
+
+    .main-index .bottom-load .progress .progress-bar{
+        background: rgba(243,242,242,0.3);
+    }

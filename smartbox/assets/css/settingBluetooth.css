@@ -1,0 +1,75 @@
+.setting-bluetooth{
+    background: #222A3E;
+    width: 100%;
+    height: 100%;
+    font-size: 55px;
+    color: #fff;
+    font-family:heavt;
+    display: block;
+}
+.setting-bluetooth .go-back{
+    position: absolute;
+    top:40px;
+    left:60px;
+    width:200px;
+    height:100px;
+    text-align: center;
+}
+.setting-bluetooth .setting-header{
+    height: 150px;
+    background: #1F2534;
+}
+.setting-bluetooth .setting-header .setting-title{
+    height: 100%;
+    text-align: center;
+    line-height: 120px;
+}
+.setting-bluetooth .setting-header .setting-title img{
+    position: relative;
+    top:-5px;
+}
+.setting-bluetooth .setting-header .setting-title span{
+    margin-left: 20px;
+}
+.setting-bluetooth .setting-content{
+    height: calc(100% - 150px);
+    overflow: scroll;
+}
+.setting-bluetooth .setting-content .setting-item{
+    display: flex;
+    height: 240px;
+    padding-left: 100px;
+    margin: 30px 45px;
+    border-radius: 30px;
+    background: rgba(240, 242, 243, 0.05);
+}
+.setting-bluetooth .setting-content .setting-item .wifi-icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-right: 40px;
+}
+.setting-bluetooth .setting-content .setting-item .label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.setting-bluetooth .setting-content .setting-item .label .desc{
+    color: #999999;
+    font-size: 40px;
+}
+.setting-bluetooth .setting-content .setting-item .label.link{
+    color: #54C2DE;
+}
+.setting-bluetooth .setting-content .setting-item .icon{
+    color: #999999;
+    font-size: 50px;
+    margin-left: auto;
+    margin-right: 80px;
+    padding-top: 80px;
+}
+.setting-bluetooth .setting-content .setting-item i{
+    color: #4D5875;
+    font-size: 60px;
+    margin-left: 80px;
+}

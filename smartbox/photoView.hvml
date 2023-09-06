@@ -1,0 +1,54 @@
+<div class="photo-view">
+    <div id="photo-view-goBack" class="go-back" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back-icon.png" />
+    </div>
+    <div class="photo-container" hvml-events="lastPhoto nextPhoto">
+        <img id="photo-view-img" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/screensaver/1.jpg" />
+    </div>
+</div>
+
+<observe on="#photo-view-goBack" for="click">
+    <update on="$DOC.query('.photoView')" at="attr.class" with="dialog photoView popOut show" />
+</observe>
+
+<observe on=".photo-container" for="lastPhoto">
+    <init as photoIndex >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($photoData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$photoData[$?].id,$currentPhoto.id)">
+            <update on="$photoIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with="$L.eq($photoIndex.index,0)">
+        <update on="$currentPhoto" to="displace" with="$photoData[$MATH.sub($DATA.count($photoData),1)]" />
+        <differ>
+            <update on="$currentPhoto" to="displace" with="$photoData[$MATH.sub($photoIndex.index,1)]" />
+        </differ>
+    </test>
+    <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
+</observe>
+
+<observe on=".photo-container" for="nextPhoto">
+    <init as photoIndex >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($photoData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$photoData[$?].id,$currentPhoto.id)">
+            <update on="$photoIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with="$L.eq($photoIndex.index,$MATH.sub($DATA.count($photoData),1))">
+        <update on="$currentPhoto" to="displace" with="$photoData[0]" />
+        <differ>
+            <update on="$currentPhoto" to="displace" with="$photoData[$MATH.add($photoIndex.index,1)]" />
+        </differ>
+    </test>
+    <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
+</observe>
+
+

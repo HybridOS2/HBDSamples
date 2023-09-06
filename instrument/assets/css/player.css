@@ -1,0 +1,46 @@
+.player{
+    position: absolute;
+    width:100%;
+    height: 100%;
+}
+.player .cover .record-bg{
+    margin: auto;
+    width: 20vw;
+    height: 20vw;
+    border-radius: 100%;
+    background: rgba(255,255,255,0.15);
+}
+
+.player .cover .record-bg .record{
+    width: 18vw;
+    height: 18vw;
+    border-radius: 100%;
+    position: relative;
+    top: 1vw;
+    left: 1vw;
+    object-fit: cover;
+}
+
+.player .label{
+    height: 25%;
+    text-align: center;
+}
+
+.player .label .title{
+    font-size: 2.76vw;
+    font-family:heavt;
+}
+
+.player .label .author{
+    font-size: 1.82vw;
+}
+
+.record{
+    animation: record 15s linear infinite;
+    animation-play-state: running;
+}
+
+@keyframes record {
+    0% {transform:rotate(0);}
+    100% {transform: rotate(1turn);}
+}

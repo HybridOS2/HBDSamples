@@ -1,0 +1,51 @@
+<div class="setting-wifibluetooth">
+    <div class="go-back" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="setting-header">
+        <div class="setting-title">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            <span>WiFi和蓝牙</span>
+        </div>
+    </div>
+    <div class="setting-content">
+        <div id="settingWifi" hvml-events="click"  class="setting-item">
+            <div class="label">
+                <span>WLAN</span>
+            </div>
+            <div class="icon">
+                <span id="wifi-bluetooth-text">未连接</span>
+                <i class="bi bi-chevron-right"></i>
+            </div>
+        </div>
+        <div id="settingBluetooth" hvml-events="click"  class="setting-item">
+            <div class="label">
+                <span>蓝牙</span>
+            </div>
+            <div class="icon">
+                <span>已开启</span>
+                <i class="bi bi-chevron-right"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<observe on=".setting-wifibluetooth .go-back" for="click">
+    <update on="$DOC.query('.wifibluetooth')" at="attr.class" with="dialog wifibluetooth popOut show" />
+</observe>
+
+<define as="settingWifi" from="file://$SYS.cwd/settingWifi.hvml" />
+<div class="dialog settingWifi">
+    <include with="$settingWifi" />
+</div>
+<observe on="#settingWifi" for="click">
+    <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog settingWifi popIn show" />
+</observe>
+
+<define as="settingBluetooth" from="file://$SYS.cwd/settingBluetooth.hvml" />
+<div class="dialog settingBluetooth">
+    <include with="$settingBluetooth" />
+</div>
+<observe on="#settingBluetooth" for="click">
+    <update on="$DOC.query('.settingBluetooth')" at="attr.class" with="dialog settingBluetooth popIn show" />
+</observe>

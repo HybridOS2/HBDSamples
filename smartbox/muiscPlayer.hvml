@@ -1,0 +1,310 @@
+<init as "progressData">
+    {
+        isPlayed:false,
+        allLength:0,
+        passed:0,
+        per:0
+    }
+</init>
+<div class="music-player">
+    <div id="muiscplayer-bg" class="bg">
+        <div class="inner"></div>
+    </div>
+    <div class="cover">
+        <div class="record-bg">
+            <img id="muiscplayer-cover" class="record" style="animation-play-state:paused" src="$playerMuisc.cover"/>
+        </div>
+        <div id="music-player-goBack" class="go-back" hvml-events="click">
+            <img style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+        </div>
+    </div>
+    <div class="label">
+        <div id="muiscplayer-title" class="title">$playerMuisc.title</div>
+        <div id="muiscplayer-author" class="author">$playerMuisc.author</div>
+    </div>
+    <div class="tools">
+        <div id="muisc-player-shape" hvml-events="click" class="play-type">
+            <img style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/shape.png" />
+        </div>
+        <div id="muisc-player-last" hvml-events="click" class="last-song">
+            <img style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/last-song.png" />
+        </div>
+        <div id="muisc-player-play-pause" hvml-events="muiscplay" class="play">
+            <img id="muisc-player-play-pause-img" style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+        </div>
+        <div id="muisc-player-next" hvml-events="click" class="next-song">
+            <img style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/next-song.png" />
+        </div>
+        <div id="muisc-player-like" hvml-events="click" class="like">
+            <img id="muisc-player-like-icon" style="width: 80px;height: 80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/like.png" />
+        </div>
+    </div>
+    <div class="progress" role="progressbar">
+        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+    </div>
+</div>
+
+<audio id="muisc-player-audio" hvml-events="play pause ended" style="position:absolute" dataUrl="" >
+    <source id="muisc-player-audio-source" src="" type="audio/mpeg" />
+</audio>
+
+<!-- ***********************上一首歌切换 开始**************************** -->
+<observe on="#muisc-player-last" for="click">
+    <init as "muisceListIndex" >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$playerMuisc.id,$muisceList[$?].id)">
+            <update on="$muisceListIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with $L.lt($muisceListIndex.index,1)>
+        <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.sub($DATA.count($muisceList),1)]" />
+        <differ>
+            <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.sub($muisceListIndex.index,1)]" />
+        </differ>
+    </test>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentMuisc))
+        $STREAM.stdout.writelines($DATA.serialize($playerMuisc))
+    </inherit>
+    
+    <update on="#muisc-player-audio-source" at="attr.src" with="$playerMuisc.url" />
+    <request on="#muisc-player-audio" to="call:muiscPlay(); return true;" />
+</observe>
+<!-- ***********************上一首歌切换 结束**************************** -->
+
+<!-- ***********************下一首歌切换 开始**************************** -->
+<observe on="#muisc-player-next" for="click">
+    <init as "muisceListIndex" >
+        {
+            index:0
+        }
+    </init>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$playerMuisc.id,$muisceList[$?].id)">
+            <update on="$muisceListIndex" at=".index" with $2? />
+        </test>
+    </iterate>
+    <test with $L.gt($muisceListIndex.index,$MATH.sub($DATA.count($muisceList),2))>
+        <update on="$playerMuisc" to="displace" with="$muisceList[0]" />
+        <differ>
+            <update on="$playerMuisc" to="displace" with="$muisceList[$MATH.add($muisceListIndex.index,1)]" />
+        </differ>
+    </test>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentMuisc))
+        $STREAM.stdout.writelines($DATA.serialize($playerMuisc))
+    </inherit>
+
+    <update on="#muisc-player-audio-source" at="attr.src" with="$playerMuisc.url" />
+    <request on="#muisc-player-audio" to="call:muiscPlay(); return true;" />
+</observe>
+<!-- ***********************下一首歌切换 结束**************************** -->
+
+<!-- ***********************收藏事件 开始******************************* -->
+<observe on="#muisc-player-like" for="click">
+    <test with="$playerMuisc.isLike">
+        <update on="$playerMuisc" at=".isLike" with="false" />
+        <differ>
+            <update on="$playerMuisc" at=".isLike" with="true" />
+        </differ>
+    </test>
+    <test with="$playerMuisc.isLike">
+        <update on="#muisc-player-like-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/like-selected.png" />
+        <differ>
+            <update on="#muisc-player-like-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/like.png" />
+        </differ>
+    </test>
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <init as "index" with $? />
+        <test with="$L.streq('case',$muisceData[$index].id,$playerMuisc.id)">
+            <update on="$muisceData[$index]" at=".isLike" with="$playerMuisc.isLike" />
+        </test>
+    </iterate>
+
+    <!-- 重载歌曲列表 开始-->
+    <update on="$muiscLatelyData" to="displace" with="[]" />
+    <update on="$muiscLikeData" to="displace" with="[]" />
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <init as "index" with $? />
+        <test with="$muisceData[$index].isLately">
+            <update on="$muiscLatelyData" to="append" with="$muisceData[$index]" />
+        </test>
+        <test with="$muisceData[$index].isLike">
+            <update on="$muiscLikeData" to="append" with="$muisceData[$index]" />
+        </test>
+    </iterate>
+    <inherit>
+        $STREAM.open("file://$SYS.cwd/json/muisc-data.json","read write create truncate").writelines($DATA.serialize($muisceData))
+    </inherit>
+    <!-- 重载歌曲列表 结束-->
+
+</observe>
+<!-- ***********************收藏事件 结束******************************* -->
+
+<!-- ***********************播放按钮切换 开始**************************** -->
+<observe on="#muisc-player-play-pause" for="muiscplay">
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentMuisc))
+        $STREAM.stdout.writelines($DATA.serialize($playerMuisc))
+    </inherit>
+    <test with="$L.streq('case',$currentMuisc.id,$playerMuisc.id)" >
+        <differ>
+            <!-- 播放列表页 -->
+            <update on="#$currentMuisc.id-icon" at="attr.class" with="icon hidden" />
+            <!-- 播放列表页 -->
+            <update on="$currentMuisc" to="displace" with="$playerMuisc" />
+            <update on="$progressData" at=".passed" with="0" />         
+        </differ>
+    </test>
+
+    <!-- 重载歌曲列表 开始-->
+    <update on="$muiscLatelyData" to="displace" with="[]" />
+    <update on="$muiscLikeData" to="displace" with="[]" />
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <init as "index" with $? />
+        <test with="$L.streq('case',$muisceData[$index].id,$currentMuisc.id)">
+            <update on="$muisceData[$index]" at=".isLately" with="true" />
+        </test>
+        <test with="$muisceData[$index].isLately">
+            <update on="$muiscLatelyData" to="append" with="$muisceData[$index]" />
+        </test>
+        <test with="$muisceData[$index].isLike">
+            <update on="$muiscLikeData" to="append" with="$muisceData[$index]" />
+        </test>
+    </iterate>
+    <inherit>
+        $STREAM.open("file://$SYS.cwd/json/muisc-data.json","read write create truncate").writelines($DATA.serialize($muisceData))
+    </inherit>
+    <!-- 重载歌曲列表 结束-->
+
+    <!-- *******主页播放样式改变 开始************ -->
+    <update on="#muiscIndex-title" at="textContent" with="$currentMuisc.title" />
+    <update on="#muiscIndex-cover" at="attr.src" with="$currentMuisc.cover" />
+    <!-- *******主页播放样式改变 结束************ -->
+
+    <!-- *******下拉栏播放样式改变 开始********** -->
+    <update on="#muiscTool-title" at="textContent" with="$currentMuisc.title" />
+    <update on="#muiscTool-author" at="textContent" with="$currentMuisc.author" />
+    <update on="#muiscTool-cover" at="attr.src" with="$currentMuisc.cover" />
+    <!-- *******下拉栏播放样式改变 结束********** -->
+
+    <test with="$L.eq($currentMuisc.isPlaying,true)">
+        <update on="$currentMuisc" at=".isPlaying" with false />
+        <differ>
+            <update on="$currentMuisc" at=".isPlaying" with true />
+        </differ>
+    </test>
+</observe>
+<!-- ***********************播放按钮切换 结束**************************** -->
+
+<!-- ***********************播放开始事件 开始**************************** -->
+<observe on="#muisc-player-audio" for="play">
+    <update on="$progressData" at=".isPlayed" with true />
+    <update on="#$currentMuisc.id-icon" at="attr.class" with="icon hidden" />
+    <update on="$currentMuisc" to="displace" with="$playerMuisc" />
+    <update on="$currentMuisc" at=".isPlaying" with true />
+    <update on="$progressData" at=".passed" with="0" /> 
+
+    <!-- 播放器 -->
+    <update on="#muiscplayer-title" at="textContent" with="$playerMuisc.title" />
+    <update on="#muiscplayer-cover" at="attr.src" with="$playerMuisc.cover" />
+    <update on="#muiscplayer-author" at="textContent" with="$playerMuisc.author" />
+    <request on="#muiscplayer-bg" to="call:ELEMENT.style.background=ARG; return true" with "url($playerMuisc.cover)" />
+    <update on="#muisc-player-audio" at="attr.dataUrl" with="$currentMuisc.url" />
+    <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/pause.png" />
+    <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "running" />
+    <!-- 播放器 -->
+
+    <!-- 首页卡片 -->
+    <update on="#muiscIndex-cover" at="attr.src" with="$currentMuisc.cover" />
+    <update on="#muiscIndex-title" at="textContent" with="$currentMuisc.title" />
+    <request on="#muiscIndex-cover" to="call:ELEMENT.style['animation-play-state']=ARG;return true" with "running" />
+    <request on="#muiscIndex-targer" to="call:ELEMENT.style['transform']=ARG;return true" with "rotate(1deg)" />
+    <!-- 首页卡片 -->
+
+    <!-- 下拉框 -->
+    <update on="#muiscTool-title" at="textContent" with="$currentMuisc.title" />
+    <update on="#muiscTool-author" at="textContent" with="$currentMuisc.author" />
+    <update on="#muiscTool-cover" at="attr.src" with="$currentMuisc.cover" />
+    <update on="#muisc-tool-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/pause.png" />
+    <!-- 下拉框 -->
+
+    <!-- 播放列表页 -->
+    <update on="#$currentMuisc.id-icon" at="attr.class" with="icon" />
+    <update on="#$currentMuisc.id-icon-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/pause.png" />
+    <!-- 播放列表页 -->
+</observe>
+
+<observe on "$TIMERS" for="expired:time-span">
+    <test with="$progressData.isPlayed">
+        <update on="$progressData" at=".allLength" with="$currentMuisc.length" />
+        <test with="$L.lt($progressData.passed,$progressData.allLength)" >
+            <update on="$progressData" at=".passed" with += 1 />
+            <update on="$progressData" at=".per" with = $MATH.mul($MATH.div($DATA.numerify($progressData.passed),$DATA.numerify($progressData.allLength)),100) />
+            <request on="#progress-bar" to="call:ELEMENT.style.width=ARG; return true" with "$progressData.per%" />
+        </test>
+    </test>
+</observe>
+<!-- ***********************播放开始事件 结束**************************** -->
+
+<!-- ***********************播放暂停事件 开始**************************** -->
+<observe on="#muisc-player-audio" for="pause">
+    <update on="$progressData" at=".isPlayed" with false />
+
+    <!-- 播放器 -->
+    <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "paused" />
+    <!-- 播放器 -->
+
+    <!-- 首页卡片 -->
+    <request on="#muiscIndex-cover" to="call:ELEMENT.style['animation-play-state']=ARG;return true" with "paused" />
+    <request on="#muiscIndex-targer" to="call:ELEMENT.style['transform']=ARG;return true" with "rotate(25deg)" />
+    <!-- 首页卡片 -->
+
+    <!-- 下拉框 -->
+    <update on="#muisc-tool-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <!-- 下拉框 -->
+
+    <!-- 播放列表页 -->
+    <update on="#$currentMuisc.id-icon" at="attr.class" with="icon" />
+    <update on="#$currentMuisc.id-icon-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <!-- 播放列表页 -->
+</observe>
+<!-- ***********************播放暂停事件 结束**************************** -->
+
+<!-- ***********************播放结束事件 开始**************************** -->
+<observe on="#muisc-player-audio" for="ended">
+    <update on="$currentMuisc" at=".isPlaying" with false />
+    <update on="$progressData" at=".isPlayed" with false />
+    <update on="$progressData" at=".passed" with="0" /> 
+
+    <!-- 播放器 -->
+    <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "paused" />
+    <!-- 播放器 -->
+
+    <!-- 首页卡片 -->
+    <request on="#muiscIndex-cover" to="call:ELEMENT.style['animation-play-state']=ARG;return true" with "paused" />
+    <request on="#muiscIndex-targer" to="call:ELEMENT.style['transform']=ARG;return true" with "rotate(25deg)" />
+    <!-- 首页卡片 -->
+
+    <!-- 下拉框 -->
+    <update on="#muisc-tool-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <!-- 下拉框 -->
+
+    <!-- 播放列表页 -->
+    <update on="#$currentMuisc.id-icon" at="attr.class" with="icon" />
+    <update on="#$currentMuisc.id-icon-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <!-- 播放列表页 -->
+
+    <fire on "#muisc-player-next" for 'click' />
+</observe>
+<!-- ***********************播放结束事件 结束**************************** -->
+
+<observe on="#music-player-goBack" for="click" >
+    <update on="$DOC.query('.muiscPlayer')" at="attr.class" with="dialog muiscPlayer popOut show" />
+</observe>

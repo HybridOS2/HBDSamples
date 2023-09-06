@@ -1,0 +1,78 @@
+.carUnderpan{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.carStatus .label{
+    text-align: center;
+    font-size: 1.45vw;
+    font-weight: bold;
+}
+.carStatus .model{
+    position: relative;
+    width: 8.48vw;
+    max-width: 163px;
+    max-height: 473px;
+    height: 21.2vw;
+    /* max-height: 50.6vh; */
+    margin: 4.1vh auto 0 auto;
+}
+.carStatus .model .carBody{
+    top:12%;
+    width: 100%;
+    height: 100%;
+}
+.carStatus .model .carLightLeft{
+    position: absolute;
+    top:-24%;
+    left: -50%;
+    width: 100%;
+}
+.carStatus .model .carLightRight{
+    position: absolute;
+    top:-24%;
+    right: -50%;
+    width: 100%;
+}
+.carStatus .model .carDoorLeftFrontSelected{
+    position: absolute;
+    top: 28.5%;
+    left: -6%;
+    transition:1s;
+    transform:rotate(0deg);
+    transform-origin: 43% 3%;
+    width: 1.95vw;
+}
+.carStatus .model .carDoorLeftRearSelected{
+    position: absolute;
+    left: -4%;
+    top:49.5%;
+    transition:1s;
+    transform:rotate(0deg);
+    transform-origin: 37% 85%;
+    width: 1.95vw;
+}
+.carStatus .model .carDoorRightFrontSelected{
+    position: absolute;
+    left: 82%;
+    top:28.5%;
+    transition:1s;
+    transform:rotate(0deg);
+    transform-origin: 62% 3%;
+    width: 1.95vw;
+}
+.carStatus .model .carDoorRightRearSelected{
+    position: absolute;
+    left: 80%;
+    top:49.5%;
+    transition:1s;
+    transform:rotate(0deg);
+    transform-origin: 65% 85%;
+    width: 1.95vw;
+}
+.carStatus .model .carDoorTrunkSelected{
+    position: absolute;
+    left: 11%;
+    top: 81.2%;
+    width: 6.5vw;
+}

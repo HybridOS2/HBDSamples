@@ -1,0 +1,12 @@
+<div class="player">
+    <div class="cover">
+        <div class="record-bg">
+            <img id="muiscplayer-cover" class="record" style="animation-play-state:running" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/53c93f0585d66e1378fd5c80f901c4f846f89fb6.jpg"/>
+        </div>
+    </div>
+
+    <div class="label">
+        <div id="muiscplayer-title" class="title">大鱼</div>
+        <div id="muiscplayer-author" class="author">周深</div>
+    </div>
+</div>

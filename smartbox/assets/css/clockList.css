@@ -1,0 +1,71 @@
+.clock-list{
+    display: flex;
+    height: 100%;
+    width: 100%;
+    background: #51A5AA;
+    color: #fff;
+    justify-content: space-between;
+}
+.clock-list .goBack{
+    position: absolute;
+    top:78px;
+    left: 60px;
+    width:200px;
+    height:100px;
+    text-align:center;
+}
+.clock-list .clock-content{
+    width: 1565px;
+    height: 870px;
+    margin-top: 210px;
+    margin-left: 55px;
+    overflow:scroll;
+    /* background: blue; */
+}
+.clock-list .clock-content .clock-item{
+    display: flex;
+    justify-content: space-between;
+    height: 250px;
+    border-radius: 30px;
+    background: rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+.clock-list .clock-content .clock-item .time-info{
+    margin-top: 30px;
+    margin-left: 100px;
+}
+.clock-list .clock-content .clock-item .time-info .time{
+    font-size: 70px;
+    font-family:heavt;
+}
+.clock-list .clock-content .clock-item .time-info .info{
+    font-size: 40px;
+}
+.clock-list .clock-content .clock-item .switch{
+    margin: auto 90;
+}
+.clock-list .empty{
+    display: none;
+    position: absolute;
+    font-size: 50px;
+    color: #A1E2D6;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.clock-list .clock-add{
+    position: relative;
+    width: 240px;
+    height: 100%;
+    background: #65BCC1;
+    border-radius: 50% 0 0 50%;
+}
+.clock-list .clock-add img{
+    position: absolute;
+    top: 490;
+    left: 80;
+}
+.clock-list .backgroundImg{
+    position: absolute;
+    bottom: 0;
+}

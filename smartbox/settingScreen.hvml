@@ -1,0 +1,47 @@
+<div class="setting-screen">
+    <div class="go-back" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="setting-header">
+        <div class="setting-title">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            <span>屏幕与亮度</span>
+        </div>
+    </div>
+    <div class="setting-content">
+
+        <div class="setting-item">
+            <div class="label">
+                <div>自动调节亮度</div>
+            </div>
+            <div class="icon">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-on.png" />
+            </div>
+        </div>
+        
+        <div class="setting-item">
+            <div class="control">
+                <div class="dot"></div>
+                <div class="light">
+                    <div class="container">
+                        <div id="slider-select" class="select" style="width: 0%;"></div>
+                        <div id="slider-button" hvml-events="slider" class="dot button-wrapper" style="left: 0%;"></div>
+                    </div>
+                </div>
+                <div class="big dot"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<observe on=".setting-screen .go-back" for="click">
+    <update on=".settingScreen" at="attr.class" with="dialog settingScreen popOut show" />
+</observe>
+
+<observe on=".setting-screen .button-wrapper" for="slider">
+    <inherit>
+        <request on="#slider-button" to="call:ELEMENT.style.left=ARG; return true" with "$?.targetMove%" />
+        <request on="#slider-select" to="call:ELEMENT.style.width=ARG; return true" with "$?.targetMove%" />
+    </inherit>
+</observe>
+

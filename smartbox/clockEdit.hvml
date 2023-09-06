@@ -1,0 +1,394 @@
+<init as="time_clock">
+{
+    only:false,
+    mon:false,
+    tue:false,
+    wed:false,
+    thu:false,
+    fri:false,
+    sat:false,
+    sun:false,
+    hourOne:0,
+    hourTwo:0,
+    minOne:0,
+    minTwo:0
+}
+</init>
+
+<archetype name="clock_item">
+    <div class="clock-item">
+        <div class="time-info">
+            <div class="time">$?.time</div>
+            <div class="info">
+                <span>$?.weekstr</span>
+            </div>
+        </div>
+        <div id="switch-$?.id" hvml-events="click" class="switch list-clock-item">
+            <img id="$?.id" style="pointer-events:none;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-$?.open.png" />
+        </div>
+    </div>
+</archetype>
+
+<div class="clock-edit">
+    <div class="clock-header">
+        <div class="cancel" hvml-events="click" >取消</div>
+        <div class="submit" hvml-events="click" >保存</div>
+    </div>
+    <div class="week-check">
+        <div class="submit title">重复</div>
+        <div id="submit-mon-day" hvml-events="click" class="submit week-day">周一</div>
+        <div id="submit-tue-day" hvml-events="click" class="submit week-day">周二</div>
+        <div id="submit-wed-day" hvml-events="click" class="submit week-day">周三</div>
+        <div id="submit-thu-day" hvml-events="click" class="submit week-day">周四</div>
+        <div id="submit-fri-day" hvml-events="click" class="submit week-day">周五</div>
+        <div id="submit-sat-day" hvml-events="click" class="submit week-day">周六</div>
+        <div id="submit-sun-day" hvml-events="click" class="submit week-day">周日</div>
+        <div id="submit-only" hvml-events="click" class="submit option">仅一次</div>
+    </div>
+    <div class="time-select">
+        <div class="select">
+            <div class="item hour-one">
+                <div  class="up-button" hvml-events="click">
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/up.png" />
+                </div>
+                <div class="number-select"><span id="numberHourOne">$time_clock.hourOne</span></div>
+                <div class="down-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/down.png" />
+                </div>
+            </div>
+            <div class="item hour-two">
+                <div class="up-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/up.png" />
+                </div>
+                <div class="number-select"><span id="numberHourTwo">$time_clock.hourTwo</span></div>
+                <div class="down-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/down.png" />
+                </div>
+            </div>
+            <div style="margin: 0 60px;">
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="item min-one">
+                <div class="up-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/up.png" />
+                </div>
+                <div class="number-select"><span id="numberMinOne">$time_clock.minOne</span></div>
+                <div class="down-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/down.png" />
+                </div>
+            </div>
+            <div class="item min-two">
+                <div class="up-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/up.png" />
+                </div>
+                <div class="number-select"><span id="numberMinTwo">$time_clock.minTwo</span></div>
+                <div class="down-button" hvml-events="click" >
+                    <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/down.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<observe on=".clock-header .cancel" for="click">
+    <update on="$DOC.query('.clockEdit')" at="attr.class" with="dialog clockEdit popOut show" />
+</observe>
+
+<!-- ************闹钟保存事件 开始************ -->
+<observe on=".clock-header .submit" for="click">
+    <init as "clockData" at="_runner" from "file://$SYS.cwd/json/clock-data.json"></init>
+    <init as="clockItem">
+        {
+            id:'',
+            time:$STR.join($time_clock.hourOne,$time_clock.hourTwo,":",$time_clock.minOne,$time_clock.minTwo),
+            week:[],
+            weekstr:[],
+            only:false,
+            open:'on'
+        }
+    </init>
+    <update on="$clockItem" at=".only" with="$time_clock.only" />
+    <update on="$clockItem" at=".id" with="$STR.join('cl-',$SYS.time)" />
+    <test with="$time_clock.mon">
+        <update on="$clockItem" at=".week" to="append" with="1" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周一" />
+    </test>
+    <test with="$time_clock.tue">
+        <update on="$clockItem" at=".week" to="append" with="2" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周二" />
+    </test>
+    <test with="$time_clock.wed">
+        <update on="$clockItem" at=".week" to="append" with="3" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周三" />
+    </test>
+    <test with="$time_clock.thu">
+        <update on="$clockItem" at=".week" to="append" with="4" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周四" />
+    </test>
+    <test with="$time_clock.fri">
+        <update on="$clockItem" at=".week" to="append" with="5" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周五" />
+    </test>
+    <test with="$time_clock.sat">
+        <update on="$clockItem" at=".week" to="append" with="6" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周六" />
+    </test>
+    <test with="$time_clock.sun">
+        <update on="$clockItem" at=".week" to="append" with="7" />
+        <update on="$clockItem" at=".weekstr" to="append" with="周日" />
+    </test>
+
+    <update on="$clockData" to="append" with="$clockItem" />
+    
+    <inherit>
+        $STREAM.open("file://$SYS.cwd/json/clock-data.json","read write create truncate").writelines($DATA.serialize($clockData))
+    </inherit>
+
+    <update on "#clock-list-group" at "content" with ' ' />
+    <iterate on $clockData in="#clock-list-group">
+        <update on="$@" to="append" with="$clock_item" />
+    </iterate>
+
+    <update on="$DOC.query('.clockEdit')" at="attr.class" with="dialog clockEdit popOut show" />
+
+</observe>
+<!-- ************闹钟保存事件 结束************ -->
+
+<!-- **************星期选择事件 开始************** -->
+<observe on="#submit-mon-day" for="click">
+    <test with="$time_clock.mon">
+        <update on="$time_clock" at=".mon" with="false" />
+        <update on="#submit-mon-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".mon" with="true" />
+            <update on="#submit-mon-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-tue-day" for="click">
+    <test with="$time_clock.tue">
+        <update on="$time_clock" at=".tue" with="false" />
+        <update on="#submit-tue-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".tue" with="true" />
+            <update on="#submit-tue-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-wed-day" for="click">
+    <test with="$time_clock.wed">
+        <update on="$time_clock" at=".wed" with="false" />
+        <update on="#submit-wed-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".wed" with="true" />
+            <update on="#submit-wed-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-thu-day" for="click">
+    <test with="$time_clock.thu">
+        <update on="$time_clock" at=".thu" with="false" />
+        <update on="#submit-thu-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".thu" with="true" />
+            <update on="#submit-thu-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-fri-day" for="click">
+    <test with="$time_clock.fri">
+        <update on="$time_clock" at=".fri" with="false" />
+        <update on="#submit-fri-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".fri" with="true" />
+            <update on="#submit-fri-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-sat-day" for="click">
+    <test with="$time_clock.sat">
+        <update on="$time_clock" at=".sat" with="false" />
+        <update on="#submit-sat-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".sat" with="true" />
+            <update on="#submit-sat-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-sun-day" for="click">
+    <test with="$time_clock.sun">
+        <update on="$time_clock" at=".sun" with="false" />
+        <update on="#submit-sun-day" at="attr.class" with="submit week-day" />
+        <differ>
+            <update on="$time_clock" at=".sun" with="true" />
+            <update on="#submit-sun-day" at="attr.class" with="submit week-day selected" />
+        </differ>
+    </test>
+</observe>
+
+<observe on="#submit-only" for="click">
+    <test with="$time_clock.only">
+        <update on="$time_clock" at=".only" with="false" />
+        <update on="#submit-only" at="attr.class" with="submit option" />
+        <differ>
+            <update on="$time_clock" at=".only" with="true" />
+            <update on="#submit-only" at="attr.class" with="submit option selected" />
+        </differ>
+    </test>
+</observe>
+
+<!-- **************星期选择事件 结束************** -->
+
+<!-- ************时间选择事件 开始************ -->
+<observe on=".hour-one .up-button" for="click">
+    <test with="$L.lt($time_clock.hourTwo,4)">
+        <test with="$L.gt($time_clock.hourOne,1)">
+            <update on="$time_clock" at=".hourOne" with="0" />
+            <update on="#numberHourOne" at="textContent" with="0" />
+            <differ>
+                <update on="$time_clock" at=".hourOne" with += 1 />
+                <update on="#numberHourOne" at="textContent" with = $time_clock.hourOne />
+            </differ>
+        </test>
+        <differ>
+            <test with="$L.gt($time_clock.hourOne,0)">
+                <update on="$time_clock" at=".hourOne" with="0" />
+                <update on="#numberHourOne" at="textContent" with="0" />
+                <differ>
+                    <update on="$time_clock" at=".hourOne" with += 1 />
+                    <update on="#numberHourOne" at="textContent" with = $time_clock.hourOne />
+                </differ>
+            </test>
+        </differ>
+    </test>
+</observe>
+
+<observe on=".hour-one .down-button" for="click">
+    <test with="$L.lt($time_clock.hourTwo,4)">
+        <test with="$L.lt($time_clock.hourOne,1)">
+            <update on="$time_clock" at=".hourOne" with="2" />
+            <update on="#numberHourOne" at="textContent" with="2" />
+            <differ>
+                <update on="$time_clock" at=".hourOne" with -= 1 />
+                <update on="#numberHourOne" at="textContent" with = $time_clock.hourOne />
+            </differ>
+        </test>
+        <differ>
+            <test with="$L.lt($time_clock.hourOne,1)">
+                <update on="$time_clock" at=".hourOne" with="1" />
+                <update on="#numberHourOne" at="textContent" with="1" />
+                <differ>
+                    <update on="$time_clock" at=".hourOne" with -= 1 />
+                    <update on="#numberHourOne" at="textContent" with = $time_clock.hourOne />
+                </differ>
+            </test>
+        </differ>
+    </test>
+</observe>
+
+<observe on=".hour-two .up-button" for="click">
+    <test with="$L.ne($time_clock.hourOne,2)">
+        <test with="$L.gt($time_clock.hourTwo,8)">
+            <update on="$time_clock" at=".hourTwo" with="0" />
+            <update on="#numberHourTwo" at="textContent" with="0" />
+            <differ>
+                <update on="$time_clock" at=".hourTwo" with += 1 />
+                <update on="#numberHourTwo" at="textContent" with = $time_clock.hourTwo />
+            </differ>
+        </test>
+        <differ>
+            <test with="$L.gt($time_clock.hourTwo,2)">
+                <update on="$time_clock" at=".hourTwo" with="0" />
+                <update on="#numberHourTwo" at="textContent" with="0" />
+                <differ>
+                    <update on="$time_clock" at=".hourTwo" with += 1 />
+                    <update on="#numberHourTwo" at="textContent" with = $time_clock.hourTwo />
+                </differ>
+            </test>
+        </differ>
+    </test>
+</observe>
+
+<observe on=".hour-two .down-button" for="click">
+    <test with="$L.ne($time_clock.hourOne,2)">
+        <test with="$L.lt($time_clock.hourTwo,1)">
+            <update on="$time_clock" at=".hourTwo" with="9" />
+            <update on="#numberHourTwo" at="textContent" with="9" />
+            <differ>
+                <update on="$time_clock" at=".hourTwo" with -= 1 />
+                <update on="#numberHourTwo" at="textContent" with = $time_clock.hourTwo />
+            </differ>
+        </test>
+        <differ>
+            <test with="$L.lt($time_clock.hourTwo,1)">
+                <update on="$time_clock" at=".hourTwo" with="3" />
+                <update on="#numberHourTwo" at="textContent" with="3" />
+                <differ>
+                    <update on="$time_clock" at=".hourTwo" with -= 1 />
+                    <update on="#numberHourTwo" at="textContent" with = $time_clock.hourTwo />
+                </differ>
+            </test>
+        </differ>
+    </test>
+</observe>
+
+<observe on=".min-one .up-button" for="click">
+    <test with="$L.gt($time_clock.minOne,4)">
+        <update on="$time_clock" at=".minOne" with="0" />
+        <update on="#numberMinOne" at="textContent" with="0" />
+        <differ>
+            <update on="$time_clock" at=".minOne" with += 1 />
+            <update on="#numberMinOne" at="textContent" with = $time_clock.minOne />
+        </differ>
+    </test>
+</observe>
+
+<observe on=".min-one .down-button" for="click">
+    <test with="$L.lt($time_clock.minOne,1)">
+        <update on="$time_clock" at=".minOne" with="5" />
+        <update on="#numberMinOne" at="textContent" with="5" />
+        <differ>
+            <update on="$time_clock" at=".minOne" with -= 1 />
+            <update on="#numberMinOne" at="textContent" with = $time_clock.minOne />
+        </differ>
+    </test>
+</observe>
+
+<observe on=".min-two .up-button" for="click">
+    <test with="$L.gt($time_clock.minTwo,8)">
+        <update on="$time_clock" at=".minTwo" with="0" />
+        <update on="#numberMinTwo" at="textContent" with="0" />
+        <differ>
+            <update on="$time_clock" at=".minTwo" with += 1 />
+            <update on="#numberMinTwo" at="textContent" with = $time_clock.minTwo />
+        </differ>
+    </test>
+</observe>
+
+<observe on=".min-two .down-button" for="click">
+    <test with="$L.lt($time_clock.minTwo,1)">
+        <update on="$time_clock" at=".minTwo" with="9" />
+        <update on="#numberMinTwo" at="textContent" with="9" />
+        <differ>
+            <update on="$time_clock" at=".minTwo" with -= 1 />
+            <update on="#numberMinTwo" at="textContent" with = $time_clock.minTwo />
+        </differ>
+    </test>
+</observe>
+<!-- ************时间选择事件 结束************ -->
+
+
+
+
+
+
+
+
+

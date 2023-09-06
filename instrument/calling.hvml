@@ -1,0 +1,37 @@
+<div class="calling down">
+    <div class="icon">
+        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/calling.png" />
+    </div>
+    <div class="info">
+        <div class="label">来电</div>
+        <div class="label form">Marpessa</div>
+    </div>
+</div>
+<div class="speaking down">
+    <div class="info">
+        <div class="label">通话中</div>
+        <div class="label form">Marpessa</div>
+        <div class="label time">00:55</div>
+    </div>
+</div>
+<div class="ending down">
+    <div class="icon">
+        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/hangup.png">
+    </div>
+    <div class="info">
+        <div class="label">通话结束</div>
+        <div class="label time">00:55</div>
+    </div>
+</div>
+<observe on $calling_type for "change">
+    <iterate on $calling_types>
+        <update on="$DOC.query($STR.join('.',$?.value))" at="attr.class" with="$STR.join($?.value,' ','up')" />
+    </iterate>
+    <test with $L.streq('case','speaking',$calling_type.value)>
+        <request on="#main-index" to="call:startSpeaking(); return true;" />
+    </test>
+    <test with $L.streq('case','ending',$calling_type.value)>
+        <request on="#main-index" to="call:stopSpeaking(); return true;" />
+    </test>
+    <update on="$DOC.query($STR.join('.',$calling_type.value))" at="attr.class" with="$calling_type.value" />
+</observe>

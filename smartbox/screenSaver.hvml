@@ -1,0 +1,32 @@
+<div class="screen-saver" hvml-events="click" >
+    <div class="bg"></div>
+    <div class="head-container">
+        <div class="header-icon">
+            <img style="width: 120px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi.png">
+        </div>
+    </div>
+    <div class="content">
+        <div id="screenSaverTime" class="time">$DATETIME.fmttime('%H:%M')</div>
+        <div class="date-info">
+            <div class="weather">
+                <!-- <i class="bi bi-cloud-lightning-rain-fill"></i> -->
+                <img id="screen-weather-icon" style="position:relative;top:-30;width: 120px;filter: invert(1);" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/thunder.svg" />
+                <span id="screen-weather-tem">12°</span>
+            </div>
+            <div id="weekTime" class="date">$DATETIME.fmttime("%m月%d日")</div>
+        </div>
+    </div>
+</div>
+
+<observe on="$TIMERS" for="expired:time-span">
+    <update on="#screenSaverTime" at="textContent" with="$DATETIME.fmttime('%H:%M')" />
+</observe>
+
+<observe on=".screen-saver" for="click">
+    <update on="$DOC.query('.screenSaver')" at="attr.class" with="dialog screenSaver popOut show" />
+</observe>
+
+<observe against="weatherSource" for="change:displaced">
+    <update on="#screen-weather-tem" at="textContent" with="$STR.join($weatherSource.data[0].tem_day,'-',$weatherSource.data[0].tem_night,'°C')" />
+    <update on="#screen-weather-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[0].wea_img.svg" />
+</observe>

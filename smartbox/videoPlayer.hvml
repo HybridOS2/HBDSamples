@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/videojs/video-js.min.css" />
+<link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/videojs/vjs-smartbox.css" />
+<script src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/videojs/video.min.js"></script>
+<div class="video-player">
+    <div id="video-player-goBack" class="goBack" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <video id="my-video" class="video-js" controls preload="none" width="1920" height="1080" data-setup="{}" dataUrl="https://files.fmsoft.cn/videos/Sample/hvml-animated-3d-random-walk.mp4">
+        <source id="my-video-source" src="https://files.fmsoft.cn/videos/Sample/hvml-animated-3d-random-walk.mp4" type="video/mp4" />
+    </video>
+</div>
+<observe on="#video-player-goBack" for="click">
+    <update on="$DOC.query('.videoPlayer')" at="attr.class" with="dialog videoPlayer popOut show" />
+</observe>
+

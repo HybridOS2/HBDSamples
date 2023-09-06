@@ -1,0 +1,35 @@
+<div class="drive">
+    <div class="info">
+        <div class="label label-text">
+            <p>限速80，请按规定行驶</p>
+            <p style="color: #EFAC4A;">超速10%，请减速</p>
+            <p style="color: #EFAC4A;">您已偏航，请注意安全</p>
+        </div>
+    </div>
+    <div class="road">
+        <img style="width: 100%;height: 100%;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/road-line.png" />
+        <canvas style="position:absolute;left: 21.3vw;" id="road-line-one"></canvas>
+        <div id="roadCar" class="road-car">
+            <img style="width: 100%;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/road-car.png" />
+        </div>
+        <div class="road-sign">
+            <span>80</span>
+            <img style="width: 3vw;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/img/road-sign.png" />
+        </div>
+    </div>
+</div>
+<observe on "$label_text" for="change">
+    <init as str with="$DATA.serialize($label_text)" />
+    <request on="#main-index" to="call:changeLabel($str); return true;" />
+</observe>
+<observe on "$shifting" for="change">
+    <test with $L.streq("case",$shifting.value,"left")>
+        <update on="#roadCar" at="attr.class" with="road-car shifting-left" />
+    </test>
+    <test with $L.streq("case",$shifting.value,"right")>
+        <update on="#roadCar" at="attr.class" with="road-car shifting-right" />
+    </test>
+    <test with $L.streq("case",$shifting.value,"null")>
+        <update on="#roadCar" at="attr.class" with="road-car" />
+    </test>
+</observe>

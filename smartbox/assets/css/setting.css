@@ -1,0 +1,59 @@
+    .setting-info{
+        background: #222A3E;
+        width: 100%;
+        height: 100%;
+        font-size: 55px;
+        color: #fff;
+        font-family:heavt;
+        display: block;
+    }
+    .setting-info .goBack{
+        position: absolute;
+        top:40px;
+        left:60px;
+        width:200px;
+        height:100px;
+        text-align:center;
+    }
+    .setting-info .setting-header{
+        height: 150px;
+        background: #1F2534;
+    }
+    .setting-info .setting-header .setting-title{
+        height: 100%;
+        text-align: center;
+        line-height: 120px;
+    }
+    .setting-info .setting-header .setting-title img{
+        position: relative;
+        top:-5px;
+    }
+    .setting-info .setting-header .setting-title span{
+        margin-left: 20px;
+    }
+    .setting-info .setting-content{
+        height: calc(100% - 150px);
+        overflow: scroll;
+    }
+    .setting-info .setting-content .setting-item{
+        display: flex;
+        height: 240px;
+        padding-left: 100px;
+        margin: 30px 45px;
+        border-radius: 30px;
+        background: rgba(240, 242, 243, 0.05);
+    }
+    .setting-info .setting-content .setting-item .label{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .setting-info .setting-content .setting-item .icon{
+        margin-left: auto;
+        margin-right: 80px;
+        padding-top: 80px;
+    }
+    .setting-info .setting-content .setting-item i{
+        color: #4D5875;
+        font-size: 60px;
+    }

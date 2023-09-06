@@ -1,0 +1,76 @@
+.weather-info{
+    display: flex;
+    height: 100%;
+    width:100%;
+    background:url("hvml://localhost/_system/_filesystem/-/app/smartbox/static/weather/background-qing.jpg");
+    color:white;
+}
+
+.weather-info .goBack{
+    position: absolute;
+    top: 78px;
+    left: 60px;
+    width:200px;
+    height:150px;
+    text-align:center;
+    z-index:1;
+}
+
+.weather-info .weather-content{
+    position: relative;
+    width: 64%;
+    height: 100%;
+}
+
+.weather-info .weather-content .weather-today{
+    position: absolute;
+    bottom: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.weather-info .weather-content .weather-today .weather-icon{
+    filter:invert(1);
+    margin: auto 0;
+}
+
+.weather-info .weather-content .weather-today .weather-icon img{
+    width: 290px;
+    height: 246px;
+}
+
+.weather-info .weather-content .weather-today .temp{
+    font-size: 260px;
+    letter-spacing: 0;
+    margin-right: 40px;
+}
+
+.weather-info .weather-content .weather-today .info{
+    font-size: 45px;
+    margin-top: 0px;
+}
+
+.weather-info .weather-week{
+    width: 36%;
+    height: 100%;
+}
+
+.weather-info .weather-week .item-weather{
+    height: 180px;
+    font-size: 45px;
+    font-family:heavt;
+    background: linear-gradient(to right,rgba(0,0,0,0),rgba(0,0,0,1));
+    border-bottom:1px solid #adb5bd;
+}
+
+.weather-info .weather-week .item-weather .content{
+    padding: 45 0 0 110;
+}
+
+.weather-info .weather-week .item-weather img{
+    width: 78px;
+    height: 96px;
+    margin:0 20px;
+    filter: invert(1);
+}

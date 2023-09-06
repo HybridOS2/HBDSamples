@@ -1,0 +1,52 @@
+.photo-list{
+    background: #272E40;
+    padding: 50px 110px;
+    width: calc(100vw);
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: -webkit-box;
+    height: 100%;
+}
+
+.photo-list .goBack{
+    position: absolute;
+    top: 78px;
+    left: 60px;
+    width:200px;
+    height:100px;
+    text-align:center;
+}
+
+.photo-content{
+    margin-top: 180px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.photo-item{
+    border-radius: 30px;
+    width: 380px;
+    height: 380px;
+    margin-right: 20px;
+}
+
+.photo-item img{
+    border-radius: 30px;
+    width: 380px;
+    height: 380px;
+    pointer-events:none;
+    object-fit: cover;
+}
+
+.photo-item.first{
+    width: 780px;
+    height: 780px;
+}
+
+.photo-item.first img{
+    width: 780px;
+    height: 780px;
+    object-fit: cover;
+}

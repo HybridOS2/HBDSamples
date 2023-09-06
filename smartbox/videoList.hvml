@@ -1,0 +1,60 @@
+<init as "videoData" from "file://$SYS.cwd/json/video-data.json" />
+<archetype name="video_item">
+    <div id="$?.id" hvml-events="click" class="video-item" data="$?.url">
+        <div class="video-cover">
+            <img src="$?.cover" />
+        </div>
+        <div class="video-icon">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/player-icon.png" />
+        </div>
+    </div>
+</archetype>
+<div class="video-list">
+    <div id="video-list-goBack" class="goBack" hvml-events="click">
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div id="video-content-group" class="video-content">
+        <iterate on $videoData in="#video-content-group">
+            <update on="$@" to="append" with="$video_item" />
+        </iterate>
+    </div>
+</div>
+<define as="videoPlayer" from="file://$SYS.cwd/videoPlayer.hvml" />
+<div class="dialog videoPlayer">
+    <include with="$videoPlayer" />
+</div>
+<observe on=".video-content .video-item" for="click">
+    <init as index with $?.targetId />
+    <init as current with {} />
+    <iterate on="$videoData">
+        <update on="$current" to="displace" with="$?" />
+        <test with="$L.streq('case',$index,$current.id)">
+            <inherit>
+                $STREAM.stdout.writelines($DATA.serialize($current))
+            </inherit>
+            <update on="#my-video" at="attr.poster" with="$current.cover" />
+            <update on="#my-video-source" at="attr.src" with="$current.url" />
+            <update on="#my-video" at="attr.dataUrl" with="$current.url" />
+        </test>
+    </iterate>
+    <update on="$DOC.query('.videoPlayer')" at="attr.class" with="dialog videoPlayer popIn show" />
+
+    <update on="$currentMuisc" at=".isPlaying" with false />
+    <!-- 播放器 -->
+    <update on="#muisc-player-play-pause-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <request on="#muiscplayer-cover" to="call:ELEMENT.style['animation-play-state']=ARG; return true" with "paused" />
+    <!-- 播放器 -->
+
+    <!-- 首页卡片 -->
+    <request on="#muiscIndex-cover" to="call:ELEMENT.style['animation-play-state']=ARG;return true" with "paused" />
+    <request on="#muiscIndex-targer" to="call:ELEMENT.style['transform']=ARG;return true" with "rotate(25deg)" />
+    <!-- 首页卡片 -->
+
+    <!-- 下拉框 -->
+    <update on="#muisc-tool-img" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/play.png" />
+    <!-- 下拉框 -->
+</observe>
+
+<observe on="#video-list-goBack" for="click">
+    <update on="$DOC.query('.videoList')" at="attr.class" with="dialog videoList popOut show" />
+</observe>

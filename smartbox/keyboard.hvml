@@ -1,0 +1,251 @@
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+
+    }
+
+    .keyboardContent {
+        background: #dcdcdc;
+        backdrop-filter: blur(15px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width:100%;
+    }
+
+    .keyboardContent .textContent{
+        width: 90%;
+        height: 150px;
+        border: 1px solid #666;
+        font-size: 4em;
+        text-align: left;
+        line-height: 150px;
+        padding-left: 40px;
+        margin-left: 40px;
+        margin-bottom: 150px;
+        color: #fff;
+    }
+
+    .keyboardContent .keyboardUl {
+        user-select: none;
+    }
+
+    .keyboardContent .keys {
+        display: flex;
+        list-style: none;
+        margin: 0 0;
+    }
+
+    .keyboardContent li {
+        box-shadow: 0 -6px 10px rgb(182, 182, 182), 0 4px 15px rgba(0, 0, 0, 0.3);
+        width: 3.5em;
+        font-size: 2em;
+        margin: 0.2em;
+        background-color: #202020;
+        border-radius: 15px;
+        text-align: center;
+        line-height: 3.5em;
+        transition: all 0.25s;
+    }
+
+    .keyboardContent li:active {
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.15);
+        color: rgb(12, 164, 190);
+        text-shadow: 0 0 15px #57c1f1;
+    }
+
+    .keyboardContent .one {
+        color: #666;
+    }
+
+    .keyboardContent .one li {
+        width: 3.12em;
+    }
+
+    .keyboardContent .two {
+        color: #666;
+    }
+
+    .keyboardContent .three {
+        color: #666;
+    }
+
+    .keyboardContent .four {
+        color: #666;
+    }
+
+    .keyboardContent .five {
+        color: #666;
+    }
+
+    .keyboardContent .six {
+        color: #666;
+    }
+
+    .keyboardContent .esc {
+        width: 3.5em;
+    }
+
+    .keyboardContent .back {
+        width: 4.7em;
+    }
+
+    .keyboardContent .tab {
+        width: 4.7em;
+    }
+
+    .keyboardContent .caps {
+        width: 6.3em;
+    }
+
+    .keyboardContent .enter {
+        width: 5.8em;
+    }
+
+    .keyboardContent .shift {
+        width: 8em;
+    }
+
+    .keyboardContent .clear {
+        width: 8em;
+    }
+</style>
+<div class="keyboardContent">
+    <div class="textContent" contenteditable="true">
+
+    </div>
+    <div class="keyboardUl">
+        <ul class="keys two">
+            <li class="keyData" data-s="~" data-n="$DATA.stringify('`')">`</li>
+            <li class="keyData" data-s="!" data-n="1">1</li>
+            <li class="keyData" data-s="@" data-n="2">2</li>
+            <li class="keyData" data-s="#" data-n="3">3</li>
+            <li class="keyData" data-s="$DATA.stringify('$')" data-n="4">4</li>
+            <li class="keyData" data-s="%" data-n="5">5</li>
+            <li class="keyData" data-s="^" data-n="6">6</li>
+            <li class="keyData" data-s="$DATA.stringify('&')" data-n="7">7</li>
+            <li class="keyData" data-s="*" data-n="8">8</li>
+            <li class="keyData" data-s="$DATA.stringify('(')" data-n="9">9</li>
+            <li class="keyData" data-s="$DATA.stringify(')')" data-n="0">10</li>
+            <li class="keyData" data-s="$DATA.stringify('_')" data-n="$DATA.stringify('-')">$DATA.stringify('-')</li>
+            <li class="keyData" data-s="+" data-n="=">=</li>
+            <li class="keyData back" >back</li>
+        </ul>
+        <ul class="keys three">
+            <li class="keyData tab">Tab</li>
+            <li class="keyData" data-b="Q" data-l="q">q</li>
+            <li class="keyData" data-b="W" data-l="w">w</li>
+            <li class="keyData" data-b="E" data-l="e">e</li>
+            <li class="keyData" data-b="R" data-l="r">r</li>
+            <li class="keyData" data-b="T" data-l="t">$DATA.stringify('t')</li>
+            <li class="keyData" data-b="Y" data-l="y">y</li>
+            <li class="keyData" data-b="U" data-l="u">$DATA.stringify('u')</li>
+            <li class="keyData" data-b="I" data-l="i">i</li>
+            <li class="keyData" data-b="O" data-l="o">o</li>
+            <li class="keyData" data-b="P" data-l="p">p</li>
+            <li class="keyData" data-s="$DATA.stringify('{')" data-n="$DATA.stringify('[')">[</li>
+            <li class="keyData" data-s="$DATA.stringify('}')" data-n="$DATA.stringify(']')">]</li>
+            <li class="keyData" data-s="$DATA.stringify('|')" data-n="$DATA.stringify('\\')">$DATA.stringify('\\')</li>
+        </ul>
+        <ul class="keys four">
+            <li class="keyData caps" >Caps</li>
+            <li class="keyData" data-b="A" data-l="a">a</li>
+            <li class="keyData" data-b="S" data-l="s">s</li>
+            <li class="keyData" data-b="D" data-l="d">d</li>
+            <li class="keyData" data-b="F" data-l="f">$DATA.stringify('f')</li>
+            <li class="keyData" data-b="G" data-l="g">g</li>
+            <li class="keyData" data-b="H" data-l="h">h</li>
+            <li class="keyData" data-b="J" data-l="j">j</li>
+            <li class="keyData" data-b="K" data-l="k">k</li>
+            <li class="keyData" data-b="L" data-l="l">l</li>
+            <li class="keyData" data-s="$DATA.stringify(':')" data-n="$DATA.stringify(';')">$DATA.stringify(';')</li>
+            <li class="keyData" data-s='"' data-n="\'">\'</li>
+            <li id="keyboardEnter" hvml-events="keyboardClick" class="keyData enter">Enter</li>
+        </ul>
+        <ul class="keys five">
+            <li class="keyData shift">Shift</li>
+            <li class="keyData" data-b="Z" data-l="z">z</li>
+            <li class="keyData" data-b="X" data-l="x">x</li>
+            <li class="keyData" data-b="C" data-l="c">c</li>
+            <li class="keyData" data-b="V" data-l="v">v</li>
+            <li class="keyData" data-b="B" data-l="b">b</li>
+            <li class="keyData" data-b="N" data-l="n">$DATA.stringify('n')</li>
+            <li class="keyData" data-b="M" data-l="m">m</li>
+            <li class="keyData" data-s=',' data-n="<">,</li>
+            <li class="keyData" data-s='.' data-n=">">.</li>
+            <li class="keyData" data-s='?' data-n="/">/</li>
+            <li class="keyData clear">Clear</li>
+        </ul>
+    </div>
+</div>
+<script hvml:raw>
+    var content = '';
+    document.querySelectorAll('.keyboardContent ul li').forEach((item)=>{
+        
+        item.addEventListener('click',function(evt){
+            var content = document.querySelector('.keyboardContent .textContent').textContent;
+            switch(item.textContent){
+                case 'back':
+                    content = content.substr(0,content.length-1)
+                    break;
+                case 'Tab':
+                    break;
+                case 'Caps':
+                    document.querySelectorAll('.keyboardContent ul li').forEach((item)=>{
+                        if(item.getAttribute('data-b') != null){
+                            if(item.getAttribute('data-b') == item.textContent){
+                                item.textContent = item.getAttribute('data-l')
+                            }else{
+                                item.textContent = item.getAttribute('data-b')
+                            }
+                        }
+                    })
+                    break;
+                case 'Shift':
+                    document.querySelectorAll('.keyboardContent ul li').forEach((item)=>{
+                        if(item.getAttribute('data-s') != null){
+                            if(item.getAttribute('data-s') == item.textContent){
+                                item.textContent = item.getAttribute('data-n')
+                            }else{
+                                item.textContent = item.getAttribute('data-s')
+                            }
+                        }
+                    })
+                    break;
+                case 'Clear':
+                    content = '';
+                    break;
+                case 'Enter':
+                    let data = {
+                        targetTagName: evt.target.tagName,
+                        targetHandle: get_element_hvml_handle(evt.target),
+                        targetId: evt.target.id,
+                        targetClass: evt.target.className,
+                        targetValue: evt.target.value,
+                        timeStamp: evt.timeStamp,
+                        details: evt
+                    };
+                    data.keyboardContent= content;
+
+                    if (get_element_hvml_handle(evt.currentTarget) == "") {
+                        HVML.post('keyboardClick', "id",
+                                evt.currentTarget.id,
+                                JSON.stringify(data));
+                    }
+                    else {
+                        HVML.post('keyboardClick', "handle",
+                                get_element_hvml_handle(evt.currentTarget),
+                                JSON.stringify(data));
+                    }
+                    break;
+                default:
+                    content += item.textContent;
+                    break;
+            }
+            document.querySelector('.keyboardContent .textContent').textContent = content
+        })
+    })
+</script>

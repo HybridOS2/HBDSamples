@@ -1,0 +1,82 @@
+<init as "weekArr" with [] />
+<init as "clockTemplate" with [] />
+
+
+<archetype name="clock_item">
+    <div class="clock-item">
+        <div class="time-info">
+            <div class="time">$?.time</div>
+            <div class="info">
+                <span>$?.weekstr</span>
+            </div>
+        </div>
+        <div id="switch-$?.id" hvml-events="click" class="switch list-clock-item">
+            <img id="$?.id" style="pointer-events:none;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-$?.open.png" />
+        </div>
+    </div>
+</archetype>
+
+<div class="clock-list">
+    <div class="goBack" hvml-events="click">
+        <img style="width:80px" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="empty">
+        点击右侧+添加闹钟
+    </div>
+    <div class="backgroundImg">
+        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/clock.png" />
+    </div>
+    <div id="clock-list-group" class="clock-content">
+        <iterate on $clockData in="#clock-list-group">
+            <update on="$@" to="append" with="$clock_item" />
+        </iterate>
+    </div>
+    <div class="clock-add" hvml-events="click" >
+        <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/add.png" />
+    </div>
+</div>
+
+<define as="clockEdit" from="file://$SYS.cwd/clockEdit.hvml" />
+<div class="dialog clockEdit">
+    <include with="$clockEdit" />
+</div>
+
+<observe on=".clock-list .clock-add" for="click">
+    <update on="$DOC.query('.clockEdit')" at="attr.class" with="dialog clockEdit popIn show" />
+    <request on="#optHour" to="call:ELEMENT.scrollTop=2261" with 0 noreturn />
+    <request on="#optMin" to="call:ELEMENT.scrollTop=6041" with 0 noreturn />
+</observe>
+
+<observe on=".clock-list .goBack" for="click">
+    <update on="$DOC.query('.clockList')" at="attr.class" with="dialog clockList popOut show" />
+</observe>
+
+<define as="reloadClockList">
+    <update on "#clock-list-group" at "content" with ' ' />
+    <iterate on $clockData in="#clock-list-group">
+        <update on="$@" to="append" with="$clock_item" />
+    </iterate>
+</define>
+
+<!-- *************开关闹钟************* -->
+<observe on=".list-clock-item" for="click"> 
+    <init as clockId with $STR.substr($?.targetId,7,19) />
+    <iterate on="0" onlyif $L.lt($0<,$DATA.count($clockData)) with $DATA.arith('+',$0<,1) nosetotail>
+        <test with="$L.streq('case',$clockData[$?][id],$clockId)">
+            <test with="$L.streq('case',$clockData[$2?].open,'on')">
+                <update on $clockData[$3?] at=".open" with="off" />
+                <update on="#$clockId" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-off.png" />
+                <differ>
+                    <update on $clockData[$4?] at=".open" with="on" />
+                    <update on="#$clockId" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/switch-on.png" />
+                </differ>
+            </test>
+        </test>
+    </iterate>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($clockData))
+    </inherit>
+    <inherit>
+        $STREAM.open("file://$SYS.cwd/json/clock-data.json","read write create truncate").writelines($DATA.serialize($clockData))
+    </inherit>
+</observe>

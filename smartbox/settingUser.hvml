@@ -1,0 +1,37 @@
+<div class="setting-user">
+    <div class="go-back" hvml-events="click" >
+        <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
+    </div>
+    <div class="setting-header">
+        <div class="setting-title">
+            <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
+            <span>账号</span>
+        </div>
+    </div>
+    <div class="setting-content">
+        <div class="setting-item">
+            <div class="label">
+                <div><span>昵称 </span>987654</div>
+            </div>
+            <div class="avatar">
+                <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/user.png">
+            </div>
+        </div>
+        <div class="setting-item">
+            <div class="label">
+                <div>账号</div>
+            </div>
+            <div class="username">
+                <div>987654</div>
+            </div>
+        </div>
+
+        <div class="setting-button">
+            <span>退出登录</span>
+        </div>
+    </div>
+</div>
+
+<observe on=".setting-user .go-back" for="click">
+     <update on="$DOC.query('.settingUser')" at="attr.class" with="dialog settingUser popOut show" />
+</observe>
