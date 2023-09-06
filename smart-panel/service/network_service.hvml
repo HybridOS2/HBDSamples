@@ -194,7 +194,10 @@
                 </observe>
                 -->
                 <catch for `RequestFailed`>
+                    <include with="$start_delay_timer" />
+                    <!--
                     <include with $report_failed on {status:"无法访问网络", sub_status:' '} />
+                    -->
                 </catch>
 
                 <differ>
