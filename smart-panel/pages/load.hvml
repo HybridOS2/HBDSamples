@@ -1,0 +1,36 @@
+<div id="id_load" class="load bg-dark">
+    <script src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/js/load.js" type="text/javascript"></script>
+
+    <div id="id_load_tips" class='load__tips text-white'>加载中</div>
+
+    <!--
+    <div class="load__img__anim load__img__anim__circle"></div>
+    -->
+
+    <img id="id_load_img" class='load__logo load__anim' src='file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/hvml.png'>
+
+
+    <update on="$TIMERS" to="unite">
+    [
+        { "id" : "network_check_timer", "interval" : 1000, "active" : "yes" }
+    ]
+    </update>
+
+    <observe on $TIMERS for "expired:network_check_timer" >
+        <update on="$TIMERS" to="overwrite">
+            { "id" : "network_check_timer", "interval" : 1000, "active" : "false" }
+        </update>
+        <forget on $TIMERS for 'expired:network_check_timer' />
+
+        <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
+
+        <catch for `RequestFailed`>
+             <load from "#id_body_network" onto "inherit:" async />
+             <exit />
+        </catch>
+
+        <load from "#id_page" onto "inherit:" async />
+        <exit />
+    </observe>
+
+</div>

@@ -1,0 +1,11 @@
+<div class="small-block block-right">
+    <div class="flex-box block-title">
+        <div>
+            <div>智能摄像机</div>
+        </div>
+
+        <div id="bedroom"><i class="bi bi-chevron-right"></i></div>
+    </div>
+    <div id="id_camera_status">离线</div>
+</div>
+

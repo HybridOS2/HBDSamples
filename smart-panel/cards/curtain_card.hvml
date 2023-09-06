@@ -1,0 +1,31 @@
+<div class="title-block">
+    <div class="block">
+        <div class="flex-box block-title">
+            <div>
+                <div>Curtain 卧室</div>
+                <div class="outline">已离线</div>
+            </div>
+
+            <div id="bedroom"><i class="bi bi-chevron-right"></i></div>
+        </div>
+        <div class="flex-box button-box gear-box air-box" style="height: 70%" >
+                <div id="percent">0%</div>
+                <div class="slider-box flex-box curatian__slider__box">
+                    <input
+                            class="slider"
+                            type="text"
+                            id="mySlider"
+                            data-slider-id="ex1Slider"
+                            data-provide="slider"
+                            data-slider-min="0"
+                            data-slider-max="100"
+                            data-slider-step="1"
+                            data-slider-value="0"
+                            data-slider-tooltip="hide"
+                            onchange="do_classify()"
+                            />
+                </div>
+        </div>
+    </div>
+</div>
+

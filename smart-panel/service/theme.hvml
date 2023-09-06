@@ -1,0 +1,66 @@
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "update_theme_timer", "interval" : 1000, "active" : "yes" }
+            ]
+        </update>
+
+        <define as "update_theme_option">
+            <init as tm with $DATETIME.localtime() temp />
+            <test with $L.and($L.ge($tm.hour, 8), $L.lt($tm.hour, 18)) >
+                <test with $L.ne($theme_option.auto, 2)>
+                    <update on $theme_option at ".auto" with 2L />
+                </test>
+                <differ>
+                    <test with $L.ne($theme_option.auto, 1)>
+                        <update on $theme_option at ".auto" with 1L />
+                    </test>
+                </differ>
+            </test>
+        </define>
+
+        <define as "set_theme" at "_topmost">
+            <test with $L.ne($running_state.theme, $?)>
+                <test on $?>
+                    <match for="EQ 1" exclusively>
+                        <update on "#id_page" at "attr.class" with "page__base page__theme__dark page" />
+                        <update on '#id_morning_scene' at "attr.class" with 'btn-icon' />
+                        <update on '#id_night_scene' at "attr.class" with 'btn-icon btn-icon-active' />
+                    </match>
+                    <match for="EQ 2" exclusively>
+                        <update on "#id_page" at "attr.class" with "page__base page__theme__light__green page" />
+                        <update on '#id_morning_scene' at "attr.class" with 'btn-icon btn-icon-active' />
+                        <update on '#id_night_scene' at "attr.class" with 'btn-icon' />
+                    </match>
+                    <match for="ANY" exclusively>
+                        <update on "#id_page" at "attr.class" with "page__base page__theme__dark page" />
+                        <update on '#id_morning_scene' at "attr.class" with 'btn-icon' />
+                        <update on '#id_night_scene' at "attr.class" with 'btn-icon btn-icon-active' />
+                    </match>
+                </test>
+                <update on "$running_state" at ".theme" with $? />
+            </test>
+        </define>
+
+        <define as "update_theme" at "_topmost">
+            <test with $L.eq($theme_option.user, 0)>
+                <include with "$set_theme" on $theme_option.auto />
+                <differ>
+                    <include with "$set_theme" on $theme_option.user />
+                </differ>
+            </test>
+        </define>
+
+        <observe on $theme_option for "change">
+            <include with "$update_theme" />
+        </observe>
+
+        <include with "$update_theme_option" />
+        <include with "$update_theme" />
+
+        <observe on $TIMERS for "expired:update_theme_timer">
+            <include with "$update_theme_option" />
+        </observe>
+
+
+
+

@@ -1,0 +1,8 @@
+<div id="id_load_page" class="bg-dark load">
+
+    <div id="id_load_page_tips" class='load__tips text-white'>Loading...</div>
+
+    <img id="id_load_page_icon" class='load__logo'
+        src='file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-dark.png'>
+
+</div>
