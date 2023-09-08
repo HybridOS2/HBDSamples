@@ -90,7 +90,7 @@ body{
 }
 
 .speed-data .speed-unit{
-    font-size: 20px;
+    font-size: 1vw;
     text-align: center;
 }
 
@@ -150,7 +150,7 @@ body{
 }
 
 .Rev-data .Rev-unit{
-    font-size: 20px;
+    font-size: 1vw;
     text-align: center;
 }
 

@@ -783,7 +783,7 @@
                     <canvas class="circle canvasArcCir"></canvas>
                     <canvas class="circle canvasRadian"></canvas>
                     <div class="Rev-data">
-                        <div class="Rev-number">11.7</div>
+                        <div class="Rev-number">0</div>
                         <div class="Rev-unit">x1000r/min</div>
                     </div>
                     <div class="temp">
