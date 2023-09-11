@@ -44,7 +44,7 @@
             }
         </request>
 
-        <load from "$CRTN.base/index.hvml" onto 'page@mainPagePanel' as 'index' async />
+        <load from "$CRTN.base/main.hvml" onto 'page@mainPagePanel' as 'index' async />
         <load from "$CRTN.base/init.hvml" onto 'page@initPagePanel' as 'network' async />
     </body>
 
