@@ -305,7 +305,7 @@
     <init as 'hbdbus' at='_runner' with undefined />
     <include with="$stop_load_main_timer" />
     <forget on $TIMERS for 'expired:network_service_load_main_timer' />
-    <load from "#id_page" onto "inherit:" async />
+    <include with="$main_hvml" />
 </observe>
 
 

@@ -4,6 +4,67 @@ function hidePrevPage() {
     $('#id_network').hide()
 }
 
+function simulate(element, eventName)
+{
+    var options = extend(defaultOptions, arguments[2] || {});
+    var oEvent, eventType = null;
+
+    for (var name in eventMatchers)
+    {
+        if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+    }
+
+    if (!eventType)
+        throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+
+    if (document.createEvent)
+    {
+        oEvent = document.createEvent(eventType);
+        if (eventType == 'HTMLEvents')
+        {
+            oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+        }
+        else
+        {
+            oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+                options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+                options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+        }
+        element.dispatchEvent(oEvent);
+    }
+    else
+    {
+        options.clientX = options.pointerX;
+        options.clientY = options.pointerY;
+        var evt = document.createEventObject();
+        oEvent = extend(evt, options);
+        element.fireEvent('on' + eventName, oEvent);
+    }
+    return element;
+}
+
+function extend(destination, source) {
+    for (var property in source)
+        destination[property] = source[property];
+    return destination;
+}
+
+var eventMatchers = {
+    'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+    'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+}
+var defaultOptions = {
+    pointerX: 0,
+    pointerY: 0,
+    button: 0,
+    ctrlKey: false,
+    altKey: false,
+    shiftKey: false,
+    metaKey: false,
+    bubbles: true,
+    cancelable: true
+}
+
 function init() {
     // 隐藏DOM元素
     console.log(".............................................init begin");
@@ -22,7 +83,7 @@ function init() {
     timer = setInterval(() => { // 定时器
         handleTime += 1
         //console.log('计时',handleTime);
-        if(handleTime >= 60){
+        if(handleTime >= 8){
             $('#lockScreen').show()
             lockScreen = true
             $('#right').hide()
@@ -36,7 +97,7 @@ function init() {
 
             $('.container').animate({ scrollTop: 0 }, 200)
         }
-        if(handleTime >= 63) {
+        if(handleTime >= 12) {
             handleTime = 0
         }
     }, 1000);
@@ -276,6 +337,7 @@ function init() {
                 checkUnlocked();
             } 
         }
+        handleTime = 0;
     });
 
     $(document).on('mouseup touchend', function(e) {
@@ -294,16 +356,15 @@ function init() {
     });
 
     initPlayer();
+
+    const carousel = new bootstrap.Carousel('#carouselExample')
+    carousel.cycle();
+
     console.log(".............................................init end");
 }
 
-function do_classify() {
-    var mySlider = document.getElementById("mySlider");
-    //console.log(mySlider.value);
-    $('#percent').text(mySlider.value + '%');
+function do_classify(value) {
+    $('#percent').text(value + '%');
 }
 
-$(document).ready(function() {
-    init();
-});
 

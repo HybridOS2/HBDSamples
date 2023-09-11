@@ -1,4 +1,6 @@
-$('#id_load').hide();
+function hide_load_page() {
+    $('#id_load').hide();
+}
 
 function show_elem(page_id) {
     $(page_id).removeClass('d-none');
@@ -35,4 +37,3 @@ function stop_anim()
     $('#id_network_icon').removeClass('network__icon__anim');
 }
 
-switch_normal();

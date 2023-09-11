@@ -7,7 +7,8 @@
     <div class="load__img__anim load__img__anim__circle"></div>
     -->
 
-    <img id="id_load_img" class='load__logo load__anim' src='$CRTN.base/assets/hvml.png'>
+    <img id="id_load_img" class='load__logo load__anim' src="$CRTN.base/assets/hvml.png">
+</div>
 
 
     <update on="$TIMERS" to="unite">
@@ -24,13 +25,11 @@
 
         <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
 
+        <include with="$main_hvml" />
+
         <catch for `RequestFailed`>
-             <load from "#id_body_network" onto "inherit:" async />
-             <exit />
+             <include with="$network_hvml" />
         </catch>
 
-        <load from "#id_page" onto "inherit:" async />
-        <exit />
     </observe>
 
-</div>

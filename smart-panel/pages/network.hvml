@@ -1,3 +1,5 @@
+<request on="#id_page" to="call:hide_load_page(); return true;" />
+
 <div id="id_network" class="network bg-dark">
     <div id="id_network_title" class='network__title text-white'>正在配置网络</div>
     <div id="id_network_status" class='network__status text-light'></div>
@@ -7,8 +9,8 @@
     <div id="id_network_icon" class="text-white network__icon network__icon__anim">
         <i class="bi bi-link"></i>
     </div>
+</div>
 
-    <script src="$CRTN.base/assets/js/network.js" type="text/javascript"></script>
 
     <update on="$TIMERS" to="unite">
         [
@@ -26,5 +28,4 @@
         <include with="$network_service_hvml" />
     </observe>
 
-</div>
 

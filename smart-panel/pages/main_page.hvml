@@ -2,8 +2,6 @@
     <inherit>
         $STREAM.stdout.writelines(".............................................begin to load main page $SYS.cwd..................")
     </inherit>
-    <!-- FIXME: It will generate two sliders, if placed it in the head -->
-    <script src="$CRTN.base/assets/js/bootstrap-slider.min.js"></script>
 
     <!-- theme switch service -->
     <define as="theme_hvml" from="$CRTN.base/service/theme.hvml" />
@@ -71,15 +69,14 @@
         <exit with "closed" />
     </observe>
 
-    <script src="$CRTN.base/assets/js/index.js" type="text/javascript"></script>
-
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "update_network_state_timer", "interval" : 5000, "active" : "yes" }
+            { "id" : "update_network_state_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
 
     <observe on $TIMERS for "expired:update_network_state_timer">
+        <request on="#id_main_page" to="call:init(); return true;" />
         <update on="$TIMERS" to="overwrite">
             { "id" : "update_network_state_timer", "interval" : 1000, "active" : "false" }
         </update>

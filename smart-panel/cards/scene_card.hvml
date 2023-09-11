@@ -2,7 +2,7 @@
     <div class="block">
         <div class="flex-box block-title">
             <div>场景</div>
-            <div id="toright"><i class="bi bi-chevron-right"></i></div>
+            <div id="toright" class="right__arrow"><i class="bi bi-chevron-right"></i></div>
         </div>
         <div class="flex-box button-box" style="height: 70%">
             <div class="scene__btn">
