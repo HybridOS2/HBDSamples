@@ -1,6 +1,6 @@
 <div class="music-block music-block2">
     <div class="flex-box" style="justify-content: space-between">
-        <img id="music-pic2" class="music-pic" src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-dark.png" alt="" />
+        <img id="music-pic2" class="music-pic" src="$CRTN.base/assets/bg-dark.png" alt="" />
         <div class="card-title">
             <p>智能音乐</p>
             <p>聆听生活</p>

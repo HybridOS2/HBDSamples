@@ -8,7 +8,7 @@
         <i class="bi bi-link"></i>
     </div>
 
-    <script src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/js/network.js" type="text/javascript"></script>
+    <script src="$CRTN.base/assets/js/network.js" type="text/javascript"></script>
 
     <update on="$TIMERS" to="unite">
         [
@@ -22,7 +22,7 @@
         </update>
         <forget on $TIMERS for 'expired:network_check_timer' />
 
-        <define as="network_service_hvml" from="file://$SYS.cwd/service/network_service.hvml" />
+        <define as="network_service_hvml" from="$CRTN.base/service/network_service.hvml" />
         <include with="$network_service_hvml" />
     </observe>
 

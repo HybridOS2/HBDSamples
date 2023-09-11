@@ -97,7 +97,7 @@ https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe
 <div id="lockScreen">
     <div class="content-block">
         <span class="weather">
-            <img id="id_weather_img" class="weather__img" src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/qing.svg" />
+            <img id="id_weather_img" class="weather__img" src="$CRTN.base/assets/weather/qing.svg" />
             <span id="id_weather_tem">27 °C</span>
         </span>
         <br />
@@ -108,12 +108,12 @@ https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe
     </div>
     <div class="music-block">
         <div class="flex-box" style="justify-content: space-between">
-            <img id="music-pic" class="music-pic" src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/resources/music/m1.jpg" alt="" />
+            <img id="music-pic" class="music-pic" src="$CRTN.base/resources/music/m1.jpg" alt="" />
             <div class="card-title">
                 <p>智能音乐</p>
                 <p>聆听生活</p>
             </div>
-            <audio id="audio" src="file:///app/cn.fmsoft.hybridos.smartcontrolpanel/resources/music/m1.mp3"></audio>
+            <audio id="audio" src="$CRTN.base/resources/music/m1.mp3"></audio>
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <button id="pre" class="btn check-btn">
@@ -195,7 +195,7 @@ https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe
 
 <observe against "weather_info" for "change:displaced" >
     <update on "#id_weather_tem" at "textContent" with "$weather_info.tem °C" />
-    <update on "#id_weather_img" at "attr.src" with "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/$weather_info.wea_img.svg" />
+    <update on "#id_weather_img" at "attr.src" with "$CRTN.base/assets/weather/$weather_info.wea_img.svg" />
     <update on "$lockscreen_info" at ".weather" with 1L />
     <catch for `NoSuchKey`>
         <inherit>
@@ -220,7 +220,7 @@ https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe
 <define as 'update_weather'>
     <test with $L.eq($lockscreen_info.weather, 1L) >
         <update on "#id_weather_tem" at "textContent" with "$weather_info.tem °C" />
-        <update on "#id_weather_img" at "attr.src" with "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/$weather_info.wea_img.svg" />
+        <update on "#id_weather_img" at "attr.src" with "$CRTN.base/assets/weather/$weather_info.wea_img.svg" />
         <catch for `NoSuchKey`>
             <inherit>
                 $STREAM.stdout.writelines("update weather failed")
