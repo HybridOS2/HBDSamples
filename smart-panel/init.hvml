@@ -1,0 +1,21 @@
+<!DOCTYPE hvml SYSTEM 'f: MATH FS'>
+<hvml target="html">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel" ) hvml:silently />
+
+    </head>
+
+    <body id="id_load" class="bg-dark page__base">
+
+        this is load.hvml
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+    </body>
+
+
+</hvml>

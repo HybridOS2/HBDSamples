@@ -1,0 +1,52 @@
+<!DOCTYPE hvml>
+<hvml target="html">
+    <head>
+        <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel" ) hvml:silently />
+        <title>Load</title>
+
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+
+
+
+    <body>
+        <request on="$RDR" to="setPageGroups">
+            {
+                "data":'<section id="sec1"><article id="viewerWindow1" class="viewer"><ol id="mainPagePanel"></ol><ol id="initPagePanel"></ol></article></section>'
+            }
+        </request>
+
+        <request on="$RDR" to="createPlainWindow">
+            {
+                "name":"page@mainPagePanel",
+                "data": {
+                    "title": "main page",
+                    "class": "normal",
+                    "layoutStyle": "with:100vw;height:100vh;",
+                    "widgetStyle": { "backgroundColor": "darkgray", "darkMode": true }
+                }
+            }
+        </request>
+
+        <request on="$RDR" to="createPlainWindow">
+            {
+                "name":"page@initPagePanel",
+                "data": {
+                    "title": "init page",
+                    "class": "normal",
+                    "layoutStyle": "with:100vw;height:100vh;",
+                    "widgetStyle": { "backgroundColor": "darkgray", "darkMode": true }
+                }
+            }
+        </request>
+
+        <load from "$CRTN.base/index.hvml" onto 'page@mainPagePanel' as 'index' async />
+        <load from "$CRTN.base/init.hvml" onto 'page@initPagePanel' as 'network' async />
+    </body>
+
+
+</hvml>
