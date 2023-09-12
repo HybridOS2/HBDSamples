@@ -22,7 +22,6 @@
             </div>
 
             <div id="id_init_tips" class="text-center fs-6 init__status__tips">
-                正在检查网络
             </div>
 
             <div id="id_init_status">
@@ -35,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            <div id="id_init_btns">
+            <div id="id_init_btns" class="d-none">
                 <button type="button" class="btn retry__button">重试</button>
             </div>
         </div>
