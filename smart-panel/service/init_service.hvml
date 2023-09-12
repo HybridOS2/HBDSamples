@@ -13,7 +13,7 @@
 
 <update on="$TIMERS" to="unite">
     [
-        { "id" : "network_service_timeout_timer", "interval" : 10000, "active" : "no" },
+        { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "no" },
         { "id" : "network_service_delay_timer", "interval" : 500, "active" : "no" }
     ]
 </update>
@@ -21,7 +21,7 @@
 <define as 'start_timeout_timer' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "network_service_timeout_timer", "interval" : 10000, "active" : "yes" }
+            { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "yes" }
         ]
     </update>
 </define>
@@ -29,7 +29,7 @@
 <define as 'stop_timeout_timer' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "network_service_timeout_timer", "interval" : 10000, "active" : "no" }
+            { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "no" }
         ]
     </update>
 </define>
