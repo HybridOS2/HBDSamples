@@ -1,0 +1,143 @@
+.page_base {
+    --theme-font-size-xx-small: 10px;
+    --theme-font-size-x-small: 12px;
+    --theme-font-size-small: 14px;
+    --theme-font-size-medium: 18px;
+    --theme-font-size-normal: 20px;
+    --theme-font-size-x-normal: 35px;
+    --theme-font-size-large: 40px;
+    --theme-font-size-x-large: 50px;
+    --theme-font-size-xx-large: 66px;
+}
+
+.btn:focus {
+    box-shadow: none;
+    outline: none !important;
+}
+
+.btn:hover {
+    outline: none !important;
+    box-shadow: none;
+    background-color: transparent;
+    border: 0px;
+}
+
+a {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:visited {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:link {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:hover {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:active {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+
+#lockScreen {
+    background: #000000 url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg") no-repeat left top;
+    --bs-offcanvas-height: 100vh;
+}
+
+#lockScreen .time {
+    font-size: var(--theme-font-size-xx-large);
+    font-weight: 300;
+}
+
+#lockScreen .date {
+    font-size: var(--theme-font-size-normal);
+    font-weight: 600;
+}
+
+.widget-block {
+    width: 100%;
+    padding: 0 21px;
+    border-radius: 16px;
+}
+
+.music-controller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.music-pic {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    border: 2px solid var(--bs-border-color);
+}
+
+.music-info {
+    margin: 16px 0 0 0;
+    font-size: 14px;
+}
+
+.music-controller .prev-btn {
+    font-size: 33px;
+    border:0;
+}
+
+.music-controller .play-btn {
+    font-size: 40px;
+    border:0;
+}
+
+.music-controller .pause-btn {
+    font-size: 40px;
+    border:0;
+}
+
+.music-controller .next-btn {
+    font-size: 33px;
+    border:0;
+}
+
+.message-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between !important;
+}
+
+.message-block .bubble-icon {
+    width: 66px;
+    height: 66px;
+    line-height: 66px;
+    margin-top: 8px;
+    font-size: 50px !important;
+}
+
+.message-block .message-content {
+    width: 79%;
+}
+
+.message-block .message-title {
+    height: 60px;
+    width: 288px;
+    min-width: 0;
+    display:flex;
+    justify-content:left;
+    align-items:center;
+}
+

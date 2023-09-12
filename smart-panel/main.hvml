@@ -1,0 +1,99 @@
+<!DOCTYPE hvml>
+<hvml target="html">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.css" />
+        <script src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.min.js" type="text/javascript"></script>
+
+        <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
+
+        <link rel="stylesheet" href="assets/css/main.css" />
+
+        <init as chan with $RUNNER.chan(! 'sysNotification' ) />
+
+        <init as 'theme_option' at '_runner'>
+            {
+                "user": 0,
+                "auto": 0
+            }
+        </init>
+
+        <init as 'running_state' at '_runner'>
+            {
+                "theme": 0,
+                "network" : {
+                    "state" : 0
+                }
+            }
+        </init>
+
+        <update on $TIMERS to 'unite'>
+            [
+                { "id" : "clock_timer", "interval" : 500, "active" : "yes" }
+            ]
+        </update>
+    </head>
+
+    <body data-bs-theme="light" class="page_base">
+        <define as="lockscreen_hvml" from="components/lockscreen.hvml" />
+        <include with="$lockscreen_hvml" />
+
+        <div id="id_main_page" class="page__base">
+
+            <div id="id-wrapper" class="wrapper">
+                <div id="container" class="container">
+                    <!-- scene card -->
+                    <define as="scene_card_hvml" from="$CRTN.base/cards/scene_card.hvml" />
+                    <include with="$scene_card_hvml" />
+
+                    <!-- music 2 -->
+                    <define as="music_card_hvml" from="$CRTN.base/cards/music_card.hvml" />
+                    <include with="$music_card_hvml" />
+
+                    <!-- curtain -->
+                    <define as="curtain_card_hvml" from="$CRTN.base/cards/curtain_card.hvml" />
+                    <include with="$curtain_card_hvml" />
+
+                    <!-- air conditioner -->
+                    <define as="air_conditioner_card_hvml" from="$CRTN.base/cards/air_conditioner_card.hvml" />
+                    <include with="$air_conditioner_card_hvml" />
+
+                    <!-- airer -->
+                    <define as="airer_card_hvml" from="$CRTN.base/cards/airer_card.hvml" />
+                    <include with="$airer_card_hvml" />
+
+                    <!-- air purifier -->
+                    <define as="air_purifier_card_hvml" from="$CRTN.base/cards/air_purifier_card.hvml" />
+                    <include with="$air_purifier_card_hvml" />
+
+                    <!-- dimmer -->
+                    <define as="dimmer_card_hvml" from="$CRTN.base/cards/dimmer_card.hvml" />
+                    <include with="$dimmer_card_hvml" />
+
+                    <!-- camera -->
+                    <define as="camera_card_hvml" from="$CRTN.base/cards/camera_card.hvml" />
+                    <include with="$camera_card_hvml" />
+
+                    <!-- other -->
+                    <define as="other_card_hvml" from="$CRTN.base/cards/other_card.hvml" />
+                    <include with="$other_card_hvml" />
+                </div>
+            </div>
+        </div>
+
+        <!-- the channel has been closed if $chan.recv() returns false -->
+        <!-- observe on $chan for 'receivable'>
+            <choose $chan.recv() silently>
+            </choose>
+        </observe -->
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+        <!-- script src="$CRTN.base/assets/js/index.js" type="text/javascript"></script -->
+    </body>
+</hvml>
