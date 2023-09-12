@@ -1,8 +1,10 @@
 <div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mt-3 mb-3">
     <div class="card-box card-title">
-        <div>场景</div>
-        <div id="more4Scenario">
-            <i class="bi bi-chevron-right"></i>
+        <div>外观</div>
+        <div>
+            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
+                <i class="bi bi-chevron-right"></i>
+            </button>
         </div>
     </div>
     <div class="card-box card-icons">
@@ -19,6 +21,83 @@
             <div class="icon-des mt-1">深色</div>
         </div>
     </div>
+</div>
+
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Scenario" aria-labelledby="offcanvas4ScenarioLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvas4ScenarioLabel">显示设置</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <h6>外观</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item">
+        <div class="card-box card-icons">
+            <div id="btnThemeLight" hvml-events="click" class="icon active">
+                <div>
+                    <i class="bi bi-sun"></i>
+                </div>
+                <div class="icon-des mt-1 mb-2">浅色</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
+                </div>
+            </div>
+            <div id="btnThemeDark" hvml-events="click" class="icon">
+                <div>
+                    <i class="bi bi-moon-fill"></i>
+                </div>
+                <div class="icon-des mt-1 mb-2">深色</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
+                </div>
+            </div>
+        </div>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          自动
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchThemeAuto" />
+        </div>
+      </li>
+
+    </ul>
+
+    <h6>语言</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中文简体
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中文繁体
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        English
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+
+    <h6>字体大小</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        小
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        大
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+
+  </div>
 </div>
 
 <observe on="#btnThemeLight" for="click">

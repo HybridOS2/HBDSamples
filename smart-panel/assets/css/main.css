@@ -142,7 +142,10 @@ a:active {
 }
 
 #mainContent {
-    background: #000000 url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg") no-repeat left top;
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg");
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
 }
 
 .card-box {
@@ -184,5 +187,9 @@ a:active {
 .card-icons .icon-des {
     font-size: var(--theme-font-size-normal);
     text-align: center;
+}
+
+.offcanvas-setting {
+    --bs-offcanvas-width:320px;
 }
 
