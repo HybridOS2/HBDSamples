@@ -15,9 +15,11 @@
         <link rel="stylesheet" href="$CRTN.base/assets/css/init.css" />
         <script type="text/javascript" src="$CRTN.base/assets/js/init.js" ></script>
 
+        <init as 'v_t' with $CRTN.timeout(! 3L) />
+
         <update on="$TIMERS" to="unite">
         [
-            { "id" : "start_init", "interval" : 500, "active" : "yes" }
+            { "id" : "start_init", "interval" : 1000, "active" : "yes" }
         ]
         </update>
 
@@ -30,6 +32,8 @@
             </div>
 
             <div id="id_init_tips" class="text-center fs-6 mt-4 init__status__tips">
+                <div id="id_init_tips_status"></div>
+                <div id="id_init_tips_sub_status"></div>
             </div>
 
             <div id="id_init_status" class="init__status__container">
@@ -48,12 +52,25 @@
         </div>
 
 
-        <observe on $TIMERS for "expired:start_init">
-            <request on="#id_init" to="call:switch_retry(); return true;" />
-        </observe>
+        <define as="init_service" at="_topmost" from="$CRTN.base/service/init_service.hvml" />
 
-        <observe on "#id_retry_btn" for 'click'>
-            <request on="#id_init" to="call:switch_normal(); return true;" />
+        <observe on $TIMERS for "expired:start_init">
+            <forget on $TIMERS for 'expired:start_init' />
+            <update on="$TIMERS" to="unite">
+                [
+                    { "id" : "start_init", "interval" : 1000, "active" : "no" }
+                ]
+            </update>
+
+            <include with="$init_service" />
+
+            <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.phpp' />
+            <include with $show_main_page />
+
+           <catch for `RequestFailed`>
+                 <update on '#id_init_status' with "正在配置网络" />
+                 <include with="$do_network_check" />
+            </catch>
         </observe>
 
         <observe on $CRTN for "rdrState:closed">

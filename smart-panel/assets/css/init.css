@@ -26,7 +26,7 @@
 
 .init__status__container {
     position: absolute;
-    bottom: 25px;
+    bottom: 40px;
 }
 
 .init__status__msg__container {
@@ -48,7 +48,7 @@
 .retry__button {
     position: absolute;
     left: 140px;
-    bottom: 25px;
+    bottom: 40px;
     width: 200px;
     color: var(--bs-body-color);
     border: 1px solid var(--bs-body-color);
