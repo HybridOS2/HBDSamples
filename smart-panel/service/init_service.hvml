@@ -1,13 +1,16 @@
 <init as 'inetd' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
 <!-- step: 0 open dbus; 1 getDeviceStatus; 2 configDevice; 3 test http request; -->
-<init as 'network_status' at="_topmost">
+<init as 'init_status' at="_topmost">
 {
     "status":" ",
     "sub_status":" ",
     "step": 0,
     "device": "null",
     "inet4": "",
+    "tickcount":0,
+    "weather" : 0,
+    "weather_info" : {}
 }
 </init>
 
@@ -15,8 +18,25 @@
     [
         { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "no" },
         { "id" : "network_service_delay_timer", "interval" : 500, "active" : "no" }
+        { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
     ]
 </update>
+
+<define as 'start_background_service' at="_topmost">
+    <update on="$TIMERS" to="unite">
+        [
+            { "id" : "background_service_timer", "interval" : 1000, "active" : "yes" }
+        ]
+    </update>
+</define>
+
+<define as 'stop_background_service' at="_topmost">
+    <update on="$TIMERS" to="unite">
+        [
+            { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
+        ]
+    </update>
+</define>
 
 <define as 'start_timeout_timer' at="_topmost">
     <update on="$TIMERS" to="unite">
@@ -68,7 +88,7 @@
 </define>
 
 <define as 'get_device_status' at="_topmost">
-    <update on $network_status at ".step"  with 1L />
+    <update on $init_status at ".step"  with 1L />
     <include with $set_status on {status:"获取设备状态", sub_status:' '} />
     <include with="$start_timeout_timer" />
     <test with $hbdbus.call($inetd, 'getDeviceStatus', '{device:"*"}')>
@@ -80,10 +100,10 @@
 </define>
 
 <define as 'open_device' at="_topmost">
-    <update on $network_status at ".step"  with 2L />
-    <include with $set_status on {status:"打开设备 $network_status.device", sub_status:' '} />
+    <update on $init_status at ".step"  with 2L />
+    <include with $set_status on {status:"打开设备 $init_status.device", sub_status:' '} />
     <include with="$start_timeout_timer" />
-    <test with $hbdbus.call($inetd, 'openDevice', "{device: '$network_status.device'}")>
+    <test with $hbdbus.call($inetd, 'openDevice', "{device: '$init_status.device'}")>
         <differ>
             <include with="$stop_timeout_timer" />
             <include with $report_failed on {status:"打开设备失败", sub_status:' '} />
@@ -92,10 +112,10 @@
 </define>
 
 <define as 'config_device' at="_topmost">
-    <update on $network_status at ".step"  with 3L />
+    <update on $init_status at ".step"  with 3L />
     <include with $set_status on {status:"配置网络", sub_status:' '} />
     <include with="$start_timeout_timer" />
-    <test with $hbdbus.call($inetd, 'configDevice', "{device: '$network_status.device', method:'dhcp'}")>
+    <test with $hbdbus.call($inetd, 'configDevice', "{device: '$init_status.device', method:'dhcp'}")>
         <differ>
             <include with="$stop_timeout_timer" />
             <include with $report_failed on {status:"配置网络失败", sub_status:' '} />
@@ -105,11 +125,12 @@
 
 <define as 'show_main_page' at="_topmost">
     <include with $set_status on {status:' ', sub_status:' ' } />
+    <include with $start_background_service />
     <request on="#id_init" to="call:close_window(); return true;" />
 </define>
 
 <define as 'test_http_request' at="_topmost">
-    <update on $network_status at ".step"  with 4L />
+    <update on $init_status at ".step"  with 4L />
     <include with $set_status on {status:"检测网络通讯", sub_status:' ' } />
     <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
     <include with $show_main_page />
@@ -118,7 +139,7 @@
 <define as 'set_status' at="_topmost">
     <update on '#id_init_tips_status' with $?.status />
     <update on '#id_init_tips_sub_status' with $?.sub_status />
-    <update on $network_status at ".status .sub_status" with [$?.status, $?.sub_status] />
+    <update on $init_status at ".status .sub_status" with [$?.status, $?.sub_status] />
 </define>
 
 <define as 'regist_hbdbus_listener' at="_topmost">
@@ -134,13 +155,13 @@
             <init as devices with $DATA.parse($?.retValue) />
             <iterate on $devices.data>
                 <test with $L.streq('caseless', $?.type, 'wired')>
-                    <update on $network_status at '.device' with $2?.device />
-                    <update on $network_status at '.inet4' with $2?.inet4.address />
+                    <update on $init_status at '.device' with $2?.device />
+                    <update on $init_status at '.inet4' with $2?.inet4.address />
                     <back to '_nexttolast' />
                 </test>
             </iterate>
 
-            <test with $L.streq('case', $network_status.device, "null")>
+            <test with $L.streq('case', $init_status.device, "null")>
                 <include with $report_failed on {status:"未找到网络设备", sub_status:' '} />
                 <differ>
                     <include with $set_status on {status:"找到网络设备", sub_status:' '} />
@@ -237,7 +258,7 @@
             $STREAM.stdout.writelines(".....................................error: $?")
         </inherit>
         <include with="$stop_timeout_timer" />
-        <include with $report_failed on {status:$network_status.status, sub_status:"$?.retMsg"} />
+        <include with $report_failed on {status:$init_status.status, sub_status:"$?.retMsg"} />
     </observe>
 </define>
 
@@ -252,7 +273,7 @@
 </define>
 
 <define as 'do_network_check' at="_topmost">
-    <test on $network_status.step >
+    <test on $init_status.step >
         <match for="EQ 0" exclusively>
             <include with $open_dbus />
         </match>
@@ -279,6 +300,13 @@
     <request on="#id_init" to="call:switch_retry(); return true;" />
 </define>
 
+<define as 'request_weather_info' at="_topmost">
+    <init as 'weather_info' at='_runner' with undefined />
+    <init as 'weather_info' at '_runner' from 'https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe' async />
+    <inherit>
+        $STREAM.stdout.writelines("call request weather async")
+    </inherit>
+</define>
 
 <observe on "#id_retry_btn" for 'click'>
     <request on="#id_init" to="call:switch_normal(); return true;" />
@@ -288,7 +316,7 @@
 
 <observe on $TIMERS for 'expired:network_service_timeout_timer'>
     <include with="$stop_timeout_timer" />
-    <include with $report_failed on {status:"$network_status.status 操作超时", sub_status:' '} />
+    <include with $report_failed on {status:"$init_status.status 操作超时", sub_status:' '} />
 </observe>
 
 <observe on $TIMERS for 'expired:network_service_delay_timer'>
@@ -311,4 +339,30 @@
     <include with="$main_hvml" />
 </observe>
 
+<observe against "weather_info" for "change:displaced" >
+    <inherit>
+        $STREAM.stdout.writelines("####> update weather $weather_info")
+    </inherit>
+    <update on $init_status.weather_info at ".tem .img" with [$weather_info.tem, $weather_info.wea_img] />
+    <update on $init_status at ".weather" with 1L />
+    <catch for `NoSuchKey`>
+        <inherit>
+            $STREAM.stdout.writelines("update weather failed")
+        </inherit>
+    </catch>
+</observe>
 
+<observe on $TIMERS for 'expired:background_service_timer'>
+    <update on $init_status at ".tickcount" with $DATA.arith('+', $init_status.tickcount, 1 ) />
+    <inherit>
+        $STREAM.stdout.writelines("tickcount: $init_status.tickcount")
+    </inherit>
+    <test with $L.eq($init_status.weather, 0)>
+        <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
+            <include with $request_weather_info />
+            <inherit>
+            $STREAM.stdout.writelines("#####> need update weather")
+            </inherit>
+        </test>
+    </test>
+</observe>

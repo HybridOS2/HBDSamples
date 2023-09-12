@@ -64,7 +64,7 @@
 
             <include with="$init_service" />
 
-            <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.phpp' />
+            <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
             <include with $show_main_page />
 
            <catch for `RequestFailed`>
