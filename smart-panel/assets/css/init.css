@@ -4,6 +4,9 @@
     height:480px;
 }
 
+.init__logo__container {
+}
+
 .init__container__logo {
     height: 160px;
     width: 160px;
@@ -14,12 +17,19 @@
 }
 
 .init__status__tips {
+    height: 60px;
+    width:80%;
 }
 
 .init__status__anim {
 }
 
 .init__status__container {
+    position: absolute;
+    bottom: 25px;
+}
+
+.init__status__msg__container {
     max-width: 70%;
 }
 
