@@ -1,19 +1,21 @@
 function show_elem(elem_id) {
-    $(elem_id).removeClass('d-none');
+    var element = document.getElementById(elem_id);
+    element.classList.remove("d-none");
 }
 
 function hide_elem(elem_id) {
-    $(elem_id).addClass('d-none');
+    var element = document.getElementById(elem_id);
+    element.classList.add("d-none");
 }
 
 function switch_normal() {
-    show_elem('#id_init_status');
-    hide_elem('#id_init_btns');
+    show_elem('id_init_status');
+    hide_elem('id_init_btns');
 }
 
 function switch_retry() {
-    hide_elem('#id_init_status');
-    show_elem('#id_init_btns');
+    hide_elem('id_init_status');
+    show_elem('id_init_btns');
 }
 
 function close_window() {

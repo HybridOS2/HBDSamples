@@ -8,9 +8,6 @@
 
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.min.css" />
-        <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
-
-        <script src="$CRTN.base/assets/js/jquery-3.6.0.min.js" type="text/javascript"></script>
 
         <link rel="stylesheet" href="$CRTN.base/assets/css/init.css" />
         <script type="text/javascript" src="$CRTN.base/assets/js/init.js" ></script>
@@ -50,9 +47,6 @@
                 <button id="id_retry_btn" type="button" class="btn retry__button" hvml-events="click">重试</button>
             </div>
         </div>
-
-
-        <define as="init_service" at="_topmost" from="$CRTN.base/service/init_service.hvml" />
 
         <observe on $TIMERS for "expired:start_init">
             <forget on $TIMERS for 'expired:start_init' />
