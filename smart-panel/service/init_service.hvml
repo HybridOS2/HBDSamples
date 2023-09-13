@@ -126,7 +126,7 @@
 <define as 'show_main_page' at="_topmost">
     <include with $set_status on {status:' ', sub_status:' ' } />
     <include with $start_background_service />
-    <request on="#id_init" to="call:close_window(); return true;" />
+    <request on="plainwindow" to="call:hide_window" />
 </define>
 
 <define as 'test_http_request' at="_topmost">
@@ -345,6 +345,7 @@
     </inherit>
     <update on $init_status.weather_info at ".tem .img" with [$weather_info.tem, $weather_info.wea_img] />
     <update on $init_status at ".weather" with 1L />
+    <request on="plainwindow" to="call:show_window" />
     <catch for `NoSuchKey`>
         <inherit>
             $STREAM.stdout.writelines("update weather failed")

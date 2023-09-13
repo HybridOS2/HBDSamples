@@ -18,7 +18,4 @@ function switch_retry() {
     show_elem('id_init_btns');
 }
 
-function close_window() {
-    window.close();
-}
 
