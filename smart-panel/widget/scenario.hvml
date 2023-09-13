@@ -2,25 +2,28 @@
     <test with $withTitle>
       <div class="d-flex justify-content-between pt-3">
         <h5>外观</h5>
-        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
-            <i class="bi bi-three-dots"></i>
-        </button>
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
+            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+        </a>
        </div>
     </test>
 
-    <div class="card-box card-icons">
-        <div id="btnThemeLight" hvml-events="click" class="icon active">
-            <div>
-                <i class="bi bi-sun"></i>
-            </div>
-            <div class="icon-des mt-1">浅色</div>
+    <div class="d-flex justify-content-evenly pb-3">
+
+      <div class="btnThemeLight icon-btn" hvml-events="click">
+        <div class="icon active">
+          <i class="bi bi-sun"></i>
         </div>
-        <div  id="btnThemeDark" hvml-events="click" class="icon">
-            <div>
-                <i class="bi bi-moon-fill"></i>
-            </div>
-            <div class="icon-des mt-1">深色</div>
+        <div class="name">浅色</div>
+      </div>
+
+      <div class="btnThemeDark icon-btn" hvml-events="click">
+        <div class="icon">
+          <i class="bi bi-moon-fill"></i>
         </div>
+        <div class="name">深色</div>
+      </div>
+
     </div>
 </div>
 
@@ -28,31 +31,30 @@
 <div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Scenario" aria-labelledby="offcanvas4ScenarioLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvas4ScenarioLabel">显示设置</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+    </a>
   </div>
   <div class="offcanvas-body">
     <h6>外观</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item">
-        <div class="card-box card-icons">
-            <div id="btnThemeLight" hvml-events="click" class="icon active">
-                <div>
-                    <i class="bi bi-sun"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">浅色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
-                </div>
+        <div class="d-flex justify-content-evenly pb-3">
+
+          <div class="btnThemeLight icon-btn" hvml-events="click">
+            <div class="icon">
+              <i class="bi bi-sun"></i>
             </div>
-            <div id="btnThemeDark" hvml-events="click" class="icon">
-                <div>
-                    <i class="bi bi-moon-fill"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">深色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
-                </div>
+            <div class="name">浅色</div>
+          </div>
+
+          <div class="btnThemeDark icon-btn" hvml-events="click">
+            <div class="icon">
+              <i class="bi bi-moon-fill"></i>
             </div>
+            <div class="name">深色</div>
+          </div>
+
         </div>
       </li>
 
@@ -103,27 +105,27 @@
 </div>
 </test>
 
-<observe on="#btnThemeLight" for="click">
+<observe on '.btnThemeLight' for 'click'>
     <update on $theme_option at ".user" with 2L />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
-    <update on '#btnThemeLight' at "attr.class" with 'icon active' />
-    <update on '#btnThemeDark' at "attr.class" with 'icon' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
 </observe>
 
-<observe on="#btnThemeDark" for="click">
+<observe on '.btnThemeDark' for 'click'>
     <update on $theme_option at ".user" with 1L />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
-    <update on '#btnThemeLight' at "attr.class" with 'icon' />
-    <update on '#btnThemeDark' at "attr.class" with 'icon active' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
 </observe>
 
 <test with $L.eq($running_state.theme, 1L)>
-    <update on '#btnThemeLight' at "attr.class" with 'icon' />
-    <update on '#btnThemeDark' at "attr.class" with 'icon active' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
     <differ>
-        <update on '#btnThemeLight' at "attr.class" with 'icon active' />
-        <update on '#btnThemeDark' at "attr.class" with 'icon' />
+        <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+        <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
         <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
     </differ>
 </test>

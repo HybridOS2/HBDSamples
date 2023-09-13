@@ -2,9 +2,9 @@
     <test with $withTitle>
         <div class="d-flex justify-content-between pt-3">
           <h5>窗帘-$roomName</h5>
-          <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Curtain" aria-controls="offcanvas4Curtain">
-             <i class="bi bi-three-dots"></i>
-          </button>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Curtain" aria-controls="offcanvas4Curtain">
+            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+          </a>
         </div>
     </test>
 
@@ -18,7 +18,9 @@
 <div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Curtain" aria-labelledby="offcanvas4CurtainLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvas4CurtainLabel">窗帘-$roomName 设置</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="关闭"></button>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+    </a>
   </div>
   <div class="offcanvas-body">
 

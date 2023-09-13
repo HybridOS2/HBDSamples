@@ -13,8 +13,7 @@
 .btn:active, .btn:focus, .btn:focus-visible, .btn:hover {
     outline: none !important;
     box-shadow: none;
-    border: 0;
-    background-color: transparent;
+    border-color: transparent;
 }
 
 a {
@@ -203,5 +202,29 @@ a:active {
 
 .turn-down {
     transform: rotate(90deg);
+}
+
+.icon-btn .icon {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    line-height: 76px;
+    text-align: center;
+}
+
+.icon-btn .icon i {
+   font-size: var(--theme-font-size-x-normal);
+}
+
+.icon-btn .icon.active {
+   color: var(--bs-primary);
+}
+
+.icon-btn .name {
+    font-size: var(--theme-font-size-normal);
+    text-align: center;
 }
 
