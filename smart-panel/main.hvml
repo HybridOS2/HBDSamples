@@ -95,7 +95,7 @@
         </update>
     </head>
 
-    <body id='theMainBody' data-bs-theme="light" class="page_base">
+    <body id='theMainBody' data-bs-theme="dark" class="page_base">
 
         <div class="offcanvas offcanvas-top show" tabindex="-1" id="lockScreen" aria-labelledby="offcanvasLabel">
           <div class="offcanvas-body ps-3 pe-3">

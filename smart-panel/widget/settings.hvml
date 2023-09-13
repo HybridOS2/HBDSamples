@@ -3,33 +3,28 @@
       <h5>设置</h5>
     </div>
 
-    <div class="d-flex justify-content-between pt-5 pb-5">
-        <div class="card-box card-icons">
-          <div class="icon">
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4SystemSettings" aria-controls="offcanvas4SystemSettings">
-                <i class="bi bi-gear-fill"></i>
-            </button>
-            <div class="icon-des mt-1">系统</div>
-          </div>
-        </div>
+    <div class="card-box card-icons pt-5 pb-5">
+      <div class="icon">
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4SystemSettings" aria-controls="offcanvas4SystemSettings">
+            <i class="bi bi-gear-fill"></i>
+        </button>
+        <div class="icon-des mt-1">系统</div>
+      </div>
 
-        <div class="card-box card-icons">
-          <div class="icon">
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4HouseSettings" aria-controls="offcanvas4HouseSettings">
-                <i class="bi bi-house-gear-fill"></i>
-            </button>
-            <div class="icon-des mt-1">家居</div>
-          </div>
-        </div>
+      <div class="icon">
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4HouseSettings" aria-controls="offcanvas4HouseSettings">
+            <i class="bi bi-house-gear-fill"></i>
+        </button>
+        <div class="icon-des mt-1">家居</div>
+      </div>
 
-        <div class="card-box card-icons">
-          <div class="icon">
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4PersonSettings" aria-controls="offcanvas4PersonSettings">
-                <i class="bi bi-person-fill-gear"></i>
-            </button>
-            <div class="icon-des mt-1">人员</div>
-          </div>
-        </div>
+      <div class="icon">
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4PersonSettings" aria-controls="offcanvas4PersonSettings">
+            <i class="bi bi-person-fill-gear"></i>
+        </button>
+        <div class="icon-des mt-1">人员</div>
+      </div>
+
     </div>
 </div>
 
