@@ -38,13 +38,16 @@
     </head>
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
-        <define as 'fragLockscreen' from='components/lockscreen.hvml' />
+        <define as 'fragLockscreen' from 'component/lockscreen.hvml' />
         <include with $fragLockscreen />
 
         <div id="mainContent" class="d-grid gap-2">
             <div class="container">
-                <define as 'fragScenario' from="components/scenario.hvml" />
-                <include with $fragScenario />
+                <define as 'widgetScenario' from 'widget/scenario.hvml' />
+                <include with $widgetScenario on { withTitle: true } />
+
+                <define as 'widgetMusic' from 'widget/music.hvml' />
+                <include with $widgetMusic on { withTitle: true } />
             </div>
         </div>
 

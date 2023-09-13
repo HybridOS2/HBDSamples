@@ -1,12 +1,13 @@
 <div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mt-3 mb-3">
-    <div class="card-box card-title">
-        <div>外观</div>
-        <div>
-            <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
-                <i class="bi bi-chevron-right"></i>
-            </button>
-        </div>
-    </div>
+    <test with $withTitle>
+      <div class="d-flex justify-content-between pt-3">
+        <h5>外观</h5>
+        <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
+            <i class="bi bi-chevron-right"></i>
+        </button>
+       </div>
+    </test>
+
     <div class="card-box card-icons">
         <div id="btnThemeLight" hvml-events="click" class="icon active">
             <div>
@@ -23,6 +24,7 @@
     </div>
 </div>
 
+<test with $withTitle>
 <div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Scenario" aria-labelledby="offcanvas4ScenarioLabel">
   <div class="offcanvas-header">
     <h5 class="offcanvas-title" id="offcanvas4ScenarioLabel">显示设置</h5>
@@ -99,6 +101,7 @@
 
   </div>
 </div>
+</test>
 
 <observe on="#btnThemeLight" for="click">
     <update on $theme_option at ".user" with 2L />
