@@ -9,17 +9,28 @@
     </test>
 
     <div class="d-flex justify-content-between pt-5 pb-5">
-        <button class="btn btn-icon large-icon turn-up">
-            <i class="bi bi-play"></i>
-        </button>
 
-        <button class="btn btn-icon large-icon">
-            <i class="bi bi-pause"></i>
-        </button>
+      <div class="btnAirerUp icon-btn" hvml-events="click">
+        <div class="icon bg-body-secondary turn-up">
+          <i class="bi bi-play-fill"></i>
+        </div>
+        <div class="name mt-1">上升</div>
+      </div>
 
-        <button class="btn btn-icon large-icon turn-down">
-            <i class="bi bi-play"></i>
-        </button>
+      <div class="btnAirerStop icon-btn" hvml-events="click">
+        <div class="icon bg-body-secondary">
+          <i class="bi bi-stop-fill"></i>
+        </div>
+        <div class="name mt-1">停止</div>
+      </div>
+
+      <div class="btnAirerDown icon-btn" hvml-events="click">
+        <div class="icon bg-body-secondary turn-down">
+          <i class="bi bi-play-fill"></i>
+        </div>
+        <div class="name mt-1">下降</div>
+      </div>
+
     </div>
 </div>
 

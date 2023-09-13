@@ -164,10 +164,6 @@
                 <define as 'widgetCamera' from 'widget/camera.hvml' temp />
                 <include with $widgetCamera on { withTitle: true, roomName: '门厅' } />
 
-                <!-- camera -->
-                <define as 'widgetMessages' from 'widget/messages.hvml' temp />
-                <include with $widgetMessages on { withTitle: true } />
-
                 <!-- settings -->
                 <define as 'widgetSettings' from 'widget/settings.hvml' temp />
                 <include with $widgetSettings on { withTitle: true } />

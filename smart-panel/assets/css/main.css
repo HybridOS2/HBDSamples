@@ -213,6 +213,7 @@ a:active {
     border-radius: 50%;
     line-height: 76px;
     text-align: center;
+    background-color: var(--bs-secondary-bg);
 }
 
 .icon-btn .icon i {
