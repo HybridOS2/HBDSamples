@@ -48,6 +48,8 @@
             </div>
         </div>
 
+        <define as="init_service" at="_topmost" from="$CRTN.base/service/init_service.hvml" />
+
         <observe on $TIMERS for "expired:start_init">
             <forget on $TIMERS for 'expired:start_init' />
             <update on="$TIMERS" to="unite">
