@@ -10,16 +10,11 @@
     --theme-font-size-xx-large: 66px;
 }
 
-.btn:focus {
-    box-shadow: none;
-    outline: none !important;
-}
-
-.btn:hover {
+.btn:active, .btn:focus, .btn:focus-visible, .btn:hover {
     outline: none !important;
     box-shadow: none;
+    border: 0;
     background-color: transparent;
-    border: 0px;
 }
 
 a {
@@ -70,8 +65,9 @@ a:active {
 
 .widget-block {
     width: 100%;
-    padding: 0 21px;
+    padding: 0 20px;
     border-radius: 16px;
+    background: rgba(var(--bs-tertiary-bg-rgb), 0.75);
 }
 
 .music-controller {
@@ -91,6 +87,14 @@ a:active {
 .music-info {
     margin: 16px 0 0 0;
     font-size: 14px;
+}
+
+.large-icon {
+    font-size: 60px;
+}
+
+.small-icon {
+    font-size: 33px;
 }
 
 .music-controller .prev-btn {
@@ -191,5 +195,13 @@ a:active {
 
 .offcanvas-setting {
     --bs-offcanvas-width:320px;
+}
+
+.turn-up {
+   transform: rotate(-90deg);
+}
+
+.turn-down {
+    transform: rotate(90deg);
 }
 

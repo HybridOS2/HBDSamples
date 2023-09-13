@@ -1,9 +1,9 @@
-<div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mt-3 mb-3">
+<div class="widget-block shadow mt-3 mb-3">
     <test with $withTitle>
       <div class="d-flex justify-content-between pt-3">
         <h5>外观</h5>
         <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
-            <i class="bi bi-chevron-right"></i>
+            <i class="bi bi-three-dots"></i>
         </button>
        </div>
     </test>

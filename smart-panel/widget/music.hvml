@@ -1,9 +1,9 @@
-<div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mt-3 mb-3">
+<div class="widget-block shdow mt-3 mb-3">
     <test with $withTitle>
         <div class="d-flex justify-content-between pt-3">
           <h5>音乐</h5>
           <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Music" aria-controls="offcanvas4Music">
-             <i class="bi bi-chevron-right"></i>
+             <i class="bi bi-three-dots"></i>
           </button>
         </div>
     </test>
@@ -41,72 +41,36 @@
     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="关闭"></button>
   </div>
   <div class="offcanvas-body">
-    <h6>外观</h6>
-    <ul class="list-group mb-5">
-      <li class="list-group-item">
-        <div class="card-box card-icons">
-            <div id="btnThemeLight" hvml-events="click" class="icon active">
-                <div>
-                    <i class="bi bi-sun"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">浅色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
-                </div>
-            </div>
-            <div id="btnThemeDark" hvml-events="click" class="icon">
-                <div>
-                    <i class="bi bi-moon-fill"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">深色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
-                </div>
-            </div>
-        </div>
-      </li>
 
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-          自动
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="switchThemeAuto" />
-        </div>
-      </li>
-
-    </ul>
-
-    <h6>语言</h6>
+    <h6>播放模式</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        中文简体
+        随机播放
         <span><i class="bi bi-check2 text-primary"></i></span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        中文繁体
+        循环播放
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
-        English
+        单曲循环
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
     </ul>
 
-    <h6>字体大小</h6>
+    <h6>曲目</h6>
     <ul class="list-group mb-5">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        小
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        中
-        <span><i class="bi bi-check2 text-primary"></i></span>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        大
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
-      </li>
+        <iterate on $music_list>
+          <li class="list-group-item">
+            <test with $?.selected>
+                <input class="form-check-input me-1" type="checkbox" value="" checked id="music$%" />
+                <differ>
+                    <input class="form-check-input me-1" type="checkbox" value="" id="music$%" />
+                </differ>
+            </test>
+            <label class="form-check-label stretched-link overflow-x-hidden" for="music$%">$?.title - $?.artist</label>
+          </li>
+        </iterate>
     </ul>
 
   </div>
