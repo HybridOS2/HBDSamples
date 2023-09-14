@@ -8,7 +8,7 @@
         </div>
     </test>
 
-    <div class="d-flex justify-content-between pt-5 pb-5">
+    <div class="d-flex justify-content-between pt-3 pb-4">
       <div class="icon-btn pe-3">
         <div class="icon" hvml-events="click">
           <i class="bi bi-power large-icon text-success"></i>

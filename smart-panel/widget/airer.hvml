@@ -8,7 +8,7 @@
         </div>
     </test>
 
-    <div class="d-flex justify-content-between pt-5 pb-5">
+    <div class="d-flex justify-content-between pt-3 pb-3">
 
       <div class="btnAirerUp icon-btn" hvml-events="click">
         <div class="icon bg-body-secondary turn-up">

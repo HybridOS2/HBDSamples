@@ -96,7 +96,7 @@ a:active {
 }
 
 .widget-block {
-    width: 432px;
+    width: 420px;
     padding: 0 20px;
     border-radius: 16px;
     background: rgba(var(--bs-tertiary-bg-rgb), 0.75);
@@ -229,7 +229,7 @@ a:active {
     margin: 1px;
     width: 33%;
     text-align: center;
-    font-size: var(--theme-font-size-normal);
+    font-size: var(--theme-font-size-medium);
 }
 
 .text-shadow {

@@ -21,7 +21,7 @@
 
         <init as 'running_state' at '_runner'>
             {
-                "bg_lockscreen": "bg-weather-cloud",
+                "bg_lockscreen": "bg-weather-cloud-sun",
                 "theme": 0,
                 "network" : {
                     "state" : 0

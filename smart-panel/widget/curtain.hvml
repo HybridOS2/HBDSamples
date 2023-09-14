@@ -8,7 +8,7 @@
         </div>
     </test>
 
-    <div class="d-flex justify-content-between pt-5 pb-5 ">
+    <div class="d-flex justify-content-between pt-3 pb-3">
         <label for="curtainRange" class="form-label text-primary fs-1 me-2">20%</label>
         <input type="range" class="form-range fs-1 mt-2" min="0" max="100" value="20" step="10" id="curtainRange">
     </div>
