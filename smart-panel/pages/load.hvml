@@ -24,7 +24,6 @@
         <forget on $TIMERS for 'expired:network_check_timer' />
 
         <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
-
         <include with="$main_hvml" />
 
         <catch for `RequestFailed`>
