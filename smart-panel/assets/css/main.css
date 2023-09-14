@@ -63,7 +63,7 @@ a:active {
 }
 
 .widget-block {
-    width: 100%;
+    width: auto;
     padding: 0 20px;
     border-radius: 16px;
     background: rgba(var(--bs-tertiary-bg-rgb), 0.75);
@@ -149,47 +149,6 @@ a:active {
     background-attachment: fixed;
     background-position: left top;
     background-repeat: no-repeat;
-}
-
-.card-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.card-title {
-    justify-content: space-between;
-    padding: 10px 0;
-    position: relative;
-    font-size: 18px;
-}
-
-.card-icons {
-    width: 70%;
-    height: 100%;
-    margin: 0 auto;
-    justify-content: space-between !important;
-}
-
-.card-icons .icon {
-    width:50%;
-    display:flex;
-    align-items:center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.card-icons .icon i {
-   font-size: var(--theme-font-size-large) !important;
-}
-
-.card-icons .icon.active {
-    color: var(--bs-primary) !important;
-}
-
-.card-icons .icon-des {
-    font-size: var(--theme-font-size-normal);
-    text-align: center;
 }
 
 .offcanvas-setting {

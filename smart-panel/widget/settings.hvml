@@ -43,40 +43,10 @@
     </a>
   </div>
   <div class="offcanvas-body">
-    <h6>外观</h6>
+    <h6>消息</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item">
-        <div class="card-box card-icons">
-            <div id="btnThemeLight" hvml-events="click" class="icon active">
-                <div>
-                    <i class="bi bi-sun"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">浅色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
-                </div>
-            </div>
-            <div id="btnThemeDark" hvml-events="click" class="icon">
-                <div>
-                    <i class="bi bi-moon-fill"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">深色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
-                </div>
-            </div>
-        </div>
       </li>
-
-      <li class="list-group-item d-flex justify-content-between align-items-start">
-        <div class="ms-2 me-auto">
-          自动
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="switchThemeAuto" />
-        </div>
-      </li>
-
     </ul>
 
     <h6>语言</h6>
@@ -123,26 +93,6 @@
     <h6>外观</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item">
-        <div class="card-box card-icons">
-            <div id="btnThemeLight" hvml-events="click" class="icon active">
-                <div>
-                    <i class="bi bi-sun"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">浅色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
-                </div>
-            </div>
-            <div id="btnThemeDark" hvml-events="click" class="icon">
-                <div>
-                    <i class="bi bi-moon-fill"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">深色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
-                </div>
-            </div>
-        </div>
       </li>
 
       <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -200,26 +150,6 @@
     <h6>外观</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item">
-        <div class="card-box card-icons">
-            <div id="btnThemeLight" hvml-events="click" class="icon active">
-                <div>
-                    <i class="bi bi-sun"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">浅色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeLight" />
-                </div>
-            </div>
-            <div id="btnThemeDark" hvml-events="click" class="icon">
-                <div>
-                    <i class="bi bi-moon-fill"></i>
-                </div>
-                <div class="icon-des mt-1 mb-2">深色</div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioThemeDark" />
-                </div>
-            </div>
-        </div>
       </li>
 
       <li class="list-group-item d-flex justify-content-between align-items-start">

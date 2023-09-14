@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <img src="assets/camera.jpg" class="rounded img-fluid" style="max-width:320px" alt="" />
+      <img src="assets/camera.jpg" class="rounded img-fluid" style="width:240px;" alt="" />
     </div>
 </div>
 
@@ -27,6 +27,7 @@
        <div class="bs-5"><i class="bi bi-x-lg"></i></div>
     </a>
   </div>
+
   <div class="offcanvas-body">
 
     <h6>控制模式</h6>
