@@ -40,8 +40,40 @@ a:active {
     color: var(--bs-secondary-color);
 }
 
+.bg-weather-cloud {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-cloud-h480.jpg");
+}
+
+.bg-weather-cloud-sun {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-cloud-sun-h480.jpg");
+}
+
+.bg-weather-fog {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-fog-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-lightning-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-rain-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sandstorm-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sleet-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-snow-h480.jpg");
+}
+
 .bg-weather-sun {
-    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/background-qing.jpg");
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sun-h480.jpg");
 }
 
 #lockScreen {
@@ -122,7 +154,7 @@ a:active {
 }
 
 #mainContent {
-    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg");
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/bg-480x480.jpg");
     background-attachment: fixed;
     background-position: left top;
     background-repeat: no-repeat;
