@@ -1,4 +1,4 @@
-<div class="widget-block shadow mt-3 mb-3">
+<div class="widget-block shadow mt-3">
     <test with $withTitle>
         <div class="d-flex justify-content-between pt-3">
           <h6>消息</h6>
@@ -9,15 +9,15 @@
     </test>
 
     <div class="message-block text-success">
-        <div class="bubble-icon">
+        <div class="bubble-icon mt-3">
             <i class="bi bi-chat-dots-fill"></i>
         </div>
         <div class="message-content">
             <div class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
+                <div class="carousel-inner fs-6">
                     <iterate on $messages >
                         <div class="carousel-item{{ $L.eq($%, 0) && ' active' || '' }}" data-bs-interval="5000">
-                            <a class="message-title text-$?.text" href="$?.url" target="_blank">$?.title</a>
+                            <small><a class="message-title text-$?.text" href="$?.url" target="_blank">$?.title</a></small>
                         </div>
                     </iterate>
                 </div>

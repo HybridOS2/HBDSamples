@@ -6,8 +6,8 @@
     --theme-font-size-normal: 18px;
     --theme-font-size-x-normal: 20px;
     --theme-font-size-large: 30px;
-    --theme-font-size-x-large: 40px;
-    --theme-font-size-xx-large: 50px;
+    --theme-font-size-x-large: 50px;
+    --theme-font-size-xx-large: 60px;
 }
 
 a {
@@ -56,19 +56,19 @@ a:active {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-lightning-h480.jpg");
 }
 
-.bg-weather-lightning {
+.bg-weather-rain {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-rain-h480.jpg");
 }
 
-.bg-weather-lightning {
+.bg-weather-sandstorm {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sandstorm-h480.jpg");
 }
 
-.bg-weather-lightning {
+.bg-weather-sleet {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sleet-h480.jpg");
 }
 
-.bg-weather-lightning {
+.bg-weather-snow {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-snow-h480.jpg");
 }
 
@@ -76,7 +76,7 @@ a:active {
     background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/img/weather-sun-h480.jpg");
 }
 
-#lockScreen {
+#theLockScreen {
     background-color: #000000;
     background-attachment: fixed;
     background-position: left top;
@@ -85,12 +85,12 @@ a:active {
     --bs-offcanvas-height: 100vh;
 }
 
-#lockScreen .time {
+#theLockScreen .time {
     font-size: var(--theme-font-size-xx-large);
-    font-weight: 300;
+    font-weight: 100;
 }
 
-#lockScreen .date {
+#theLockScreen .date {
     font-size: var(--theme-font-size-normal);
     font-weight: 600;
 }
@@ -232,3 +232,6 @@ a:active {
     font-size: var(--theme-font-size-normal);
 }
 
+.text-shadow {
+    text-shadow: 1px 1px var(--bs-dark-bg-subtle);
+}

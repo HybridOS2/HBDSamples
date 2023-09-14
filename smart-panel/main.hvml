@@ -21,6 +21,7 @@
 
         <init as 'running_state' at '_runner'>
             {
+                "bg_lockscreen": "bg-weather-cloud",
                 "theme": 0,
                 "network" : {
                     "state" : 0
@@ -97,21 +98,21 @@
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
-        <div id="lockScreen" class="offcanvas offcanvas-top show bg-weather-sun" tabindex="-1" aria-labelledby="offcanvasLabel">
+        <div id="theLockScreen" class="offcanvas offcanvas-top show $running_state.bg_lockscreen" tabindex="-1" aria-labelledby="offcanvasLabel">
           <div class="offcanvas-body ps-4 pe-4">
 
-            <div class="lead-block text-light">
-                <div class="fw-normal fs-3 my-0 lh-1">
-                  <i id="weatherIcon" class="bi bi-sun-fill"></i>
-                  <small><span id="weatherTemp">27</span>°C</small>
-                  <br />
-                  <small><span id="currentCity">北京</span></small>
+            <div class="lead-block text-light text-shadow">
+                <div class="fw-normal my-0 lh-1">
+                  <span class="float-start fs-1 mt-2 me-2"><i id="theWeatherIcon" class="bi bi-sun-fill"></i></span>
+                  <span id="theWeatherTemp" class="fs-3 me-2">26</span>
+                  <span class="fs-3 me-2">°C</span>
+                  <span id="theWeatherCity" class="fs-3 me-2">中国</span>
                 </div>
 
                 <div class="my-0 py-0 lh-1">
-                    <span id="currentDate" class="date">09月04日 星期一</span>
+                    <span id="theCurrentDate" class="date">09月04日 星期一</span>
                     <br />
-                    <span id="currentTime" class="time">12:00</span>
+                    <span id="theCurrentTime" class="time">12:00</span>
                 </div>
             </div>
 
@@ -124,7 +125,7 @@
           </div>
 
           <div class="offcanvas-footer">
-            <div class="text-center">
+            <div class="text-center fs-5 text-shadow">
               <a href="#" class="text-light" data-bs-dismiss="offcanvas" aria-label="关闭">
                 <span class="ps-5 pe-5 pb-2"><i class="bi bi-chevron-double-up"></i></span>
               </a>
