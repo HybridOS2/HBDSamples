@@ -20,14 +20,14 @@
     [
         { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "no" },
         { "id" : "network_service_delay_timer", "interval" : 500, "active" : "no" }
-        { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
+        { "id" : "weather_refresh_timer", "interval" : 1000, "active" : "no" }
     ]
 </update>
 
 <define as 'start_background_service' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "background_service_timer", "interval" : 1000, "active" : "yes" }
+            { "id" : "weather_refresh_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
 </define>
@@ -35,7 +35,7 @@
 <define as 'stop_background_service' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
+            { "id" : "weather_refresh_timer", "interval" : 1000, "active" : "no" }
         ]
     </update>
 </define>
@@ -379,7 +379,7 @@
     </catch>
 </observe>
 
-<observe on $TIMERS for 'expired:background_service_timer'>
+<observe on $TIMERS for 'expired:weather_refresh_timer'>
     <update on $init_status at ".tickcount" with $DATA.arith('+', $init_status.tickcount, 1 ) />
     <inherit>
         $STREAM.stdout.writelines("tickcount: $init_status.tickcount")
@@ -387,10 +387,12 @@
     <test with $L.eq($init_status.weather, 0)>
         <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
             <include with $request_weather_info />
-            <inherit>
-                $STREAM.stdout.writelines("#####> need update weather")
-            </inherit>
         </test>
+        <differ>
+            <update on $init_status at ".tickcount" with $DATA.arith('+', $init_status.tickcount, 0 ) />
+            <forget on $TIMERS for 'expired:weather_refresh_timer' />
+            <include with $stop_background_service />
+        </differ>
     </test>
 
 </observe>
