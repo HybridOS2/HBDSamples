@@ -2,12 +2,12 @@
     --theme-font-size-xx-small: 10px;
     --theme-font-size-x-small: 12px;
     --theme-font-size-small: 14px;
-    --theme-font-size-medium: 18px;
-    --theme-font-size-normal: 20px;
-    --theme-font-size-x-normal: 35px;
-    --theme-font-size-large: 40px;
-    --theme-font-size-x-large: 50px;
-    --theme-font-size-xx-large: 66px;
+    --theme-font-size-medium: 16px;
+    --theme-font-size-normal: 18px;
+    --theme-font-size-x-normal: 20px;
+    --theme-font-size-large: 30px;
+    --theme-font-size-x-large: 40px;
+    --theme-font-size-xx-large: 50px;
 }
 
 a {
@@ -122,7 +122,7 @@ a:active {
 
 .music-info {
     width: 200px;
-    font-size: 20px;
+    font-size: var(--theme-font-size-medium);
 }
 
 .message-block {
@@ -137,7 +137,7 @@ a:active {
     height: 66px;
     line-height: 66px;
     margin-top: 8px;
-    font-size: 50px !important;
+    font-size: var(--theme-font-size-large);
 }
 
 .message-block .message-content {
@@ -194,7 +194,7 @@ a:active {
 }
 
 .icon-btn .icon i {
-   font-size: var(--theme-font-size-large);
+    font-size: var(--theme-font-size-large);
 }
 
 .icon-btn .icon.small {

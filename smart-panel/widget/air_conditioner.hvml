@@ -1,7 +1,7 @@
 <div class="widget-block shadow mt-3 mb-3">
     <test with $withTitle>
         <div class="d-flex justify-content-between pt-3">
-          <h5>空调-$roomName</h5>
+          <h6>空调-$roomName</h6>
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4AirConditioner" aria-controls="offcanvas4AirConditioner">
             <div class="ps-3"><i class="bi bi-three-dots"></i></div>
           </a>
@@ -16,7 +16,7 @@
       </div>
 
       <div class="progress h-icon-btn-l" role="progressbar" aria-label="空调温度" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-        <div class="progress-bar fs-1" style="width: 25%">26°C</div>
+        <div class="progress-bar fs-2" style="width: 25%">26°C</div>
       </div>
     </div>
 </div>
@@ -24,7 +24,7 @@
 <test with $withTitle>
 <div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4AirConditioner" aria-labelledby="offcanvas4AirConditionerLabel">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title" id="offcanvas4AirConditionerLabel">空调-$roomName 设置</h5>
+    <h6 class="offcanvas-title" id="offcanvas4AirConditionerLabel">空调-$roomName 设置</h6>
     <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
        <div class="bs-5"><i class="bi bi-x-lg"></i></div>
     </a>

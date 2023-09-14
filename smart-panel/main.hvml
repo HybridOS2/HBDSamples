@@ -12,8 +12,6 @@
 
         <link rel="stylesheet" href="assets/css/main.css" />
 
-        <init as chan with $RUNNER.chan(! 'sysNotification' ) />
-
         <init as 'theme_option' at '_runner'>
             {
                 "user": 0,
@@ -103,16 +101,18 @@
           <div class="offcanvas-body ps-4 pe-4">
 
             <div class="lead-block text-light">
-                <p class="fw-normal fs-3">
+                <div class="fw-normal fs-3 my-0 lh-1">
                   <i id="weatherIcon" class="bi bi-sun-fill"></i>
                   <small><span id="weatherTemp">27</span>°C</small>
-                </p>
+                  <br />
+                  <small><span id="currentCity">北京</span></small>
+                </div>
 
-                <p>
+                <div class="my-0 py-0 lh-1">
                     <span id="currentDate" class="date">09月04日 星期一</span>
                     <br />
                     <span id="currentTime" class="time">12:00</span>
-                </p>
+                </div>
             </div>
 
             <define as 'widgetMusic' from 'widget/music.hvml' temp />
@@ -182,12 +182,6 @@
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
-        </observe>
-
-        <observe on $chIn for 'receivable'>
-            <inherit>
-                $STREAM.stdout.writelines("....................................receivalbe msg : $chIn.recv()")
-            </inherit>
         </observe>
 
         <audio id="theMusic" src="$music_list[0].src"></audio>

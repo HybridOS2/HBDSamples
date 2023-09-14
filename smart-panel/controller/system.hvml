@@ -1,8 +1,20 @@
-<observe on $chan for 'receivable'>
-    <choose $chan.recv() silently>
+<observe on $chIn for 'receivable'>
+    <choose on $chIn.recv() silently>
         <inherit>
             $STREAM.stdout.writelines($DATA.serialize($?))
         </inherit>
+
+        <test on $?.type>
+            <match for "AS 'weather'" exclusively>
+                <update on '#' to="displace" with="$footer_cn" />
+            </match>
+            <match for="AS 'network'" exclusively>
+                <update on="$@" to="displace" with="$footer_tw" />
+            </match>
+            <match for="ANY">
+                <update on="$@" to="displace" with="$footer_def" />
+            </match>
+        </test>
     </choose>
 </observe>
 
