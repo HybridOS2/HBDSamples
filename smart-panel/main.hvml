@@ -43,6 +43,8 @@
                 { "id" : "clock_timer", "interval" : 1000, "active" : "yes" }
             ]
         </update>
+
+        <init as chIn with {{ $RUNNER.chan(! "panelMain", 10 ) && $RUNNER.chan( "panelMain" ) }} at "_topmost" />↵
     </head>
 
     <body id="id_page" class="bg-dark page__base">
@@ -54,6 +56,11 @@
         <define as="main_hvml" at="_topmost" from="$CRTN.base/pages/main_page.hvml" />
         <include with="$main_hvml" />
 
+        <observe on $chIn for "receivable">
+            <inherit>
+                $STREAM.stdout.writelines("....................................receive event receivable $chIn.recv()")
+            </inherit>
+        </observe>
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />

@@ -1,5 +1,7 @@
 <init as 'inetd' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
+<init as chan with $RUNNER.chan( "panelMain" ) at "_topmost" />↵
+
 <!-- step: 0 open dbus; 1 getDeviceStatus; 2 configDevice; 3 test http request; -->
 <init as 'init_status' at="_topmost">
 {
@@ -123,10 +125,32 @@
     </test>
 </define>
 
+<define as 'hide_init_window' at '_topmost'>
+    <request on $RDR to 'callMethod'>
+        {
+            name: "plainwin:page@initPagePanel",
+            data: {
+                method: 'hideWindow'
+            }
+        }
+    </request>
+</define>
+
+<define as 'show_init_window' at '_topmost'>
+    <request on $RDR to 'callMethod'>
+        {
+            name: "plainwin:page@initPagePanel",
+            data: {
+                method: 'showWindow'
+            }
+        }
+    </request>
+</define>
+
 <define as 'show_main_page' at="_topmost">
     <include with $set_status on {status:' ', sub_status:' ' } />
     <include with $start_background_service />
-    <request on="plainwindow" to="call:hide_window" />
+    <include with $hide_init_window />
 </define>
 
 <define as 'test_http_request' at="_topmost">
@@ -345,7 +369,9 @@
     </inherit>
     <update on $init_status.weather_info at ".tem .img" with [$weather_info.tem, $weather_info.wea_img] />
     <update on $init_status at ".weather" with 1L />
-    <request on="plainwindow" to="call:show_window" />
+    <inherit>
+        $chan.send({"type":"weather", value:$weather_info})
+    </inherit>
     <catch for `NoSuchKey`>
         <inherit>
             $STREAM.stdout.writelines("update weather failed")
@@ -362,8 +388,18 @@
         <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
             <include with $request_weather_info />
             <inherit>
-            $STREAM.stdout.writelines("#####> need update weather")
+                $STREAM.stdout.writelines("#####> need update weather")
             </inherit>
         </test>
     </test>
+
+    <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
+        <include with $hide_init_window />
+        <differ>
+            <test with $L.eq($DATA.arith('%', $init_status.tickcount, 5), 0) >
+                <include with $show_init_window />
+            </test>
+        </differ>
+    </test>
+
 </observe>
