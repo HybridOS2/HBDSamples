@@ -55,7 +55,7 @@
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
     </ul>
-    <p class="mb-5">自动停止。</p>
+    <p class="mt-1 mb-5">自动停止。</p>
 
   </div>
 </div>

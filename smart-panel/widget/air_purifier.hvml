@@ -21,11 +21,6 @@
         <div class="gear">三档</div>
       </div>
 
-      <!-- div class="btn-group btn-group-lg" role="group" aria-label="档位">
-        <button type="button" class="btn btn-outline-primary">一档</button>
-        <button type="button" class="btn btn-primary">二档</button>
-        <button type="button" class="btn btn-outline-primary">三档</button>
-       </div -->
     </div>
 </div>
 
@@ -54,16 +49,16 @@
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
     </ul>
-    <p class="mb-5">根据情况自动开关空气净化器。</p>
+    <p class="mt-1 mb-5">根据空气质量自动开关空气净化器。</p>
 
     <h6>自定时段</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item">
         <div class="row">
-          <div class="col-6">
+          <div class="col-4">
             <label for="timeAirPurifierOpen" class="col-form-label">开启</label>
           </div>
-          <div class="col-6">
+          <div class="col-8">
             <input type="time" id="timeAirPurifierOpen" class="form-control" value="07:00" min="5:00" max="11:00" />
           </div>
         </div>
@@ -71,10 +66,10 @@
 
       <li class="list-group-item">
         <div class="row">
-          <div class="col-6">
-            <label for="timeAirPurifierClose" class="col-form-label">开启</label>
+          <div class="col-4">
+            <label for="timeAirPurifierClose" class="col-form-label">关闭</label>
           </div>
-          <div class="col-6">
+          <div class="col-8">
             <input type="time" id="timeAirPurifierClose" class="form-control" value="19:00" min="12:00" max="22:00" />
           </div>
         </div>

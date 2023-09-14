@@ -1,5 +1,5 @@
 .page_base {
-    --theme-font-size-xx-small: 10px;
+    --theme-font-size-xx-small: 11px;
     --theme-font-size-x-small: 12px;
     --theme-font-size-small: 14px;
     --theme-font-size-medium: 16px;
@@ -234,4 +234,16 @@ a:active {
 
 .text-shadow {
     text-shadow: 1px 1px var(--bs-dark-bg-subtle);
+}
+
+.offcanvas-body h6 {
+    font-size: var(--theme-font-size-small);
+}
+
+.offcanvas-body .list-group-item {
+    font-size: var(--theme-font-size-x-small) !important;
+}
+
+.offcanvas-body p {
+    font-size: var(--theme-font-size-xx-small);
 }
