@@ -77,3 +77,27 @@
     </test>
 </observe>
 
+<observe on '#theLockScreen' for 'locked'>
+    <inherit>
+        $STREAM.stdout.writelines("screen locked")
+    </inherit>
+</observe>
+
+<observe on '.time-to-lock-screen' for 'click'>
+    <choose on $DOC.query("#theLockScreen").attr('data-time-to-lock') >
+        <test with $L.ne($?, $2?.targetValue) >
+            <inherit>
+                $STREAM.stdout.writelines("Changing time-to-lock to $3?.targetValue $3?.targetId")
+            </inherit>
+
+            <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.targetValue" />
+            <request on ' #theTimeToLock5 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on ' #theTimeToLock10 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on ' #theTimeToLock30 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on " #theTimeToLock{$3?.targetValue} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on " #$3?.targetId span" to 'call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+        </test>
+    </choose>
+
+</observe>
+

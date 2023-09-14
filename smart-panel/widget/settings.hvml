@@ -46,15 +46,15 @@
 
     <h6>锁屏时间</h6>
     <ul class="list-group mb-5">
-      <li class="list-group-item d-flex justify-content-between align-items-center" id="lockTime5Seconds" hvml-events="click">
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="5" id="theTimeToLock5" hvml-events="click">
         5 秒
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center" id="lockTime10Seconds" hvml-events="click">
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="10" id="theTimeToLock10" hvml-events="click">
         10 秒
         <span><i class="bi bi-check2 text-primary"></i></span>
       </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center" id="lockTime30Seconds" hvml-events="click">
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="30" id="theTimeToLock30" hvml-events="click">
         30 秒
         <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
       </li>
