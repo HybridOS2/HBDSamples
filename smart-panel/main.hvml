@@ -61,28 +61,28 @@
                 title: '天空之城',
                 artist:'久石让',
                 img:'resources/music/m1.jpg',
-                audio: 'resources/music/m1.mp3',
+                src: 'resources/music/m1.mp3',
                 selected: true,
             },
             {
                 title: 'Creep',
                 artist:'Radiohead',
                 img:'resources/music/m2.png',
-                audio: 'resources/music/m2.mp3',
+                src: 'resources/music/m2.mp3',
                 selected: true,
             },
             {
                 title: 'Shape of You',
                 artist:'Ed Sheeran',
                 img:'resources/music/m3.jpg',
-                audio: 'resources/music/m3.mp3',
+                src: 'resources/music/m3.mp3',
                 selected: true,
             },
             {
                 title: '知足',
                 artist:'五月天',
                 img:'resources/music/m4.png',
-                audio: 'resources/music/m4.mp3',
+                src: 'resources/music/m4.mp3',
                 selected: false,
             }
         ]
@@ -97,7 +97,7 @@
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
-        <!-- div class="offcanvas offcanvas-top show" tabindex="-1" id="lockScreen" aria-labelledby="offcanvasLabel">
+        <div id="lockScreen" class="offcanvas offcanvas-top show bg-weather-sun" tabindex="-1" aria-labelledby="offcanvasLabel">
           <div class="offcanvas-body ps-4 pe-4">
 
             <div class="lead-block text-light">
@@ -128,10 +128,10 @@
               </a>
             </div>
           </div>
-        </div -->
+        </div>
 
-        <div id="mainContent" class="ps-5 pe-5">
-            <div class="d-grid gap-2">
+        <div id="mainContent" class="ps-4 pe-4">
+            <div class="container-fluid bg-transparent">
                 <!-- scenario -->
                 <define as 'widgetScenario' from 'widget/scenario.hvml' temp />
                 <include with $widgetScenario on { withTitle: true } />
@@ -179,6 +179,8 @@
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
         </observe>
+
+        <audio id="music" src="$music_list[0].src" autoplay></audio>
 
         <!-- script src="$CRTN.base/assets/js/index.js" type="text/javascript"></script -->
     </body>

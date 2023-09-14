@@ -8,28 +8,39 @@
         </div>
     </test>
 
-    <div class="music-controller">
-        <img class="music-pic" src="resources/music/m1.jpg" alt="" />
-        <div class="music-info">
-            <p class="music-title">智能音乐</p>
-            <p class="music-author">聆听生活</p>
+    <div class="music-controller pt-3 pb-3">
+        <img class="music-pic animate-img" src="resources/music/m1.jpg" alt="" />
+        <div class="music-info mx-2">
+            <span class="music-title align-text-top">智能音乐</span><br />
+            <span class="music-author align-text-bottom">聆听生活</span>
         </div>
-        <!-- audio id="audio" src="resources/music/m1.mp3"></audio -->
+
         <div class="d-flex justify-content-between align-items-center">
-            <div>
-                <button class="btn prev-btn">
-                    <i class="bi bi-skip-start-fill"></i>
-                </button>
-                <button class="btn play-btn">
-                    <i class="bi bi-play-circle-fill"></i>
-                </button>
-                <button class="btn pause-btn d-none">
-                    <i class="bi bi-pause-circle-fill"></i>
-                </button>
-                <button class="btn next-btn">
-                    <i class="bi bi-skip-end-fill"></i>
-                </button>
+
+          <div class="icon-btn btnPrevMusic me-2" hvml-events="click">
+            <div class="icon small">
+              <i class="bi bi-skip-start-fill"></i>
             </div>
+          </div>
+
+          <div class="icon-btn btnPlayMusic me-2" hvml-events="click">
+            <div class="icon">
+              <i class="bi bi-play-circle-fill"></i>
+            </div>
+          </div>
+
+          <div class="icon-btn d-none btnPauseMusic me-2" hvml-events="click">
+            <div class="icon">
+              <i class="bi bi-pause-circle-fill"></i>
+            </div>
+          </div>
+
+          <div class="icon-btn btnNextMusic" hvml-events="click">
+            <div class="icon small">
+              <i class="bi bi-skip-end-fill"></i>
+            </div>
+          </div>
+
         </div>
     </div>
 </div>

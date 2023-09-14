@@ -10,12 +10,6 @@
     --theme-font-size-xx-large: 66px;
 }
 
-.btn:active, .btn:focus, .btn:focus-visible, .btn:hover {
-    outline: none !important;
-    box-shadow: none;
-    border-color: transparent;
-}
-
 a {
     outline:none;
     text-decoration: none;
@@ -46,9 +40,16 @@ a:active {
     color: var(--bs-secondary-color);
 }
 
+.bg-weather-sun {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/background-qing.jpg");
+}
 
 #lockScreen {
-    background: #000000 url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg") no-repeat left top;
+    background-color: #000000;
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: cover;
     --bs-offcanvas-height: 100vh;
 }
 
@@ -83,37 +84,13 @@ a:active {
     border: 2px solid var(--bs-border-color);
 }
 
+.animate-img {
+    animation: rotate 10s linear infinite;
+}
+
 .music-info {
-    margin: 16px 0 0 0;
-    font-size: 14px;
-}
-
-.large-icon {
-    font-size: 60px;
-}
-
-.small-icon {
-    font-size: 33px;
-}
-
-.music-controller .prev-btn {
-    font-size: 33px;
-    border:0;
-}
-
-.music-controller .play-btn {
-    font-size: 40px;
-    border:0;
-}
-
-.music-controller .pause-btn {
-    font-size: 40px;
-    border:0;
-}
-
-.music-controller .next-btn {
-    font-size: 33px;
-    border:0;
+    width: 200px;
+    font-size: 20px;
 }
 
 .message-block {
@@ -188,6 +165,16 @@ a:active {
    font-size: var(--theme-font-size-large);
 }
 
+.icon-btn .icon.small {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.icon-btn .icon.small i {
+   font-size: var(--theme-font-size-normal);
+}
+
 .icon-btn .icon.active {
    color: var(--bs-primary);
 }
@@ -195,5 +182,21 @@ a:active {
 .icon-btn .name {
     font-size: var(--theme-font-size-normal);
     text-align: center;
+}
+
+.gears {
+    width: 74%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-left: 16px;
+    border: 2px solid var(--bs-border-color);
+}
+
+.gear {
+    padding: 20px;
+    margin: 1px;
+    width: 33%;
+    text-align: center;
+    font-size: var(--theme-font-size-normal);
 }
 
