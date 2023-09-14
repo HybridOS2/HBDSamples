@@ -1,0 +1,8 @@
+<observe on $chan for 'receivable'>
+    <choose $chan.recv() silently>
+        <inherit>
+            $STREAM.stdout.writelines($DATA.serialize($?))
+        </inherit>
+    </choose>
+</observe>
+

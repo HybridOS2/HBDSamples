@@ -170,11 +170,13 @@
             </div>
         </div>
 
-        <!-- the channel has been closed if $chan.recv() returns false -->
-        <!-- observe on $chan for 'receivable'>
-            <choose $chan.recv() silently>
-            </choose>
-        </observe -->
+        <!-- controller for system -->
+        <define as 'controllerSystem' from 'controller/system.hvml' temp />
+        <include with $controllerSystem />
+
+        <!-- controller for scenario -->
+        <define as 'controllerScenario' from 'controller/scenario.hvml' temp />
+        <include with $controllerScenario />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />

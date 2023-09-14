@@ -1,0 +1,33 @@
+<observe on '.btnThemeLight' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("btnThemeLight clicked")
+    </inherit>
+
+    <update on $theme_option at ".user" with 2L />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+</observe>
+
+<observe on '.btnThemeDark' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("btnThemeDark clicked")
+    </inherit>
+
+    <update on $theme_option at ".user" with 1L />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+</observe>
+
+<test with $L.eq($running_state.theme, 1L)>
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+    <differ>
+        <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+        <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+        <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+    </differ>
+</test>
+
