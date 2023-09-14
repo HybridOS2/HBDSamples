@@ -204,20 +204,29 @@ a:active {
     transform: rotate(90deg);
 }
 
+.h-icon-btn-l {
+    height: 76px;
+    line-height: 76px;
+}
+
+.w-icon-btn-l {
+    width: 76px;
+}
+
 .icon-btn .icon {
     display:flex;
     align-items:center;
     justify-content: center;
     width: 76px;
     height: 76px;
-    border-radius: 50%;
     line-height: 76px;
+    border-radius: 50%;
     text-align: center;
     background-color: var(--bs-secondary-bg);
 }
 
 .icon-btn .icon i {
-   font-size: var(--theme-font-size-x-normal);
+   font-size: var(--theme-font-size-large);
 }
 
 .icon-btn .icon.active {

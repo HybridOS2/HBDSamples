@@ -6,7 +6,7 @@
     <div class="d-flex justify-content-between pt-5 pb-5">
 
       <div class="icon-btn">
-        <div class="icon bg-body-secondary">
+        <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4HouseSettings" aria-controls="offcanvas4HouseSettings">
             <i class="bi bi-house-gear-fill"></i>
           </a>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="icon-btn">
-        <div class="icon bg-body-secondary">
+        <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4PersonSettings" aria-controls="offcanvas4PersonSettings">
             <i class="bi bi-person-fill-gear"></i>
           </a>
@@ -24,7 +24,7 @@
       </div>
 
       <div class="icon-btn">
-        <div class="icon bg-body-secondary">
+        <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4SystemSettings" aria-controls="offcanvas4SystemSettings">
             <i class="bi bi-gear-fill"></i>
           </a>

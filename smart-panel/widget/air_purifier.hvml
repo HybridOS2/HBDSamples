@@ -9,9 +9,11 @@
     </test>
 
     <div class="d-flex justify-content-between pt-5 pb-5">
-      <button class="btn bg-dark-sutle rounded-circle">
-        <i class="bi bi-power large-icon text-success"></i>
-      </button>
+      <div class="icon-btn pe-3">
+        <div class="icon" hvml-events="click">
+          <i class="bi bi-power large-icon text-success"></i>
+        </div>
+      </div>
 
       <div class="btn-group btn-group-lg" role="group" aria-label="档位">
         <button type="button" class="btn btn-outline-primary">一档</button>
