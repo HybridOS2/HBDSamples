@@ -1,0 +1,202 @@
+.page_base {
+    --theme-font-size-xx-small: 10px;
+    --theme-font-size-x-small: 12px;
+    --theme-font-size-small: 14px;
+    --theme-font-size-medium: 18px;
+    --theme-font-size-normal: 20px;
+    --theme-font-size-x-normal: 35px;
+    --theme-font-size-large: 40px;
+    --theme-font-size-x-large: 50px;
+    --theme-font-size-xx-large: 66px;
+}
+
+a {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:visited {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:link {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:hover {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:active {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+.bg-weather-sun {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/weather/background-qing.jpg");
+}
+
+#lockScreen {
+    background-color: #000000;
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    --bs-offcanvas-height: 100vh;
+}
+
+#lockScreen .time {
+    font-size: var(--theme-font-size-xx-large);
+    font-weight: 300;
+}
+
+#lockScreen .date {
+    font-size: var(--theme-font-size-normal);
+    font-weight: 600;
+}
+
+.widget-block {
+    width: auto;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: rgba(var(--bs-tertiary-bg-rgb), 0.75);
+}
+
+.music-controller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.music-pic {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    border: 2px solid var(--bs-border-color);
+}
+
+.animate-img {
+    animation: rotate 10s linear infinite;
+}
+
+.music-info {
+    width: 200px;
+    font-size: 20px;
+}
+
+.message-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between !important;
+}
+
+.message-block .bubble-icon {
+    width: 66px;
+    height: 66px;
+    line-height: 66px;
+    margin-top: 8px;
+    font-size: 50px !important;
+}
+
+.message-block .message-content {
+    width: 79%;
+}
+
+.message-block .message-title {
+    height: 60px;
+    width: 288px;
+    min-width: 0;
+    display:flex;
+    justify-content:left;
+    align-items:center;
+}
+
+#mainContent {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-480x480.jpg");
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+
+.offcanvas-setting {
+    --bs-offcanvas-width:320px;
+}
+
+.turn-up {
+   transform: rotate(-90deg);
+}
+
+.turn-down {
+    transform: rotate(90deg);
+}
+
+.h-icon-btn-l {
+    height: 76px;
+    line-height: 76px;
+}
+
+.w-icon-btn-l {
+    width: 76px;
+}
+
+.icon-btn .icon {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    line-height: 76px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: var(--bs-secondary-bg);
+}
+
+.icon-btn .icon i {
+   font-size: var(--theme-font-size-large);
+}
+
+.icon-btn .icon.small {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.icon-btn .icon.small i {
+   font-size: var(--theme-font-size-normal);
+}
+
+.icon-btn .icon.active {
+   color: var(--bs-primary);
+}
+
+.icon-btn .name {
+    font-size: var(--theme-font-size-normal);
+    text-align: center;
+}
+
+.gears {
+    width: 74%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-left: 16px;
+    border: 2px solid var(--bs-border-color);
+}
+
+.gear {
+    padding: 20px;
+    margin: 1px;
+    width: 33%;
+    text-align: center;
+    font-size: var(--theme-font-size-normal);
+}
+

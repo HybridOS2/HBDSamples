@@ -1,0 +1,91 @@
+<init as 'msgs'>
+[
+    {
+        "title":"基于 HVML 的合璧操作系统 2.0 开发样机呼之欲出",
+        "url":"https://mp.weixin.qq.com/s/FdEoUeaoeE7ZgWz6gGfhkA"
+    },
+    {
+        "title":"HVML 解释器和渲染器更新；合璧操作系统 2.0 基础组件发布",
+        "url":"https://mp.weixin.qq.com/s/uDYqzfnfDB739o-R9-dkiQ"
+    },
+    {
+        "title":"物业费缴费通知",
+        "url":"https://www.fmsoft.cn/358/361"
+    }
+]
+</init>
+
+<div class="offcanvas offcanvas-top show" tabindex="-1" id="lockScreen" aria-labelledby="offcanvasLabel">
+  <div class="offcanvas-body">
+
+    <div class="lead-block text-light">
+        <p class="fw-normal fs-3">
+          <i id="weatherIcon" class="bi bi-sun-fill"></i>
+          <small><span id="weatherTemp">27</span>°C</small>
+        </p>
+
+        <p>
+            <span id="currentDate" class="date">09月04日 星期一</span>
+            <br />
+            <span id="currentTime" class="time">12:00</span>
+        </p>
+    </div>
+
+    <div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mb-5">
+        <div class="music-controller">
+            <img class="music-pic" src="resources/music/m1.jpg" alt="" />
+            <div class="music-info">
+                <p class="music-title">智能音乐</p>
+                <p class="music-author">聆听生活</p>
+            </div>
+            <!-- audio id="audio" src="resources/music/m1.mp3"></audio -->
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <button class="btn prev-btn">
+                        <i class="bi bi-skip-start-fill"></i>
+                    </button>
+                    <button class="btn play-btn">
+                        <i class="bi bi-play-circle-fill"></i>
+                    </button>
+                    <button class="btn pause-btn d-none">
+                        <i class="bi bi-pause-circle-fill"></i>
+                    </button>
+                    <button class="btn next-btn">
+                        <i class="bi bi-skip-end-fill"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-block bg-secondary-subtle bg-opacity-25 shadow mb-5">
+        <div class="message-block text-success">
+            <div class="bubble-icon">
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+            <div class="message-content">
+                <div class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active" data-bs-interval="5000">
+                            <a id="id_lockscreen_msg_a" class="message-title" href="$msgs[0].url" target="_blank">$msgs[0].title</a>
+                        </div>
+                        <div class="carousel-item" data-bs-interval="5000">
+                            <a id="id_lockscreen_msg_a" class="message-title" href="$msgs[1].url" target="_blank">$msgs[1].title</a>
+                        </div>
+                        <div class="carousel-item" data-bs-interval="5000">
+                            <a id="id_lockscreen_msg_a" class="message-title" href="$msgs[2].url" target="_blank">$msgs[2].title</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="offcanvas-footer">
+    <div class="d-grid gap-2 m-2">
+      <button type="button" class="btn btn-outline text-light" data-bs-dismiss="offcanvas" aria-label="Close"><i class="bi bi-chevron-double-up"></i></button>
+    </div>
+  </div>
+</div>
+

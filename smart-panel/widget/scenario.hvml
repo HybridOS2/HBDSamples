@@ -1,0 +1,140 @@
+<div class="widget-block shadow mt-3 mb-3">
+    <test with $withTitle>
+      <div class="d-flex justify-content-between pt-3">
+        <h5>外观</h5>
+        <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Scenario" aria-controls="offcanvas4Scenario">
+            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+        </a>
+       </div>
+    </test>
+
+    <div class="d-flex justify-content-evenly pb-3">
+
+      <div class="btnThemeLight icon-btn" hvml-events="click">
+        <div class="icon active">
+          <i class="bi bi-sun"></i>
+        </div>
+        <div class="name mt-1">浅色</div>
+      </div>
+
+      <div class="btnThemeDark icon-btn" hvml-events="click">
+        <div class="icon">
+          <i class="bi bi-moon-fill"></i>
+        </div>
+        <div class="name mt-1">深色</div>
+      </div>
+
+    </div>
+</div>
+
+<test with $withTitle>
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Scenario" aria-labelledby="offcanvas4ScenarioLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvas4ScenarioLabel">显示设置</h5>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+    </a>
+  </div>
+  <div class="offcanvas-body">
+    <h6>外观</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item">
+        <div class="d-flex justify-content-evenly pb-3">
+
+          <div class="btnThemeLight icon-btn" hvml-events="click">
+            <div class="icon active">
+              <i class="bi bi-sun"></i>
+            </div>
+            <div class="name mt-1">浅色</div>
+          </div>
+
+          <div class="btnThemeDark icon-btn" hvml-events="click">
+            <div class="icon">
+              <i class="bi bi-moon-fill"></i>
+            </div>
+            <div class="name mt-1">深色</div>
+          </div>
+
+        </div>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          自动
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchThemeAuto" />
+        </div>
+      </li>
+
+    </ul>
+
+    <h6>语言</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中文简体
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中文繁体
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        English
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+
+    <h6>字体大小</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        小
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        中
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        大
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+
+  </div>
+</div>
+</test>
+
+<observe on '.btnThemeLight' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("btnThemeLight clicked")
+    </inherit>
+
+    <update on $theme_option at ".user" with 2L />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+</observe>
+
+<observe on '.btnThemeDark' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("btnThemeDark clicked")
+    </inherit>
+
+    <update on $theme_option at ".user" with 1L />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+</observe>
+
+<!-- test with $L.eq($running_state.theme, 1L)>
+    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
+    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+    <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+    <differ>
+        <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
+        <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+        <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+    </differ>
+</test -->
+

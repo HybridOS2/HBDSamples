@@ -1,0 +1,72 @@
+<div class="widget-block shadow mt-3 mb-3">
+    <test with $withTitle>
+        <div class="d-flex justify-content-between pt-3">
+          <h5>窗帘-$roomName</h5>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Curtain" aria-controls="offcanvas4Curtain">
+            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+          </a>
+        </div>
+    </test>
+
+    <div class="d-flex justify-content-between pt-5 pb-5 fs-1">
+        <label for="curtainRange" class="form-label text-primary align-middle me-1">20%</label>
+        <input type="range" class="form-range align-middle" min="0" max="100" value="20" step="10" id="curtainRange">
+    </div>
+</div>
+
+<test with $withTitle>
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Curtain" aria-labelledby="offcanvas4CurtainLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvas4CurtainLabel">窗帘-$roomName 设置</h5>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+    </a>
+  </div>
+  <div class="offcanvas-body">
+
+    <h6>控制模式</h6>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        手动
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        定时
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        自动
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+    <p class="mb-5">根据日落日出自动开关窗帘。</p>
+
+    <h6>自定时段</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-6">
+            <label for="timeCurtainOpen" class="col-form-label">开启</label>
+          </div>
+          <div class="col-6">
+            <input type="time" id="timeCurtainOpen" class="form-control" value="07:00" min="5:00" max="11:00" />
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-6">
+            <label for="timeCurtainClose" class="col-form-label">开启</label>
+          </div>
+          <div class="col-6">
+            <input type="time" id="timeCurtainClose" class="form-control" value="19:00" min="12:00" max="22:00" />
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+</test>
+

@@ -1,0 +1,78 @@
+<div class="widget-block shadow mt-3 mb-3">
+    <test with $withTitle>
+        <div class="d-flex justify-content-between pt-3">
+          <h5>智能摄像头-$roomName</h5>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Camera" aria-controls="offcanvas4Camera">
+            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+          </a>
+        </div>
+    </test>
+
+    <div class="d-flex justify-content-between pt-5 pb-5">
+      <div class="icon-btn my-auto pe-3">
+        <div class="icon" hvml-events="click">
+          <i class="bi bi-power large-icon text-success"></i>
+        </div>
+      </div>
+
+      <img src="assets/camera.jpg" class="rounded img-fluid" style="width:240px;" alt="" />
+    </div>
+</div>
+
+<test with $withTitle>
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Camera" aria-labelledby="offcanvas4CameraLabel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvas4CameraLabel">智能摄像头-$roomName 设置</h5>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+    </a>
+  </div>
+
+  <div class="offcanvas-body">
+
+    <h6>控制模式</h6>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        手动
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        定时
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        自动
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+    <p class="mb-5">根据时间自动开启智能摄像头。</p>
+
+    <h6>自定时段</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-6">
+            <label for="timeCameraOpen" class="col-form-label">开启</label>
+          </div>
+          <div class="col-6">
+            <input type="time" id="timeCameraOpen" class="form-control" value="07:00" min="5:00" max="11:00" />
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-6">
+            <label for="timeCameraClose" class="col-form-label">开启</label>
+          </div>
+          <div class="col-6">
+            <input type="time" id="timeCameraClose" class="form-control" value="19:00" min="12:00" max="22:00" />
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+</test>
+
