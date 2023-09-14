@@ -97,7 +97,7 @@
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
-        <div id="lockScreen" class="offcanvas offcanvas-top show bg-weather-sun" tabindex="-1" aria-labelledby="offcanvasLabel">
+        <!--div id="lockScreen" class="offcanvas offcanvas-top show bg-weather-sun" tabindex="-1" aria-labelledby="offcanvasLabel">
           <div class="offcanvas-body ps-4 pe-4">
 
             <div class="lead-block text-light">
@@ -128,7 +128,7 @@
               </a>
             </div>
           </div>
-        </div>
+        </div -->
 
         <div id="mainContent" class="ps-4 pe-4">
             <div class="container-fluid bg-transparent">
@@ -140,33 +140,6 @@
                 <define as 'widgetMusic' from 'widget/music.hvml' temp />
                 <include with $widgetMusic on { withTitle: true } />
 
-                <!-- curtain -->
-                <define as 'widgetCurtain' from 'widget/curtain.hvml' temp />
-                <include with $widgetCurtain on { withTitle: true, roomName: '主卧' } />
-
-                <!-- air conditioner -->
-                <define as 'widgetAirConditioner' from 'widget/air_conditioner.hvml' temp />
-                <include with $widgetAirConditioner on { withTitle: true, roomName: '主卧' } />
-
-                <!-- airer -->
-                <define as 'widgetAirer' from 'widget/airer.hvml' temp />
-                <include with $widgetAirer on { withTitle: true, roomName: '阳台' } />
-
-                <!-- air purifier -->
-                <define as 'widgetAirPurifier' from 'widget/air_purifier.hvml' temp />
-                <include with $widgetAirPurifier on { withTitle: true, roomName: '客厅' } />
-
-                <!-- dimmer -->
-                <define as 'widgetDimmer' from 'widget/dimmer.hvml' temp />
-                <include with $widgetDimmer on { withTitle: true, roomName: '主卧' } />
-
-                <!-- camera -->
-                <define as 'widgetCamera' from 'widget/camera.hvml' temp />
-                <include with $widgetCamera on { withTitle: true, roomName: '门厅' } />
-
-                <!-- settings -->
-                <define as 'widgetSettings' from 'widget/settings.hvml' temp />
-                <include with $widgetSettings on { withTitle: true } />
             </div>
         </div>
 
