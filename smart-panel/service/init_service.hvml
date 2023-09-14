@@ -20,22 +20,39 @@
     [
         { "id" : "network_service_timeout_timer", "interval" : 5000, "active" : "no" },
         { "id" : "network_service_delay_timer", "interval" : 500, "active" : "no" }
-        { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
+        { "id" : "weather_update_timer", "interval" : 1000, "active" : "no" }
+        { "id" : "weather_refresh_timer", "interval" : 1800000, "active" : "no" }
     ]
 </update>
 
-<define as 'start_background_service' at="_topmost">
+<define as 'start_weather_update' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "background_service_timer", "interval" : 1000, "active" : "yes" }
+            { "id" : "weather_update_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
 </define>
 
-<define as 'stop_background_service' at="_topmost">
+<define as 'stop_weather_update' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "background_service_timer", "interval" : 1000, "active" : "no" }
+            { "id" : "weather_update_timer", "interval" : 1000, "active" : "no" }
+        ]
+    </update>
+</define>
+
+<define as 'start_weather_refresh' at="_topmost">
+    <update on="$TIMERS" to="unite">
+        [
+            { "id" : "weather_refresh_timer", "interval" : 1800000, "active" : "yes" }
+        ]
+    </update>
+</define>
+
+<define as 'stop_weather_refresh' at="_topmost">
+    <update on="$TIMERS" to="unite">
+        [
+            { "id" : "weather_refresh_timer", "interval" : 1000, "active" : "no" }
         ]
     </update>
 </define>
@@ -149,7 +166,7 @@
 
 <define as 'show_main_page' at="_topmost">
     <include with $set_status on {status:' ', sub_status:' ' } />
-    <include with $start_background_service />
+    <include with $start_weather_update />
     <include with $hide_init_window />
 </define>
 
@@ -367,7 +384,7 @@
     <inherit>
         $STREAM.stdout.writelines("####> update weather $weather_info")
     </inherit>
-    <update on $init_status.weather_info at ".tem .img" with [$weather_info.tem, $weather_info.wea_img] />
+    <update on $init_status.weather_info at ".tem" with $weather_info.tem />
     <update on $init_status at ".weather" with 1L />
     <inherit>
         $chan.send({"type":"weather", value:$weather_info})
@@ -379,7 +396,7 @@
     </catch>
 </observe>
 
-<observe on $TIMERS for 'expired:background_service_timer'>
+<observe on $TIMERS for 'expired:weather_update_timer'>
     <update on $init_status at ".tickcount" with $DATA.arith('+', $init_status.tickcount, 1 ) />
     <inherit>
         $STREAM.stdout.writelines("tickcount: $init_status.tickcount")
@@ -387,10 +404,19 @@
     <test with $L.eq($init_status.weather, 0)>
         <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
             <include with $request_weather_info />
-            <inherit>
-                $STREAM.stdout.writelines("#####> need update weather")
-            </inherit>
         </test>
+        <differ>
+            <update on $init_status at ".tickcount" with 0L />
+            <include with $stop_weather_update />
+            <include with $start_weather_refresh />
+        </differ>
     </test>
+</observe>
 
+<observe on $TIMERS for 'expired:weather_refresh_timer'>
+    <inherit>
+        $STREAM.stdout.writelines("###########> weather refresh timer")
+    </inherit>
+    <update on $init_status at ".weather" with 0L />
+    <include with $start_weather_update />
 </observe>
