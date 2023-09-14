@@ -93,6 +93,8 @@
                 { "id" : "clock_timer", "interval" : 500, "active" : "yes" }
             ]
         </update>
+
+        <init as chIn with {{ $RUNNER.chan(! "panelMain", 10 ) && $RUNNER.chan( "panelMain" ) }} at '_topmost' />↵
     </head>
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
@@ -180,6 +182,12 @@
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
+        </observe>
+
+        <observe on $chIn for 'receivable'>
+            <inherit>
+                $STREAM.stdout.writelines("....................................receivalbe msg : $chIn.recv()")
+            </inherit>
         </observe>
 
         <audio id="theMusic" src="$music_list[0].src"></audio>

@@ -393,13 +393,4 @@
         </test>
     </test>
 
-    <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
-        <include with $hide_init_window />
-        <differ>
-            <test with $L.eq($DATA.arith('%', $init_status.tickcount, 5), 0) >
-                <include with $show_init_window />
-            </test>
-        </differ>
-    </test>
-
 </observe>
