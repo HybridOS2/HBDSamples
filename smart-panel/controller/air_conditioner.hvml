@@ -12,10 +12,10 @@
             $STREAM.stdout.writelines("temp reaches max value")
         </inherit>
 
-        <request on '#theToastAlertingMaxTemp' to="call:bootstrap.Toast.getInstance(ELEMENT).show()" noreturn />
+        <request on '#theToastAlertingMaxTemp' to="call:bootstrap.Toast.getOrCreateInstance(ELEMENT).show()" noreturn />
         <differ>
             <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp%" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp°C" />
             <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
         </differ>
     </test>
@@ -35,10 +35,10 @@
             $STREAM.stdout.writelines("temp reaches min value")
         </inherit>
 
-        <request on '#theToastAlertingMinTemp' to='call:bootstrap.Toast.getInstance(ELEMENT).show()' noreturn />
+        <request on '#theToastAlertingMinTemp' to='call:bootstrap.Toast.getOrCreateInstance(ELEMENT).show()' noreturn />
         <differ>
             <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp%" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp°C" />
             <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
         </differ>
     </test>
