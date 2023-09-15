@@ -198,6 +198,10 @@
         <define as 'controllerAirConditioner' from 'controller/air_conditioner.hvml' temp />
         <include with $controllerAirConditioner />
 
+        <!-- controller for dimmer -->
+        <define as 'controllerDimmer' from 'controller/dimmer.hvml' temp />
+        <include with $controllerDimmer />
+
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
         </observe>

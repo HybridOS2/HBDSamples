@@ -1,0 +1,60 @@
+<observe on '.lightness-up-for-dimmer' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("LightnessUp of dimmer for $?.originName clicked")
+    </inherit>
+
+    <init as 'currentLightness' with $DOC.query("#theDimmerLightnessFor$?.originName").attr('data-current-lightness') temp />
+
+    <init as 'targetLightness' with $DATA.arith('+', $currentLightness, 1L) temp />
+
+    <test with $L.gt($targetLightness, 100L) >
+        <inherit>
+            $STREAM.stdout.writelines("lightness reaches max value")
+        </inherit>
+
+        <differ>
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'attr.data-current-lightness' with "$targetLightness" />
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'textContent' with "$targetLightness%" />
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'attr.style' with "width: $targetLightness%" />
+
+            <test with $L.eq($targetLightness, 85L) >
+                <request on "#theDimmerLightnessFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-warning' noreturn />
+            </test>
+
+            <test with $L.eq($targetLightness, 60L) >
+                <request on "#theDimmerLightnessFor$?.originName" to='call:ELEMENT.classList.replace("bg-info", ARG)' with 'bg-success' noreturn />
+            </test>
+        </differ>
+    </test>
+</observe>
+
+<observe on '.lightness-down-for-dimmer' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("LightnessDown of dimmer for $?.originName clicked")
+    </inherit>
+
+    <init as 'currentLightness' with $DOC.query("#theDimmerLightnessFor$?.originName").attr('data-current-lightness') temp />
+
+    <init as 'targetLightness' with $DATA.arith('-', $currentLightness, 1L) temp />
+
+    <test with $L.lt($targetLightness, 0L) >
+        <inherit>
+            $STREAM.stdout.writelines("lightness reaches min value")
+        </inherit>
+
+        <differ>
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'attr.data-current-lightness' with "$targetLightness" />
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'textContent' with "$targetLightness%" />
+            <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'attr.style' with "width: $targetLightness%" />
+
+            <test with $L.eq($targetLightness, 60L) >
+                <request on "#theDimmerLightnessFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-info' noreturn />
+            </test>
+
+            <test with $L.eq($targetLightness, 85L) >
+                <request on "#theDimmerLightnessFor$?.originName" to='call:ELEMENT.classList.replace("bg-warning", ARG)' with 'bg-success' noreturn />
+            </test>
+        </differ>
+    </test>
+</observe>
+
