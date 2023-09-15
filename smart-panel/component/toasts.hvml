@@ -1,0 +1,24 @@
+<div class="toast-container position-static">
+  <div class="toast align-items-center" id="theToastAlertingMaxTemp" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        空调温度已达最高。
+      </div>
+      <a href="#" data-bs-dismiss="toast" aria-label="关闭">
+        <div class="ps-3"><i class="bi bi-x-lg"></i></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="toast align-items-center" id="theToastAlertingMinTemp" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        空调温度已达最低。
+      </div>
+      <a href="#" data-bs-dismiss="toast" aria-label="关闭">
+        <div class="ps-3"><i class="bi bi-x-lg"></i></div>
+      </a>
+    </div>
+  </div>
+</div>
+

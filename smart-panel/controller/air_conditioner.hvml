@@ -1,0 +1,46 @@
+<observe on '.temp-up-for-air-conditioner' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("TempUp of air conditioner for $?.targetName clicked")
+    </inherit>
+
+    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.targetName").attr('data-current-temp') temp />
+
+    <init as 'targetTemp' with $DATA.arith('+', $currentTemp, 1L) temp />
+
+    <test with $L.gt($targetTemp, 35L) >
+        <inherit>
+            $STREAM.stdout.writelines("temp reaches max value")
+        </inherit>
+
+        <request on '#theToastAlertingMaxTemp' to="call:bootstrap.Toast.getInstance(ELEMENT).show()" noreturn />
+        <differ>
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp%" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+        </differ>
+    </test>
+</observe>
+
+<observe on '.temp-down-for-air-conditioner' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("TempDown of air conditioner for $?.targetName clicked")
+    </inherit>
+
+    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.targetName").attr('data-current-temp') temp />
+
+    <init as 'targetTemp' with $DATA.arith('-', $currentTemp, 1L) temp />
+
+    <test with $L.lt($targetTemp, 15L) >
+        <inherit>
+            $STREAM.stdout.writelines("temp reaches min value")
+        </inherit>
+
+        <request on '#theToastAlertingMinTemp' to='call:bootstrap.Toast.getInstance(ELEMENT).show()' noreturn />
+        <differ>
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp%" />
+            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+        </differ>
+    </test>
+</observe>
+

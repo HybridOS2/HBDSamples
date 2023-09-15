@@ -1,4 +1,4 @@
-<!DOCTYPE hvml>
+<!DOCTYPE hvml SYSTEM 'f: MATH'>
 <hvml target="html">
     <head>
         <meta charset="utf-8" />
@@ -174,6 +174,10 @@
             </div>
         </div>
 
+        <!-- component for toasts -->
+        <define as 'compToasts' from 'component/toasts.hvml' temp />
+        <include with $compToasts />
+
         <!-- controller for system -->
         <define as 'controllerSystem' from 'controller/system.hvml' temp />
         <include with $controllerSystem />
@@ -189,6 +193,10 @@
         <!-- controller for air purifier -->
         <define as 'controllerAirPurifier' from 'controller/air_purifier.hvml' temp />
         <include with $controllerAirPurifier />
+
+        <!-- controller for air conditioner -->
+        <define as 'controllerAirConditioner' from 'controller/air_conditioner.hvml' temp />
+        <include with $controllerAirConditioner />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
