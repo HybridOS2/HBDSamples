@@ -58,3 +58,47 @@
     </test>
 </observe>
 
+<define as 'updateLightness'>
+    <update on "#theDimmerLightnessFor$originName" to 'displace' at 'attr.data-current-lightness' with "$targetLightness" />
+    <update on "#theDimmerLightnessFor$originName" to 'displace' at 'textContent' with "$targetLightness%" />
+    <update on "#theDimmerLightnessFor$originName" to 'displace' at 'attr.style' with "width: $targetLightness%" />
+
+    <init as 'newBgClass' with 'bg-success' />
+
+    <test with $L.gt($targetLightness, 85L) >
+        <init as 'newBgClass' at '_grandparent' with 'bg-warning' />
+        <differ>
+            <test with $L.lt($targetLightness, 60L) >
+                <init as 'newBgClass' at '4' with 'bg-info' />
+            </test>
+        </differ>
+    </test>
+
+    <request on "#theDimmerLightnessFor$originName" to='call:ELEMENT.classList.remove(ARG[0], ARG[1], ARG[2]); ELEMENT.classList.add(ARG[3])'
+            with [ 'bg-info', 'bg-success', 'bg-warning', $newBgClass] noreturn />
+
+</define>
+
+<observe on '.lightness-change-for-dimmer' for 'click'>
+    <!-- inherit>
+        $STREAM.stdout.writelines("Change lightness of dimmer for $?.originName: $?.relativeX")
+    </inherit -->
+
+    <init as 'relativeX' with $?.relativeX temp />
+    <init as 'currentLightness' with $DATA.numerify($DOC.query("#theDimmerLightnessFor$?.originName").attr('data-current-lightness')) temp />
+
+    <test with $?.targetDiffersOrigin >
+        <init as 'relativeX' at '_grandparent' with $MATH.div($MATH.mul($currentLightness, $?.relativeX), 100) temp silently />
+    </test>
+
+    <init as 'targetLightness' with $DATA.arith('+', 0, $MATH.mul($relativeX, 100)) temp />
+
+    <!-- inherit>
+        $STREAM.stdout.writelines("Normalized x: $relativeX, current lightness: $currentLightness, target lightness: $targetLightness")
+    </inherit -->
+
+    <test with $L.and($L.ge($targetLightness, 0L), $L.le($targetLightness, 100L)) >
+        <call on $updateLightness with { originName: $?.originName, targetLightness: $targetLightness } />
+    </test>
+</observe>
+
