@@ -173,21 +173,21 @@ a:active {
 }
 
 .h-icon-btn-l {
-    height: 76px;
-    line-height: 76px;
+    height: 85px;
+    line-height: 85px;
 }
 
 .w-icon-btn-l {
-    width: 76px;
+    width: 85px;
 }
 
 .icon-btn .icon {
     display:flex;
     align-items:center;
     justify-content: center;
-    width: 76px;
-    height: 76px;
-    line-height: 76px;
+    width: 85px;
+    height: 85px;
+    line-height: 85px;
     border-radius: 50%;
     text-align: center;
     background-color: var(--bs-secondary-bg);

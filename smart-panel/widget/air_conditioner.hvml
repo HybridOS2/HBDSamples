@@ -9,15 +9,30 @@
     </test>
 
     <div class="d-flex justify-content-between pt-3 pb-4">
-      <div class="icon-btn pe-3">
+      <div class="icon-btn pe-2">
         <div class="icon" hvml-events="click">
           <i class="bi bi-power large-icon text-success"></i>
         </div>
       </div>
 
-      <div class="progress h-icon-btn-l" role="progressbar" aria-label="空调温度" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-        <div class="progress-bar fs-2" style="width: 25%">26°C</div>
+      <div class="progress h-icon-btn-l me-2" role="progressbar" aria-label="空调温度" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        <div class="progress-bar fs-2" id="theACTempFor$roomName" value="26" style="width: 25%">26°C</div>
       </div>
+
+      <div class="d-grid gap-1">
+        <div class="icon-btn temp-up-for-air-conditioner" name="$roomName" hvml-events="click">
+          <div class="icon small">
+            <i class="bi bi-caret-up-fill"></i>
+          </div>
+        </div>
+
+        <div class="icon-btn temp-down-for-air-conditioner" name="$roomName" hvml-events="click">
+          <div class="icon small">
+            <i class="bi bi-caret-down-fill"></i>
+          </div>
+        </div>
+      </div>
+
     </div>
 </div>
 
