@@ -97,11 +97,8 @@
             </inherit>
 
             <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.targetValue" />
-            <request on ' #theTimeToLock5 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-            <request on ' #theTimeToLock10 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-            <request on ' #theTimeToLock30 span' to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-            <request on " #theTimeToLock{$3?.targetValue} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-            <request on " #$3?.targetId span" to 'call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+            <request on "#theTimeToLock{$3?.targetValue} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on "#$3?.targetId span" to 'call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
         </test>
     </choose>
 

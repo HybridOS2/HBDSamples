@@ -98,6 +98,8 @@
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
+        <define as 'widgetMusic' from 'widget/music.hvml' />
+
         <div id="theLockScreen" class="offcanvas offcanvas-top show $running_state.bg_lockscreen" tabindex="-1" aria-labelledby="offcanvasLabel" style="z-index:1075"
             data-time-to-lock="10">
           <div class="offcanvas-body ps-4 pe-4">
@@ -117,7 +119,6 @@
                 </div>
             </div>
 
-            <define as 'widgetMusic' from 'widget/music.hvml' temp />
             <include with $widgetMusic on { withTitle: false } />
 
             <define as 'widgetMessages' from 'widget/messages.hvml' temp />
@@ -141,7 +142,6 @@
                 <include with $widgetScenario on { withTitle: true } />
 
                 <!-- music -->
-                <define as 'widgetMusic' from 'widget/music.hvml' temp />
                 <include with $widgetMusic on { withTitle: true } />
 
                 <!-- curtain -->
