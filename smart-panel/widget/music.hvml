@@ -8,7 +8,7 @@
         </div>
     </test>
 
-    <div class="music-controller pt-3 pb-3">
+    <div class="music-controller pt-2 pb-2">
         <img class="music-pic animate-img" src="resources/music/m1.jpg" alt="" />
         <div class="music-info mx-2">
             <span class="music-title align-text-top">智能音乐</span><br />
@@ -42,6 +42,13 @@
           </div>
 
         </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mt-2 pb-2">
+      <span><i class="bi bi-volume-mute-fill text-secondary fs-6"></i></span>
+      <input type="range" class="form-range mx-1 range-for-volume"
+              min="0" max="100" value="80" step="1" hvml-events="change" />
+      <span><i class="bi bi-volume-up-fill text-primary fs-6"></i></span>
     </div>
 </div>
 

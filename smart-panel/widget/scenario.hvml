@@ -50,6 +50,16 @@
     </ul>
     <p class="mt-1 mb-5">将在太阳升起或落下时自动切换外观。</p>
 
+    <h6>屏幕亮度</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-brightness-low text-primary fs-6"></i></span>
+        <input type="range" class="form-range mx-1 range-for-screen-brightness" id="theRange4ScreenBrightness"
+                min="0" max="100" value="80" step="1" hvml-events="change" />
+        <span><i class="bi bi-brightness-high text-primary fs-6"></i></span>
+      </li>
+    </ul>
+
     <h6>语言</h6>
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
