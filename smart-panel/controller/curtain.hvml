@@ -1,0 +1,8 @@
+<observe on '.range-for-curtain' for 'change'>
+    <inherit>
+        $STREAM.stdout.writelines("Changing curtain for $?.targetName to $?.targetValue")
+    </inherit>
+
+    <update on "#theCurtainValue$?.targetName" at 'textContent' with "$?.targetValue%" />
+</observe>
+

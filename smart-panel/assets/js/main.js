@@ -1,4 +1,4 @@
-function init() {
+function closure_for_lockscreen() {
     var lock_count = 0;
     const mainContent = document.getElementById('mainContent');
     const lockScreen = document.getElementById('theLockScreen');
@@ -6,6 +6,19 @@ function init() {
 
     function on_any_input(evt) {
         lock_count = 0;
+    }
+
+    function post_event(evt) {
+        let data = {
+            targetTagName: lockScreen.tagName,
+            targetHandle: lockScreen.hvmlHandleText,
+            targetId: lockScreen.id,
+            targetClass: lockScreen.className,
+            targetName: lockScreen.getAttribute('name'),
+            targetValue: (typeof(lockScreen.value) === 'undefined') ? lockScreen.getAttribute('value') : lockScreen.value
+        };
+
+        HVML.post(evt, "id", lockScreen.id, JSON.stringify(data));
     }
 
     var lock_timer;
@@ -18,14 +31,6 @@ function init() {
 
                 bootstrap.Offcanvas.getInstance(lockScreen).show();
 
-                let data = {
-                    targetTagName: lockScreen.tagName,
-                    targetHandle: lockScreen.hvmlHandleText,
-                    targetId: lockScreen.id,
-                    targetClass: lockScreen.className
-                };
-
-                HVML.post('locked', "id", lockScreen.id, JSON.stringify(data));
                 lock_count = 0;
             }
         }, 1000);
@@ -34,6 +39,7 @@ function init() {
         mainContent.addEventListener("keydown", on_any_input);
         mainContent.addEventListener("touchstart", on_any_input);
         mainContent.addEventListener("touchmove", on_any_input);
+        post_event('unlocked');
     });
 
     lockScreen.addEventListener('shown.bs.offcanvas', event => {
@@ -42,8 +48,9 @@ function init() {
         mainContent.removeEventListener("keydown", on_any_input);
         mainContent.removeEventListener("touchstart", on_any_input);
         mainContent.removeEventListener("touchmove", on_any_input);
+        post_event('locked');
     });
 }
 
-init();
+closure_for_lockscreen();
 

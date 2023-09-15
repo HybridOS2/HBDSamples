@@ -182,6 +182,14 @@
         <define as 'controllerScenario' from 'controller/scenario.hvml' temp />
         <include with $controllerScenario />
 
+        <!-- controller for curtain -->
+        <define as 'controllerCurtain' from 'controller/curtain.hvml' temp />
+        <include with $controllerCurtain />
+
+        <!-- controller for air purifier -->
+        <define as 'controllerAirPurifier' from 'controller/air_purifier.hvml' temp />
+        <include with $controllerAirPurifier />
+
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
         </observe>
