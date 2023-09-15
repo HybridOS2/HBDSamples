@@ -65,24 +65,26 @@
     <update on "#theACTempFor$originName" to 'displace' at 'textContent' with "$targetTemp°C" />
     <update on "#theACTempFor$originName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
 
-    <request on "#theACTempFor$originName" to='call:ELEMENT.classList.remove(ARG[0], ARG[1], ARG[2])' with [ 'bg-info', 'bg-success', 'bg-warning' ] noreturn />
+    <init as 'newBgClass' with 'bg-success' />
+
     <test with $L.gt($targetTemp, 30L) >
-        <request on "#theACTempFor$originName" to='call:ELEMENT.classList.add(ARG)' with 'bg-warning' noreturn />
+        <init as 'newBgClass' at '_grandparent' with 'bg-warning' />
         <differ>
             <test with $L.lt($targetTemp, 20L) >
-                <request on "#theACTempFor$originName" to='call:ELEMENT.classList.add(ARG)' with 'bg-info' noreturn />
-                <differ>
-                    <request on "#theACTempFor$originName" to='call:ELEMENT.classList.add(ARG)' with 'bg-success' noreturn />
-                </differ>
+                <init as 'newBgClass' at '4' with 'bg-info' />
             </test>
         </differ>
     </test>
+
+    <request on "#theACTempFor$originName" to='call:ELEMENT.classList.remove(ARG[0], ARG[1], ARG[2]); ELEMENT.classList.add(ARG[3])'
+            with [ 'bg-info', 'bg-success', 'bg-warning', $newBgClass] noreturn />
+
 </define>
 
 <observe on '.temp-change-for-air-conditioner' for 'click'>
-    <inherit>
+    <!-- inherit>
         $STREAM.stdout.writelines("Change Temp. of air conditioner for $?.originName: $?.relativeX")
-    </inherit>
+    </inherit -->
 
     <init as 'relativeX' with $?.relativeX temp />
     <init as 'currentTemp' with $DATA.numerify($DOC.query("#theACTempFor$?.originName").attr('data-current-temp')) temp />
@@ -93,9 +95,9 @@
 
     <init as 'targetTemp' with $DATA.arith('+', 0, $MATH.eval('15 + 20 * x', { x: $relativeX })) temp />
 
-    <inherit>
+    <!-- inherit>
         $STREAM.stdout.writelines("Normalized x: $relativeX, current temp: $currentTemp, target temp: $targetTemp")
-    </inherit>
+    </inherit -->
 
     <test with $L.and($L.ge($targetTemp, 15L), $L.le($targetTemp, 35L)) >
         <call on $updateTemp with { originName: $?.originName, targetTemp: $targetTemp } />
