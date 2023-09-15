@@ -1,9 +1,9 @@
 <observe on '.temp-up-for-air-conditioner' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("TempUp of air conditioner for $?.targetName clicked")
+        $STREAM.stdout.writelines("TempUp of air conditioner for $?.originName clicked")
     </inherit>
 
-    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.targetName").attr('data-current-temp') temp />
+    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.originName").attr('data-current-temp') temp />
 
     <init as 'targetTemp' with $DATA.arith('+', $currentTemp, 1L) temp />
 
@@ -14,19 +14,27 @@
 
         <request on '#theToastAlertingMaxTemp' to="call:bootstrap.Toast.getOrCreateInstance(ELEMENT).show()" noreturn />
         <differ>
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp°C" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'textContent' with "$targetTemp°C" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+
+            <test with $L.eq($targetTemp, 30L) >
+                <request on "#theACTempFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-warning' noreturn />
+            </test>
+
+            <test with $L.eq($targetTemp, 20L) >
+                <request on "#theACTempFor$?.originName" to='call:ELEMENT.classList.replace("bg-info", ARG)' with 'bg-success' noreturn />
+            </test>
         </differ>
     </test>
 </observe>
 
 <observe on '.temp-down-for-air-conditioner' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("TempDown of air conditioner for $?.targetName clicked")
+        $STREAM.stdout.writelines("TempDown of air conditioner for $?.originName clicked")
     </inherit>
 
-    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.targetName").attr('data-current-temp') temp />
+    <init as 'currentTemp' with $DOC.query("#theACTempFor$?.originName").attr('data-current-temp') temp />
 
     <init as 'targetTemp' with $DATA.arith('-', $currentTemp, 1L) temp />
 
@@ -37,9 +45,17 @@
 
         <request on '#theToastAlertingMinTemp' to='call:bootstrap.Toast.getOrCreateInstance(ELEMENT).show()' noreturn />
         <differ>
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'textContent' with "$targetTemp°C" />
-            <update on "#theACTempFor$?.targetName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'attr.data-current-temp' with "$targetTemp" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'textContent' with "$targetTemp°C" />
+            <update on "#theACTempFor$?.originName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
+
+            <test with $L.eq($targetTemp, 20L) >
+                <request on "#theACTempFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-info' noreturn />
+            </test>
+
+            <test with $L.eq($targetTemp, 30L) >
+                <request on "#theACTempFor$?.originName" to='call:ELEMENT.classList.replace("bg-warning", ARG)' with 'bg-success' noreturn />
+            </test>
         </differ>
     </test>
 </observe>

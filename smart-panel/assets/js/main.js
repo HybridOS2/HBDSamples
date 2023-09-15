@@ -10,12 +10,13 @@ function closure_for_lockscreen() {
 
     function post_event(evt) {
         let data = {
-            targetTagName: lockScreen.tagName,
-            targetHandle: lockScreen.hvmlHandleText,
-            targetId: lockScreen.id,
-            targetClass: lockScreen.className,
-            targetName: lockScreen.getAttribute('name'),
-            targetValue: (typeof(lockScreen.value) === 'undefined') ? lockScreen.getAttribute('value') : lockScreen.value
+            originTagName: lockScreen.tagName,
+            originHandle: lockScreen.hvmlHandleText,
+            originId: lockScreen.id,
+            originClass: lockScreen.className,
+            originName: lockScreen.getAttribute('name'),
+            originValue: (typeof(lockScreen.value) === 'undefined') ? lockScreen.getAttribute('value') : lockScreen.value,
+            targetDiffersOrigin: false,
         };
 
         HVML.post(evt, "id", lockScreen.id, JSON.stringify(data));

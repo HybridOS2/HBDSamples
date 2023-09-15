@@ -97,6 +97,26 @@
 
     </ul>
 
+    <h6>关闭屏幕</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-never" value="0" id="theTimeToOffScreenNever" hvml-events="click">
+        永不
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-5-minutes" value="5" id="theTimeToOffScreen5" hvml-events="click">
+        锁屏后 5 分钟
+        <span><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-10-minutes" value="10" id="theTimeToOffScreen10" hvml-events="click">
+        锁屏后 10 分钟
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-30-minutes" value="30" id="theTimeToOffScreen30" hvml-events="click">
+        锁屏后 30 分钟
+        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+      </li>
+    </ul>
+
   </div>
 </div>
 
