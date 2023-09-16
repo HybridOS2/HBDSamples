@@ -1,0 +1,102 @@
+<define as 'switchToMusic'>
+    <inherit>
+        $STREAM.stdout.writelines("Switching to music #$item")
+    </inherit>
+
+    <update on $music_info at '.current' with $item />
+    <update on '.music-pic' at 'attr.src' with $music_info.list[$item].img />
+    <update on '.music-title' at 'textContent' with $music_info.list[$item].title />
+    <update on '.music-artist' at 'textContent' with $music_info.list[$item].artist />
+    <update on '#theMusicPlayer' at 'attr.src' with $music_info.list[$item].src />
+
+    <test with $music_info.playing >
+        <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
+    </test>
+</define>
+
+<define as 'switchToPrevMusic'>
+    <init as 'prev' with $DATA.arith('-', $music_info.current, 1L) temp />
+    <test with $L.lt($prev, 0L)>
+        <init as 'prev' at '_grandparent' with $DATA.arith('-', $DATA.count($music_info.list), 1L) temp />
+    </test>
+
+    <call on $switchToMusic with { item: $prev } />
+</define>
+
+<observe on '.music-switch-to-prev' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-switch-to-prev clicked")
+    </inherit>
+
+    <call on $switchToPrevMusic />
+</observe>
+
+<define as 'switchToNextMusic'>
+    <init as 'next' with $DATA.arith('%', $DATA.arith('+', $music_info.current, 1L), $DATA.count($music_info.list)) temp />
+
+    <call on $switchToMusic with { item: $next } />
+</define>
+
+<observe on '.music-switch-to-next' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-switch-to-next clicked")
+    </inherit>
+
+    <call on $switchToNextMusic />
+</observe>
+
+<observe on '.music-play-or-pause' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-play-or-pause clicked")
+    </inherit>
+
+    <test with $music_info.playing >
+        <request on '#theMusicPlayer' to="call:ELEMENT.pause()" noreturn />
+        <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+        <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-pause-circle-fill', 'bi-play-circle-fill'] noreturn />
+        <update on $music_info at '.playing' with false />
+        <differ>
+            <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
+            <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+            <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-play-circle-fill', 'bi-pause-circle-fill'] noreturn />
+            <update on $music_info at '.playing' with true />
+        </differ>
+    </test>
+</observe>
+
+<observe on '#theMusicPlayer' for 'play'>
+    <inherit>
+        $STREAM.stdout.writelines("#theMusicPlayer play")
+    </inherit>
+
+    <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+</observe>
+
+<observe on '#theMusicPlayer' for 'pause'>
+    <inherit>
+        $STREAM.stdout.writelines("#theMusicPlayer pause")
+    </inherit>
+
+    <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+</observe>
+
+<observe on '#theMusicPlayer' for 'ended'>
+    <inherit>
+        $STREAM.stdout.writelines("#theMusicPlayer ended")
+    </inherit>
+
+    <call on $switchToNextMusic />
+</observe>
+
+<observe on '#theMusicPlayer' for 'timeupdate'>
+    <inherit>
+        $STREAM.stdout.writelines("#theMusicPlayer timeupdate")
+    </inherit>
+
+    <request on '#theMusicPlayer' to="get:ELEMENT.currentTime">
+        <inherit>
+            $STREAM.stdout.writelines("#theMusicPlayer currentTime: $?")
+        </inherit>
+    </request>
+</observe>
+

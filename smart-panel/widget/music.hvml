@@ -9,33 +9,27 @@
     </test>
 
     <div class="music-controller pt-2 pb-2">
-        <img class="music-pic animate-img" src="resources/music/m1.jpg" alt="" />
-        <div class="music-info mx-2">
-            <span class="music-title align-text-top">智能音乐</span><br />
-            <span class="music-author align-text-bottom">聆听生活</span>
+        <img class="music-pic" src="$music_info.list[$music_info.current].img" alt="" />
+        <div class="music-info mx-2 overflow-hidden" style="width: 100px">
+            <span class="music-title align-text-top text-nowrap">$music_info.list[$music_info.current].title</span><br />
+            <span class="music-artist align-text-bottom text-nowrap">$music_info.list[$music_info.current].artist</span>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
 
-          <div class="icon-btn btnPrevMusic me-2" hvml-events="click">
+          <div class="music-switch-to-prev icon-btn me-2" hvml-events="click">
             <div class="icon small">
               <i class="bi bi-skip-start-fill"></i>
             </div>
           </div>
 
-          <div class="icon-btn btnPlayMusic me-2" hvml-events="click">
+          <div class="music-play-or-pause icon-btn me-2" hvml-events="click">
             <div class="icon">
               <i class="bi bi-play-circle-fill"></i>
             </div>
           </div>
 
-          <div class="icon-btn d-none btnPauseMusic me-2" hvml-events="click">
-            <div class="icon">
-              <i class="bi bi-pause-circle-fill"></i>
-            </div>
-          </div>
-
-          <div class="icon-btn btnNextMusic" hvml-events="click">
+          <div class="music-switch-to-next icon-btn" hvml-events="click">
             <div class="icon small">
               <i class="bi bi-skip-end-fill"></i>
             </div>
@@ -80,7 +74,7 @@
 
     <h6>曲目</h6>
     <ul class="list-group mb-5">
-        <iterate on $music_list>
+        <iterate on $music_info.list>
           <li class="list-group-item">
             <test with $?.selected>
                 <input class="form-check-input me-1" type="checkbox" value="" checked id="music$%" />

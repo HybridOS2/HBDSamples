@@ -1,13 +1,4 @@
 <div class="widget-block shadow mt-3">
-    <test with $withTitle>
-        <div class="d-flex justify-content-between pt-3">
-          <h6>消息</h6>
-          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Messages" aria-controls="offcanvas4Messages">
-            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
-          </a>
-        </div>
-    </test>
-
     <div class="message-block text-success">
         <div class="bubble-icon mt-3">
             <i class="bi bi-chat-dots-fill"></i>
@@ -25,49 +16,4 @@
         </div>
     </div>
 </div>
-
-<test with $withTitle>
-<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Messages" aria-labelledby="offcanvas4MessagesLabel">
-  <div class="offcanvas-header">
-    <h6 class="offcanvas-title" id="offcanvas4MessagesLabel">消息设置</h6>
-    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
-       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
-    </a>
-  </div>
-  <div class="offcanvas-body">
-
-    <h6>播放模式</h6>
-    <ul class="list-group mb-5">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        随机播放
-        <span><i class="bi bi-check2 text-primary"></i></span>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        循环播放
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        单曲循环
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
-      </li>
-    </ul>
-
-    <h6>曲目</h6>
-    <ul class="list-group mb-5">
-        <iterate on $music_list>
-          <li class="list-group-item">
-            <test with $?.selected>
-                <input class="form-check-input me-1" type="checkbox" value="" checked id="music$%" />
-                <differ>
-                    <input class="form-check-input me-1" type="checkbox" value="" id="music$%" />
-                </differ>
-            </test>
-            <label class="form-check-label stretched-link overflow-x-hidden" for="music$%">$?.title - $?.artist</label>
-          </li>
-        </iterate>
-    </ul>
-
-  </div>
-</div>
-</test>
 

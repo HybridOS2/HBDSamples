@@ -53,5 +53,37 @@ function closure_for_lockscreen() {
     });
 }
 
+function closure_for_music_player() {
+    const musicPlayer = document.getElementById('theMusicPlayer');
+
+    function post_event(evt) {
+        let data = {
+            originTagName: musicPlayer.tagName,
+            originHandle: musicPlayer.hvmlHandleText,
+            originId: musicPlayer.id,
+            originClass: musicPlayer.className,
+            originName: musicPlayer.getAttribute('name'),
+            originValue: (typeof(musicPlayer.value) === 'undefined') ? musicPlayer.getAttribute('value') : musicPlayer.value,
+            targetDiffersOrigin: false,
+        };
+
+        HVML.post(evt, "id", musicPlayer.id, JSON.stringify(data));
+    }
+
+    musicPlayer.addEventListener('ended', event => {
+        post_event('ended');
+    });
+
+    musicPlayer.addEventListener('play', event => {
+        console.log("musicPlayer: play");
+        post_event('play');
+    });
+
+    musicPlayer.addEventListener('pause', event => {
+        console.log("musicPlayer: pause");
+        post_event('pause');
+    });
+}
+
 closure_for_lockscreen();
 
