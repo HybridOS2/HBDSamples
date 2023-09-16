@@ -10,6 +10,7 @@
     <update on '#theMusicPlayer' at 'attr.src' with $music_info.list[$item].src />
 
     <test with $music_info.playing >
+        <request on '#theMusicPlayer' to="call:reset_music_progress(ARG)" with '.music-play-progress' noreturn />
         <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
     </test>
 </define>
@@ -86,17 +87,5 @@
     </inherit>
 
     <call on $switchToNextMusic />
-</observe>
-
-<observe on '#theMusicPlayer' for 'timeupdate'>
-    <inherit>
-        $STREAM.stdout.writelines("#theMusicPlayer timeupdate")
-    </inherit>
-
-    <request on '#theMusicPlayer' to="get:ELEMENT.currentTime">
-        <inherit>
-            $STREAM.stdout.writelines("#theMusicPlayer currentTime: $?")
-        </inherit>
-    </request>
 </observe>
 

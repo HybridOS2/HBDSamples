@@ -55,36 +55,69 @@ function closure_for_lockscreen() {
 
 function closure_for_music_player() {
     const musicPlayer = document.getElementById('theMusicPlayer');
+    musicPlayer.volume = 0.8;
 
-    function post_music_event(evt) {
-        let data = {
-            originTagName: musicPlayer.tagName,
-            originHandle: musicPlayer.hvmlHandleText,
-            originId: musicPlayer.id,
-            originClass: musicPlayer.className,
-            originName: musicPlayer.getAttribute('name'),
-            originValue: (typeof(musicPlayer.value) === 'undefined') ? musicPlayer.getAttribute('value') : musicPlayer.value,
-            targetDiffersOrigin: false,
-        };
+    musicPlayer.addEventListener('timeupdate', event => {
+        if (musicPlayer.duration) {
+            let curr_minutes = parseInt(musicPlayer.currentTime / 60);
+            let curr_seconds = parseInt(musicPlayer.currentTime - 60 * curr_minutes);
 
-        HVML.post(evt, "id", musicPlayer.id, JSON.stringify(data));
-    }
+            let total_minutes = parseInt(musicPlayer.duration / 60);
+            let total_seconds = parseInt(musicPlayer.duration - 60 * total_minutes);
 
-    musicPlayer.addEventListener('ended', event => {
-        console.log("musicPlayer: ended");
-        post_music_event('ended');
+            let playProgresses = document.querySelectorAll(".music-play-progress");
+            playProgresses.forEach(function(progress) {
+                progress.previousSibling.textContent = curr_minutes.toString().padStart(2, "0") + ":" + curr_seconds.toString().padStart(2, "0");
+                progress.nextSibling.textContent = total_minutes.toString().padStart(2, "0") + ":" + total_seconds.toString().padStart(2, "0");
+                progress.firstChild.style = "width:" + (musicPlayer.currentTime / musicPlayer.duration * 100) + "%";
+            });
+        }
     });
 
-    musicPlayer.addEventListener('play', event => {
-        console.log("musicPlayer: play");
-        post_music_event('play');
-    });
+    const musicVolumeControllers = document.querySelectorAll('.range-for-music-volume');
+    musicVolumeControllers.forEach(function(range) {
+        range.addEventListener('change', function(evt) {
+            musicPlayer.volume = evt.target.value / 100.0;
 
-    musicPlayer.addEventListener('pause', event => {
-        console.log("musicPlayer: pause");
-        post_music_event('pause');
+            musicVolumeControllers.forEach(function(other) {
+                if (other != evt.target) {
+                    other.value = evt.target.value;
+                }
+            });
+        });
+
+        range.previousSibling.addEventListener('click', event => {
+            if (musicPlayer.muted) {
+                musicPlayer.muted = false;
+            }
+            else {
+                musicPlayer.muted = true;
+            }
+
+            musicVolumeControllers.forEach(function(other) {
+                if (musicPlayer.muted) {
+                    other.previousSibling.firstChild.classList.replace('text-secondary', 'text-danger');
+                    other.nextSibling.firstChild.classList.replace('text-primary', 'text-secondary');
+                }
+                else {
+                    other.previousSibling.firstChild.classList.replace('text-danger', 'text-secondary');
+                    other.nextSibling.firstChild.classList.replace('text-secondary', 'text-primary');
+                }
+            });
+        });
+    });
+}
+
+function reset_music_progress(selector)
+{
+    let playProgresses = document.querySelectorAll(selector);
+    playProgresses.forEach(function(progress) {
+        progress.previousSibling.textContent = "00:00";
+        progress.nextSibling.textContent = "--:--";
+        progress.firstChild.style = "width:0%";
     });
 }
 
 closure_for_lockscreen();
+closure_for_music_player();
 

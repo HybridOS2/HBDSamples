@@ -109,7 +109,7 @@ list:
             data-time-to-lock="10">
           <div class="offcanvas-body ps-4 pe-4">
 
-            <div class="d-flex justify-content-between text-light text-shadow mt-1 mb-4">
+            <div class="d-flex justify-content-between text-light text-shadow mb-2">
                 <div class="fw-normal mt-1 lh-base">
                   <span class="fs-1 mt-1 me-2"><i id="theWeatherIcon" class="bi bi-cloud-sun-fill"></i></span>
                   <span id="theWeatherTemp" class="fs-4 me-2">26</span><span class="fs-4 me-2">°C</span><br />
