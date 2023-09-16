@@ -56,7 +56,7 @@ function closure_for_lockscreen() {
 function closure_for_music_player() {
     const musicPlayer = document.getElementById('theMusicPlayer');
 
-    function post_event(evt) {
+    function post_music_event(evt) {
         let data = {
             originTagName: musicPlayer.tagName,
             originHandle: musicPlayer.hvmlHandleText,
@@ -71,17 +71,18 @@ function closure_for_music_player() {
     }
 
     musicPlayer.addEventListener('ended', event => {
-        post_event('ended');
+        console.log("musicPlayer: ended");
+        post_music_event('ended');
     });
 
     musicPlayer.addEventListener('play', event => {
         console.log("musicPlayer: play");
-        post_event('play');
+        post_music_event('play');
     });
 
     musicPlayer.addEventListener('pause', event => {
         console.log("musicPlayer: pause");
-        post_event('pause');
+        post_music_event('pause');
     });
 }
 
