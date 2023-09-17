@@ -47,16 +47,15 @@
       <li class="list-group-item d-flex justify-content-between align-items-center">
         开启
         <div class="dropdown">
-          <a class="btn btn-outline dropdown-toggle" id="theTimeToOpenCurtainFor${roomName}"
+          <a class="btn btn-outline dropdown-toggle" id="theTimeToOpenCurtainFor$roomName"
                 data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
             07:00
           </a>
-
           <div class="dropdown-menu p-4">
-            <hipicker type="integer" class="hour" for="theTimeToOpenCurtainFor${roomName}"
+            <hipicker type="integer" class="hour" for="theTimeToOpenCurtainFor$roomName"
                     value="7" min="0" max="23" step="1" endtoend="endtoend" width="100" height="200">
             </hipicker>
-            <hipicker type="integer" class="minute" for="theTimeToOpenCurtainFor${roomName}"
+            <hipicker type="integer" class="minute" for="theTimeToOpenCurtainFor$roomName"
                     value="0" min="0" max="59" step="1" endtoend="endtoend" width="100" height="200">
             </hipicker>
           </div>
@@ -66,16 +65,16 @@
       <li class="list-group-item d-flex justify-content-between align-items-center">
         关闭
         <div class="dropdown">
-          <a class="btn btn-outline dropdown-toggle" id="theTimeToCloseCurtainFor${roomName}"
+          <a class="btn btn-outline dropdown-toggle" id="theTimeToCloseCurtainFor$roomName"
                 data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
             19:00
           </a>
           <div class="dropdown-menu p-4">
-            <hipicker type="integer" class="hour" for="theTimeToCloseCurtainFor${roomName}"
+            <hipicker type="integer" class="hour" for="theTimeToCloseCurtainFor$roomName"
                     value="19" min="0" max="23" step="1" endtoend="endtoend" width="100" height="200">
             </hipicker>
-            <hipicker type="integer" class="minute" for="theTimeToCloseCurtainFor${roomName}
-                    "value="0" min="0" max="59" step="1" endtoend="endtoend" width="100" height="200">
+            <hipicker type="integer" class="minute" for="theTimeToCloseCurtainFor$roomName"
+                    value="0" min="0" max="59" step="1" endtoend="endtoend" width="100" height="200">
             </hipicker>
           </div>
         </div>
