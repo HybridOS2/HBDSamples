@@ -1,32 +1,32 @@
-<observe on '.btnThemeLight' for 'click'>
+<observe on '.switch-theme-to-light' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("btnThemeLight clicked")
+        $STREAM.stdout.writelines("switch-theme-to-light clicked")
     </inherit>
 
     <update on $theme_option at ".user" with 2L />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
-    <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
-    <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+    <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.add("active")' noreturn />
+    <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.remove("active")' noreturn />
 </observe>
 
-<observe on '.btnThemeDark' for 'click'>
+<observe on '.switch-theme-to-dark' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("btnThemeDark clicked")
+        $STREAM.stdout.writelines("switch-theme-to-dark clicked")
     </inherit>
 
     <update on $theme_option at ".user" with 1L />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
-    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
-    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+    <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.remove("active")' noreturn />
+    <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.add("active")' noreturn />
 </observe>
 
 <test with $L.eq($running_state.theme, 1L)>
-    <update on '.btnThemeLight .icon' at "attr.class" with 'icon' />
-    <update on '.btnThemeDark .icon' at "attr.class" with 'icon active' />
+    <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.remove("active")' noreturn />
+    <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.add("active")' noreturn />
     <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
     <differ>
-        <update on '.btnThemeLight .icon' at "attr.class" with 'icon active' />
-        <update on '.btnThemeDark .icon' at "attr.class" with 'icon' />
+        <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.add("active")' noreturn />
+        <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.remove("active")' noreturn />
         <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
     </differ>
 </test>
