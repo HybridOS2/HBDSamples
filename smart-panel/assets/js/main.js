@@ -10,7 +10,7 @@ function closure_for_lockscreen() {
 
     function post_event(evt) {
         let data = {
-            originTagName: lockScreen.tagName,
+            originTag: lockScreen.tagName,
             originHandle: lockScreen.hvmlHandleText,
             originId: lockScreen.id,
             originClass: lockScreen.className,
