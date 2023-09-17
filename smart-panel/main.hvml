@@ -215,7 +215,7 @@ list:
             <exit with "closed" />
         </observe>
 
-        <audio id="theMusicPlayer" src="$music_info.list[$music_info.current].src" hvml-events="play pause ended"></audio>
+        <audio id="theMusicPlayer" src="$music_info.list[$music_info.current].src" hvml-events="ended"></audio>
 
         <script src='assets/js/main.js' type="text/javascript"></script>
     </body>
