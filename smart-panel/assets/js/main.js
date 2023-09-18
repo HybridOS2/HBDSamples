@@ -1,7 +1,7 @@
 function post_hvml_event(evt, elem) {
     let data = {
             originTag: elem.tagName,
-            originHandle: elem.hvmlHandleText,
+            originHandle: elem.hvmlHandleText ? elem.hvmlHandleText : elem.getAttribute('hvml-handle'),
             originId: elem.id,
             originClass: elem.className,
             originName: elem.getAttribute('name'),
