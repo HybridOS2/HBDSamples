@@ -269,35 +269,41 @@ hipicker::-hi-picker-items {
     mask: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
 }
 
-hipicker.hour {
-    display:inline-block;
+hipicker.time {
+    display: inline-block;
     width: 50px;
-    height: 100px;
-    -hi-picker-rotate-y: 5deg;      /* 向右倾斜 5 度。*/
+    height: 180px;
+    outline: none;
+}
+
+hipicker.hour {
+    margin-right: 15px;
+    -hi-picker-rotate-y: 10deg;      /* 向右倾斜 10 度。*/
     -hi-picker-damping-factor: 50;  /* 选项少，旋转速度低。*/
 }
 
 hipicker.minute {
-    display:inline-block;
-    width: 50px;
-    height: 100px;
-    -hi-picker-rotate-y: -5deg;      /* 向左倾斜 5 度。*/
+    margin-left: 15px;
+    -hi-picker-rotate-y: -10deg;      /* 向左倾斜 10 度。*/
     -hi-picker-damping-factor: 100; /* 选项多，旋转速度高。*/
 }
 
-hipicker.hour::-hi-picker-selected {
+hipicker.hour::-hi-picker-selected,
+hipicker.minute::-hi-picker-selected {
     color: var(--bs-secondary-color);
     font-size: var(--theme-font-size-small);
-    border-style: none solid none solid;
+    border-style: solid none solid none;
     border-width: 1px;
     border-color: var(--bs-border-color);
 }
 
 hipicker.hour::-hi-picker-selected-after {
+    font-size: var(--theme-font-size-small);
     content: "时";
 }
 
 hipicker.minute::-hi-picker-selected-after {
+    font-size: var(--theme-font-size-small);
     content: "分";
 }
 

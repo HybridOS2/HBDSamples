@@ -6,3 +6,15 @@
     <update on "#theCurtainValue$?.targetName" at 'textContent' with "$?.targetValue%" />
 </observe>
 
+<observe on '.time-to-open-curtain' for 'change'>
+    <inherit>
+        $STREAM.stdout.writelines("Changing time to open curtain for $?.originName to $?.originValue")
+    </inherit>
+</observe>
+
+<observe on '.time-to-close-curtain' for 'change'>
+    <inherit>
+        $STREAM.stdout.writelines("Changing time to close curtain for $?.originName to $?.originValue")
+    </inherit>
+</observe>
+

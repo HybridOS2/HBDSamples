@@ -1,3 +1,17 @@
+function post_hvml_event(evt, elem) {
+    let data = {
+            originTag: elem.tagName,
+            originHandle: elem.hvmlHandleText,
+            originId: elem.id,
+            originClass: elem.className,
+            originName: elem.getAttribute('name'),
+            originValue: (typeof(elem.value) === 'undefined') ? elem.getAttribute('value') : elem.value,
+            targetDiffersOrigin: false,
+    };
+
+    HVML.post(evt, "id", elem.id, JSON.stringify(data));
+}
+
 function closure_for_lockscreen() {
     var lock_count = 0;
     const mainContent = document.getElementById('mainContent');
@@ -6,20 +20,6 @@ function closure_for_lockscreen() {
 
     function on_any_input(evt) {
         lock_count = 0;
-    }
-
-    function post_event(evt) {
-        let data = {
-            originTag: lockScreen.tagName,
-            originHandle: lockScreen.hvmlHandleText,
-            originId: lockScreen.id,
-            originClass: lockScreen.className,
-            originName: lockScreen.getAttribute('name'),
-            originValue: (typeof(lockScreen.value) === 'undefined') ? lockScreen.getAttribute('value') : lockScreen.value,
-            targetDiffersOrigin: false,
-        };
-
-        HVML.post(evt, "id", lockScreen.id, JSON.stringify(data));
     }
 
     var lock_timer;
@@ -40,7 +40,7 @@ function closure_for_lockscreen() {
         mainContent.addEventListener("keydown", on_any_input);
         mainContent.addEventListener("touchstart", on_any_input);
         mainContent.addEventListener("touchmove", on_any_input);
-        post_event('unlocked');
+        post_hvml_event('unlocked', lockScreen);
     });
 
     lockScreen.addEventListener('shown.bs.offcanvas', event => {
@@ -49,7 +49,7 @@ function closure_for_lockscreen() {
         mainContent.removeEventListener("keydown", on_any_input);
         mainContent.removeEventListener("touchstart", on_any_input);
         mainContent.removeEventListener("touchmove", on_any_input);
-        post_event('locked');
+        post_hvml_event('locked', lockScreen);
     });
 }
 
@@ -108,6 +108,40 @@ function closure_for_music_player() {
     });
 }
 
+function closure_for_timer_picker() {
+    const timePickers = document.querySelectorAll('hipicker.time');
+    timePickers.forEach(function(picker) {
+        picker.addEventListener('change', function(evt) {
+            var hour, minute;
+            if (evt.target.classList.contains('hour')) {
+                hour = parseInt(evt.target.value);
+                minute = parseInt(evt.target.nextSibling.value);
+            }
+            else {
+                hour = parseInt(evt.target.previousSibling.value);
+                minute = parseInt(evt.target.value);
+            }
+
+            let timeId = evt.target.getAttribute('for');
+            let timeElem = document.getElementById(timeId);
+            let value = hour.toString().padStart(2, "0") + ":" + minute.toString().padStart(2, "0");
+            timeElem.textContent = value;
+            timeElem.setAttribute('value', value);
+
+            post_hvml_event('change', timeElem);
+        });
+
+        /* not work
+        picker.addEventListener('mousemove', function(evt) {
+            evnt.stopImmediatePropagation();
+        });
+
+        picker.addEventListener('touchmove', function(evt) {
+            evnt.stopImmediatePropagation();
+        }); */
+    });
+}
+
 function reset_music_progress(selector)
 {
     let playProgresses = document.querySelectorAll(selector);
@@ -120,4 +154,5 @@ function reset_music_progress(selector)
 
 closure_for_lockscreen();
 closure_for_music_player();
+closure_for_timer_picker();
 
