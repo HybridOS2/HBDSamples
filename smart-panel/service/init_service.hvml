@@ -31,6 +31,7 @@
             { "id" : "weather_update_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
+    <include with $request_weather_info />
 </define>
 
 <define as 'stop_weather_update' at="_topmost">
