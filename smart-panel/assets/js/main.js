@@ -9,7 +9,7 @@ function post_hvml_event(evt, elem) {
             targetDiffersOrigin: false,
     };
 
-    HVML.post(evt, "id", elem.id, JSON.stringify(data));
+    HVML.post(evt, "handle", data.originHandle, JSON.stringify(data));
 }
 
 function closure_for_lockscreen() {
