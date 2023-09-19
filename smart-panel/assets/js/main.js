@@ -12,15 +12,15 @@ function post_hvml_event(evt, elem) {
     HVML.post(evt, "handle", data.originHandle, JSON.stringify(data));
 }
 
+var lock_count = 0;
+function on_any_input(evt) {
+    lock_count = 0;
+}
+
 function closure_for_lockscreen() {
-    var lock_count = 0;
     const mainContent = document.getElementById('mainContent');
     const lockScreen = document.getElementById('theLockScreen');
     const lockOffcanvas = new bootstrap.Offcanvas('#theLockScreen');
-
-    function on_any_input(evt) {
-        lock_count = 0;
-    }
 
     var lock_timer;
     lockScreen.addEventListener('hidden.bs.offcanvas', event => {
@@ -128,6 +128,7 @@ function closure_for_timer_picker() {
             timeElem.textContent = value;
             timeElem.setAttribute('value', value);
 
+            on_any_input();
             post_hvml_event('change', timeElem);
         });
 
