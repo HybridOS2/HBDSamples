@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between pt-3">
           <h6>智能摄像头-$roomName</h6>
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Camera" aria-controls="offcanvas4Camera">
-            <div class="ps-3"><i class="bi bi-three-dots"></i></div>
+            <div class="ps-5"><i class="bi bi-three-dots"></i></div>
           </a>
         </div>
     </test>
@@ -24,7 +24,7 @@
   <div class="offcanvas-header">
     <h6 class="offcanvas-title" id="offcanvas4CameraLabel">智能摄像头-$roomName 设置</h6>
     <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
-       <div class="bs-5"><i class="bi bi-x-lg"></i></div>
+       <div class="ps-5"><i class="bi bi-x-lg"></i></div>
     </a>
   </div>
 
