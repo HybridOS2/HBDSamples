@@ -39,12 +39,12 @@
             {
                 "text":"secondary",
                 "title":"基于 HVML 的合璧操作系统 2.0 开发样机呼之欲出",
-                "url":"https://mp.weixin.qq.com/s/FdEoUeaoeE7ZgWz6gGfhkA"
+                "url":"https://hybridos.fmsoft.cn/blog/hvml-hybridos-2-0-develop-prototype"
             },
             {
                 "text":"primary",
                 "title":"HVML 解释器和渲染器更新；合璧操作系统 2.0 基础组件发布",
-                "url":"https://mp.weixin.qq.com/s/uDYqzfnfDB739o-R9-dkiQ"
+                "url":"https://hybridos.fmsoft.cn/blog/hybridos-2-0-base-release"
             },
             {
                 "text":"success",
@@ -64,28 +64,28 @@ list:
             title: '天空之城',
             artist: '久石让',
             img: 'resources/music/m1.jpg',
-            src: 'resources/music/m1.mp3',
+            src: 'resources/music/m1.wav',
             selected: true,
         },
         {
             title: 'Creep',
             artist: 'Radiohead',
             img: 'resources/music/m2.png',
-            src: 'resources/music/m2.mp3',
+            src: 'resources/music/m2.wav',
             selected: true,
         },
         {
             title: 'Shape of You',
             artist: 'Ed Sheeran',
             img: 'resources/music/m3.jpg',
-            src: 'resources/music/m3.mp3',
+            src: 'resources/music/m3.wav',
             selected: true,
         },
         {
             title: '知足',
             artist: '五月天',
             img: 'resources/music/m4.png',
-            src: 'resources/music/m4.mp3',
+            src: 'resources/music/m4.wav',
             selected: false,
         }
     ],
