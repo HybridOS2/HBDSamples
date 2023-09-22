@@ -18,4 +18,12 @@ function switch_retry() {
     show_elem('id_init_btns');
 }
 
+function start_init_anim() {
+    var element = document.getElementById('id_init_status_anim');
+    element.classList.add("spinner-border");
+}
 
+function stop_init_anim() {
+    var element = document.getElementById('id_init_status_anim');
+    element.classList.remove("spinner-border");
+}

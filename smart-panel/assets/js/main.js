@@ -23,6 +23,10 @@ function closure_for_lockscreen() {
     const lockOffcanvas = new bootstrap.Offcanvas('#theLockScreen');
 
     var lock_timer;
+    lockScreen.addEventListener('hide.bs.offcanvas', event => {
+        mainContent.classList.remove("opacity-0");
+    });
+
     lockScreen.addEventListener('hidden.bs.offcanvas', event => {
         lock_count = 0;
         lock_timer = setInterval(() => {
@@ -30,6 +34,7 @@ function closure_for_lockscreen() {
             let lock_time = parseInt(lockScreen.getAttribute('data-time-to-lock'));
             if (lock_count >= lock_time) {
 
+                lockScreen.classList.remove("opacity-0");
                 bootstrap.Offcanvas.getInstance(lockScreen).show();
 
                 lock_count = 0;
@@ -40,6 +45,7 @@ function closure_for_lockscreen() {
         mainContent.addEventListener("keydown", on_any_input);
         mainContent.addEventListener("touchstart", on_any_input);
         mainContent.addEventListener("touchmove", on_any_input);
+        lockScreen.classList.add("opacity-0");
         post_hvml_event('unlocked', lockScreen);
     });
 
@@ -49,6 +55,7 @@ function closure_for_lockscreen() {
         mainContent.removeEventListener("keydown", on_any_input);
         mainContent.removeEventListener("touchstart", on_any_input);
         mainContent.removeEventListener("touchmove", on_any_input);
+        mainContent.classList.add("opacity-0");
         post_hvml_event('locked', lockScreen);
     });
 }

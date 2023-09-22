@@ -144,6 +144,7 @@
 </define>
 
 <define as 'hide_init_window' at '_topmost'>
+    <request on="#id_init" to="call:stop_init_anim(); return true;" />
     <request on $RDR to 'callMethod'>
         {
             name: "plainwin:page@initPagePanel",
@@ -155,6 +156,7 @@
 </define>
 
 <define as 'show_init_window' at '_topmost'>
+    <request on="#id_init" to="call:start_init_anim(); return true;" />
     <request on $RDR to 'callMethod'>
         {
             name: "plainwin:page@initPagePanel",

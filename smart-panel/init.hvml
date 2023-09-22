@@ -36,7 +36,7 @@
             <div id="id_init_status" class="init__status__container">
                 <div class="d-flex justify-content-center align-items-center init__status fs-4">
                     <div class="init__status__anim text-end">
-                        <div class="spinner-border"></div>
+                        <div id="id_init_status_anim" class="spinner-border"></div>
                     </div>
                     <div class="init__status__msg__container m-2">
                         <strong id="id_init_status" role="status">加载中</strong>
