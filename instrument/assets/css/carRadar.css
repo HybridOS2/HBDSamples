@@ -23,62 +23,66 @@
     position: absolute;
 }
 .carRadar .model .radar-left-1{
-    height: 8.75vh;
+    width: 3.17vw;
+    margin-left: -1.58vw;
 }
 .carRadar .model .radar-left-1.radar-level-1{
     top: 92%;
-    left: -26%;
+    left: -4%;
 }
 .carRadar .model .radar-left-1.radar-level-2{
     top: 100%;
-    left: -38%;
+    left: -20%;
 }
 .carRadar .model .radar-left-1.radar-level-3{
     top: 110%;
-    left: -47%;
+    left: -35%;
 }
 .carRadar .model .radar-left-2{
-    height: 7.36vh;
+    width: 4.53vw;
+    margin-left: -2.27vw;
 }
 .carRadar .model .radar-left-2.radar-level-1{
     top: 102%;
-    left: -1%;
+    left: 30%;
 }
 .carRadar .model .radar-left-2.radar-level-2{
     top: 112%;
-    left: -4%;
+    left: 25%;
 }
 .carRadar .model .radar-left-2.radar-level-3{
     top: 122%;
-    left: -10%;
+    left: 15%;
 }
 .carRadar .model .radar-left-3{
-    height: 7.36vh;
+    width: 4.53vw;
+    margin-left: -2.27vw;
 }
 .carRadar .model .radar-left-3.radar-level-1{
     top: 102%;
-    left: 40%;
+    left: 74%;
 }
 .carRadar .model .radar-left-3.radar-level-2{
     top: 112%;
-    left: 48%;
+    left: 79%;
 }
 .carRadar .model .radar-left-3.radar-level-3{
     top: 122%;
-    left: 55%;
+    left: 86%;
 }
 .carRadar .model .radar-left-4{
-    height: 8.75vh;
+    width: 3.17vw;
+    margin-left: -1.58vw;
 }
 .carRadar .model .radar-left-4.radar-level-1{
-    top: 90%;
-    left: 88%;
+    top: 92%;
+    left: 104%;
 }
 .carRadar .model .radar-left-4.radar-level-2{
     top: 100%;
-    left: 105%;
+    left: 117%;
 }
 .carRadar .model .radar-left-4.radar-level-3{
     top: 110%;
-    left: 116%;
+    left: 134%;
 }

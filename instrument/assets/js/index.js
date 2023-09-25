@@ -47,9 +47,9 @@ function changeSysType(sys_type){
     document.querySelector(".main-content").style.backgroundImage = "url(\'hvml://localhost/_system/_filesystem/-/app/instrument/assets/img/background-"+sys_type.value+".png\')"
 }
 
-function changeSpeed(speed,acc){
+function changeSpeed(speed,acc,frame){
     drawCircleLeftPromise = drawCircleLeftPromise.then(()=>{
-        return drawCircleLeft(speed,acc)
+        return drawCircleLeft(speed,acc,frame)
     })
 }
 
@@ -59,9 +59,9 @@ function changeMileage(mileage,acc){
     })
 }
 
-function changeRev(rev,acc){
+function changeRev(rev,acc,frame){
     drawCircleRightPromise = drawCircleRightPromise.then(()=>{
-        return drawCircleRight(rev,acc)
+        return drawCircleRight(rev,acc,frame)
     })
 }
 
@@ -85,9 +85,9 @@ var circle_left_el_arcCir = document.querySelector('.left-instrument .canvasArcC
 circle_left_el_arcCir.width = circle_left_canvasWidth;
 circle_left_el_arcCir.height = circle_left_canvasHeight;
 var circle_left_cxt_arc = circle_left_el_arcCir.getContext("2d");
-var drawCircleLeftPromise = drawCircleLeft(1,0)
+var drawCircleLeftPromise = drawCircleLeft(0,0,1)
 
-function drawCircleLeft(score,acc){
+function drawCircleLeft(score,acc,frame){
     circle_left_value = score / 150;    //得分占比
     
     roadLineSpeed = circle_left_value*5;
@@ -103,13 +103,14 @@ function drawCircleLeft(score,acc){
         CircleLeft = setInterval(()=>{
             var isUp = true
             if (circle_left_count >= circle_left_value) {
-                circle_left_count -= 0.01;
+                circle_left_count -= (0.01*frame);
                 isUp = false
             }else{
-                circle_left_count += 0.01;
+                circle_left_count += (0.01*frame);
                 isUp = true
             }
             
+            circle_left_count = circle_left_count < 0 ? 0 : circle_left_count;
             circle_left_speed_number.innerText = parseInt(circle_left_count*150)<0 ? 0 : parseInt(circle_left_count*150);
             // 清除上次绘画进度条
             circle_left_cxt_arc.clearRect(0, 0, circle_left_canvasWidth, circle_left_canvasHeight);
@@ -160,7 +161,7 @@ function drawCircleLeft(score,acc){
                     resolve()
                 }
             }
-        }, acc)
+        }, acc*frame)
     });
 }
 
@@ -260,10 +261,10 @@ var circle_right_el_arcCir = document.querySelector('.right-instrument .canvasAr
 circle_right_el_arcCir.width = circle_right_canvasWidth;
 circle_right_el_arcCir.height = circle_right_canvasHeight;
 var circle_right_cxt_arc = circle_right_el_arcCir.getContext("2d");
-var drawCircleRightPromise = drawCircleRight(0.1,0)
+var drawCircleRightPromise = drawCircleRight(0,0,1)
 
 
-function drawCircleRight(score,acc){
+function drawCircleRight(score,acc,frame){
     circle_right_value = score / 8;    //得分占比
     var r = circle_right_canvasWidth/2
 
@@ -275,12 +276,13 @@ function drawCircleRight(score,acc){
         CircleRight = setInterval(()=>{
             var isUp = true;
             if (circle_right_count >= circle_right_value) {
-                circle_right_count -= 0.01;
+                circle_right_count -= (0.01*frame);
                 isUp = false
             }else{
-                circle_right_count += 0.01;
+                circle_right_count += (0.01*frame);
                 isUp = true
             }
+            circle_right_count = circle_right_count < 0 ? 0 : circle_right_count
             if(parseFloat(circle_right_count*8) > 0){
                 circle_right_rev_number.innerText = parseFloat(circle_right_count*8).toFixed(1)
             }else{
@@ -335,7 +337,7 @@ function drawCircleRight(score,acc){
                     resolve()
                 }
             }
-        }, acc);
+        }, acc*frame);
     })
     
 }

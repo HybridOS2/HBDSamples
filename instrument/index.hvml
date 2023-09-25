@@ -471,15 +471,14 @@
                     timestamp:22,
                     action:{
                         label_text:"""
-                            <p>限速80，请按规定行驶</p>
                             <p style="color: #EFAC4A;">您已偏航，请注意安全</p>
                         """,
                         lowBeam:false,
                         highBeam:true,
                         shifting:"left",
 
-                        speed:70,
-                        speed_acc:300,
+                        speed:80,
+                        speed_acc:150,
                         mileage:238,
                         mileage_acc:30,
                         rev:5,
@@ -491,10 +490,6 @@
                     timestamp:24,
                     action:{
                         sysType:"sport",
-                        label_text:"""
-                            <p>限速80，请按规定行驶</p>
-                            
-                        """,
                         shifting:"null",
 
                         speed:80,
@@ -509,9 +504,6 @@
                 },{
                     timestamp:26,
                     action:{
-                        label_text:"""
-                            <p>限速80，请按规定行驶</p>
-                        """,
                         speed:90,
                         speed_acc:300,
                         mileage:236,
@@ -539,7 +531,7 @@
                         engine_temp_acc:30     
                     }
                 },{
-                    timestamp:29,
+                    timestamp:30,
                     action:{
                         page:"playerInfo",
                         
@@ -617,9 +609,9 @@
                         leftBeam:true,
 
                         speed:0,
-                        speed_acc:300,
+                        speed_acc:10,
                         rev:0,
-                        rev_acc:100,
+                        rev_acc:10,
                         engine_temp:30,
                         engine_temp_acc:300    
                     }
@@ -680,6 +672,12 @@
             ]
         </init>
 
+        <!-- 设置帧率倍数 -->
+        <init as "frameNumber" at="_runner">
+            {
+                value:"8"
+            }
+        </init>
     </head>
 
     <body>
@@ -820,7 +818,7 @@
 
         <observe on $speed for "change">
             <test with $L.ne('0',$speed_acc.value)>
-                <request on="#main-index" to="call:changeSpeed($speed.value,$speed_acc.value); return true;" />
+                <request on="#main-index" to="call:changeSpeed($speed.value,$speed_acc.value,$frameNumber.value); return true;" />
             </test>
         </observe>
 
@@ -832,7 +830,7 @@
 
         <observe on $rev for "change">
             <test with $L.ne(0,$rev_acc.value)>
-                <request on="#main-index" to="call:changeRev($rev.value,$rev_acc.value);return true;" />
+                <request on="#main-index" to="call:changeRev($rev.value,$rev_acc.value,$frameNumber.value);return true;" />
             </test>
         </observe>
 
