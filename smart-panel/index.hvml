@@ -28,7 +28,7 @@
                     "class": "normal",
                     "layoutStyle": "width:480px;height:480px;",
                     "widgetStyle": { "backgroundColor": "darkgray", "darkMode": true },
-                    "windowLevel": "normal"
+                    "windowLevel": "higher"
                 }
             }
         </request>
@@ -41,13 +41,13 @@
                     "class": "normal",
                     "layoutStyle": "width:480px;height:480px;",
                     "widgetStyle": { "backgroundColor": "darkgray", "darkMode": true },
-                    "windowLevel": "higher"
+                    "windowLevel": "normal"
                 }
             }
         </request>
 
-        <load from "$CRTN.base/main.hvml" onto 'page@mainPagePanel' as 'index' async />
         <load from "$CRTN.base/init.hvml" onto 'page@initPagePanel' as 'network' async />
+        <load from "$CRTN.base/main.hvml" onto 'page@mainPagePanel' as 'index' async />
     </body>
 
 

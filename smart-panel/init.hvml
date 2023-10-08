@@ -12,11 +12,11 @@
         <link rel="stylesheet" href="$CRTN.base/assets/css/init.css" />
         <script type="text/javascript" src="$CRTN.base/assets/js/init.js" ></script>
 
-        <init as 'v_t' with $CRTN.timeout(! 3L) />
+        <init as 'v_t' with $CRTN.timeout(! 2L) />
 
         <update on="$TIMERS" to="unite">
         [
-            { "id" : "start_init", "interval" : 1000, "active" : "yes" }
+            { "id" : "start_init", "interval" : 500, "active" : "yes" }
         ]
         </update>
 

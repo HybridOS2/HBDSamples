@@ -77,7 +77,7 @@
 <define as 'start_delay_timer' at="_topmost">
     <update on="$TIMERS" to="unite">
         [
-            { "id" : "network_service_delay_timer", "interval" : 500, "active" : "yes" }
+            { "id" : "network_service_delay_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
 </define>
@@ -341,7 +341,10 @@
 
 <define as 'report_failed' at="_topmost">
     <include with $set_status on $? />
-    <request on="#id_init" to="call:switch_retry(); return true;" />
+    <!--
+        <request on="#id_init" to="call:switch_retry(); return true;" />
+    -->
+    <include with="$start_delay_timer" />
 </define>
 
 <define as 'request_weather_info' at="_topmost">
