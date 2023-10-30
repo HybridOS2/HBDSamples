@@ -170,14 +170,18 @@
 <define as 'show_main_page' at="_topmost">
     <include with $set_status on {status:' ', sub_status:' ' } />
     <include with $start_weather_update />
+<!--
     <include with $hide_init_window />
+-->
 </define>
 
 <define as 'test_http_request' at="_topmost">
     <update on $init_status at ".step"  with 4L />
     <include with $set_status on {status:"检测网络通讯", sub_status:' ' } />
     <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
+<!--
     <include with $show_main_page />
+-->
 </define>
 
 <define as 'set_status' at="_topmost">
