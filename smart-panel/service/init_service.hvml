@@ -144,7 +144,6 @@
 </define>
 
 <define as 'hide_init_window' at '_topmost'>
-    <request on="#id_init" to="call:stop_init_anim(); return true;" />
     <request on $RDR to 'callMethod'>
         {
             name: "plainwin:page@initPagePanel",
@@ -156,7 +155,6 @@
 </define>
 
 <define as 'show_init_window' at '_topmost'>
-    <request on="#id_init" to="call:start_init_anim(); return true;" />
     <request on $RDR to 'callMethod'>
         {
             name: "plainwin:page@initPagePanel",
@@ -185,8 +183,6 @@
 </define>
 
 <define as 'set_status' at="_topmost">
-    <update on '#id_init_tips_status' with $?.status />
-    <update on '#id_init_tips_sub_status' with $?.sub_status />
     <update on $init_status at ".status .sub_status" with [$?.status, $?.sub_status] />
 </define>
 
@@ -345,9 +341,6 @@
 
 <define as 'report_failed' at="_topmost">
     <include with $set_status on $? />
-    <!--
-        <request on="#id_init" to="call:switch_retry(); return true;" />
-    -->
     <include with="$start_delay_timer" />
 </define>
 
@@ -358,12 +351,6 @@
         $STREAM.stdout.writelines("call request weather async")
     </inherit>
 </define>
-
-<observe on "#id_retry_btn" for 'click'>
-    <request on="#id_init" to="call:switch_normal(); return true;" />
-    <include with $set_status on {status:' ', sub_status:' '}/>
-    <include with="$start_delay_timer" />
-</observe>
 
 <observe on $TIMERS for 'expired:network_service_timeout_timer'>
     <include with="$stop_timeout_timer" />
@@ -392,7 +379,7 @@
 
 <observe against "weather_info" for "change:displaced" >
     <inherit>
-        $STREAM.stdout.writelines("####> update weather $weather_info")
+        $STREAM.stdout.writelines("#####> update weather $weather_info")
     </inherit>
     <update on $init_status.weather_info at ".tem" with $weather_info.tem />
     <update on $init_status at ".weather" with 1L />
@@ -425,7 +412,7 @@
 
 <observe on $TIMERS for 'expired:weather_refresh_timer'>
     <inherit>
-        $STREAM.stdout.writelines("###########> weather refresh timer")
+        $STREAM.stdout.writelines("#####> weather refresh timer")
     </inherit>
     <update on $init_status at ".weather" with 0L />
     <include with $start_weather_update />

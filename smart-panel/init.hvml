@@ -1,16 +1,10 @@
 <!DOCTYPE hvml SYSTEM 'f: MATH FS'>
-<hvml target="html">
+<hvml target="void">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel" ) hvml:silently />
-
-        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.min.css" />
-
-        <link rel="stylesheet" href="$CRTN.base/assets/css/init.css" />
-        <script type="text/javascript" src="$CRTN.base/assets/js/init.js" ></script>
 
         <init as 'v_t' with $CRTN.timeout(! 2L) />
 
@@ -22,31 +16,7 @@
 
     </head>
 
-    <body id="id_init" data-bs-theme="dark" >
-        <div id="id_init_container" class="d-flex align-items-center flex-column init__container">
-            <div class="init__logo__container mt-4">
-                <img id="id_init_container_logo" class='init__container__logo mt-3' src="$CRTN.base/assets/hvml.png">
-            </div>
-
-            <div id="id_init_tips" class="text-center fs-6 mt-4 init__status__tips">
-                <div id="id_init_tips_status"></div>
-                <div id="id_init_tips_sub_status"></div>
-            </div>
-
-            <div id="id_init_status" class="init__status__container">
-                <div class="d-flex justify-content-center align-items-center init__status fs-4">
-                    <div class="init__status__anim text-end">
-                        <div id="id_init_status_anim" class="spinner-border"></div>
-                    </div>
-                    <div class="init__status__msg__container m-2">
-                        <strong id="id_init_status" role="status">加载中</strong>
-                    </div>
-                </div>
-            </div>
-            <div id="id_init_btns" class="d-none">
-                <button id="id_retry_btn" type="button" class="btn retry__button" hvml-events="click">重试</button>
-            </div>
-        </div>
+    <body id="id_init">
 
         <define as="init_service" at="_topmost" from="$CRTN.base/service/init_service.hvml" />
 
@@ -64,7 +34,6 @@
             <include with $show_main_page />
 
            <catch for `RequestFailed`>
-                 <update on '#id_init_status' with "正在配置网络" />
                  <include with="$do_network_check" />
             </catch>
         </observe>
