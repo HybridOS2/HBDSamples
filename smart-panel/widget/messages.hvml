@@ -1,6 +1,6 @@
 <div class="widget-block shadow mt-3">
     <div class="message-block text-success">
-        <div class="bubble-icon my-1">
+        <div class="bubble-icon mt-3">
             <i class="bi bi-chat-dots-fill"></i>
         </div>
         <div class="message-content">
