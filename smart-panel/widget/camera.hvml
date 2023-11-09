@@ -15,7 +15,7 @@
         </div>
       </div>
 
-      <img src="assets/img/camera.jpg" class="rounded img-fluid" style="width:240px;" alt="" />
+      <img src="exported/assets/img/camera.jpg" class="rounded img-fluid" style="width:240px;" alt="" />
     </div>
 </div>
 

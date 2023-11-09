@@ -18,7 +18,7 @@
 
 .page__theme__dark {
     --theme-background-color: #0F2035;
-    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-dark.png");
+    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/bg-dark.png");
     --theme-color: #FFF;
     --theme-btn-color: #FFF;
     --theme-lockscreen-message-mask-color: rgba(125, 141, 167, 0.5);
@@ -44,7 +44,7 @@
 
 .page__theme__light__blue {
     --theme-background-color: #2868F0;
-    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-light-blue.png");
+    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/bg-light-blue.png");
     --theme-color: #FFF;
     --theme-btn-color: #FFF;
     --theme-lockscreen-message-mask-color: rgba(125, 141, 167, 0.5);
@@ -68,7 +68,7 @@
 
 .page__theme__light__green {
     --theme-background-color: #4CA99E;
-    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/assets/bg-light-green.png");
+    --theme-background-url: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/bg-light-green.png");
     --theme-color: #494949;
     --theme-btn-color: #696969;
     --theme-lockscreen-message-mask-color: rgba(87, 98, 116, 0.5);
