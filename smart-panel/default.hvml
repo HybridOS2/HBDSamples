@@ -2,6 +2,7 @@
 <hvml target="html" template="/app/cn.fmsoft.hybridos.smartcontrolpanel/template/main.html">
     <head>
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
+        <init as 'v_loadpanel' with $CRTN.sendingDocumentByURL(! false) />
 
         <init as 'theme_option' at '_runner'>
             {
