@@ -1,0 +1,48 @@
+{
+    "app": "cn.fmsoft.hybridos.smartcontrolpanel",
+    "runners": [
+        {
+            "coroutines": [{
+                "bodyId": null,
+                "renderer": {
+                    "pageName": "lockscreen",
+                    "pageType": "plainwin",
+                    "layoutStyle":"window-size:480px 480px; window-position:center",
+                    "transitionStyle":"window-transition-move: linear 200",
+                    "toolkitStyle": {
+                        "windowLevel":"screenlock"
+                    }
+                },
+                "request": {},
+                "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_lockscreen.hvml"
+            }],
+            "renderer": {
+                "commMethod": "socket",
+                "uri": "unix:///var/tmp/purcmc.sock",
+                "workspaceName": "default"
+            },
+            "allowSwitchingRdr": false,
+            "runner": "lockscreen"
+        },
+        {
+            "coroutines": [{
+                "bodyId": null,
+                "renderer": {
+                    "pageName": "main",
+                    "pageType": "plainwin",
+                    "layoutStyle":"window-size:480px 480px; window-position:center"
+                },
+                "request": {},
+                "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_main.hvml"
+            }],
+            "renderer": {
+                "commMethod": "socket",
+                "uri": "unix:///var/tmp/purcmc.sock",
+                "workspaceName": "default"
+            },
+            "allowSwitchingRdr": true,
+            "runner": "main"
+        }
+    ]
+}
+
