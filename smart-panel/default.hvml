@@ -94,7 +94,7 @@ list:
     </head>
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
-        <load from "$CRTN.base/init.hvml" onto 'null:' as 'network' async />
+        <load from "$CRTN.base/service/init_service.hvml" onto 'null:' as 'network' async />
 
         <!-- controller for system -->
         <define as 'controllerSystem' from 'controller/system.hvml' temp />

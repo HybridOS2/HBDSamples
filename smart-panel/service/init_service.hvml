@@ -1,3 +1,6 @@
+<!DOCTYPE hvml>
+<hvml target="void">
+
 <init as 'inetd' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
 <init as chan with $RUNNER.chan( "panelMain" ) at "_topmost" />↵
@@ -31,7 +34,6 @@
             { "id" : "weather_update_timer", "interval" : 1000, "active" : "yes" }
         ]
     </update>
-    <include with $request_weather_info />
 </define>
 
 <define as 'stop_weather_update' at="_topmost">
@@ -399,7 +401,7 @@
         $STREAM.stdout.writelines("tickcount: $init_status.tickcount")
     </inherit>
     <test with $L.eq($init_status.weather, 0)>
-        <test with $L.eq($DATA.arith('%', $init_status.tickcount, 10), 0) >
+        <test with $L.eq($DATA.arith('%', $init_status.tickcount, 5), 0) >
             <include with $request_weather_info />
         </test>
         <differ>
@@ -417,3 +419,13 @@
     <update on $init_status at ".weather" with 0L />
     <include with $start_weather_update />
 </observe>
+
+
+<init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
+<include with $show_main_page />
+
+<catch for `RequestFailed`>
+    <include with="$do_network_check" />
+</catch>
+
+</hvml>
