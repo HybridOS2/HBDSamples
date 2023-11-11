@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.css" />
-        <script src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.bundle.min.js"></script>
 
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
 
@@ -135,12 +135,16 @@ list:
 
           <div class="offcanvas-footer">
             <div class="text-center fs-5 text-shadow">
-              <a href="#" class="text-light" data-bs-dismiss="offcanvas" aria-label="关闭">
+              <div class="text-light">
                 <span class="ps-5 pe-5 pb-2"><i class="bi bi-chevron-double-up"></i></span>
-              </a>
+              </div>
             </div>
           </div>
         </div>
+
+        <!-- controller for system -->
+        <define as 'controllerSystem' from 'controller/system.hvml' temp />
+        <include with $controllerSystem />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
