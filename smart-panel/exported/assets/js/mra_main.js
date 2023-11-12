@@ -17,47 +17,32 @@ function on_any_input(evt) {
     lock_count = 0;
 }
 
-function closure_for_lockscreen() {
+var lock_timer;
+function start_lockscreen_timer() {
     const mainContent = document.getElementById('mainContent');
-    const lockScreen = document.getElementById('theLockScreen');
-    const lockOffcanvas = new bootstrap.Offcanvas('#theLockScreen');
+    lock_count = 0;
+    lock_timer = setInterval(() => {
+        lock_count += 1;
+        let lock_time = 10; // TODO: option
+        if (lock_count >= lock_time) {
+            post_hvml_event('locked', mainContent);
+            lock_count = 0;
+        }
+    }, 1000);
 
-    var lock_timer;
-    lockScreen.addEventListener('hide.bs.offcanvas', event => {
-        mainContent.classList.remove("opacity-0");
-    });
+    mainContent.addEventListener("mousedown", on_any_input);
+    mainContent.addEventListener("keydown", on_any_input);
+    mainContent.addEventListener("touchstart", on_any_input);
+    mainContent.addEventListener("touchmove", on_any_input);
+}
 
-    lockScreen.addEventListener('hidden.bs.offcanvas', event => {
-        lock_count = 0;
-        lock_timer = setInterval(() => {
-            lock_count += 1;
-            let lock_time = parseInt(lockScreen.getAttribute('data-time-to-lock'));
-            if (lock_count >= lock_time) {
-
-                lockScreen.classList.remove("opacity-0");
-                bootstrap.Offcanvas.getInstance(lockScreen).show();
-
-                lock_count = 0;
-            }
-        }, 1000);
-
-        mainContent.addEventListener("mousedown", on_any_input);
-        mainContent.addEventListener("keydown", on_any_input);
-        mainContent.addEventListener("touchstart", on_any_input);
-        mainContent.addEventListener("touchmove", on_any_input);
-        lockScreen.classList.add("opacity-0");
-        post_hvml_event('unlocked', lockScreen);
-    });
-
-    lockScreen.addEventListener('shown.bs.offcanvas', event => {
-        clearInterval(lock_timer);
-        mainContent.removeEventListener("mousedown", on_any_input);
-        mainContent.removeEventListener("keydown", on_any_input);
-        mainContent.removeEventListener("touchstart", on_any_input);
-        mainContent.removeEventListener("touchmove", on_any_input);
-        mainContent.classList.add("opacity-0");
-        post_hvml_event('locked', lockScreen);
-    });
+function stop_lockscreen_timer() {
+    clearInterval(lock_timer);
+    const mainContent = document.getElementById('mainContent');
+    mainContent.removeEventListener("mousedown", on_any_input);
+    mainContent.removeEventListener("keydown", on_any_input);
+    mainContent.removeEventListener("touchstart", on_any_input);
+    mainContent.removeEventListener("touchmove", on_any_input);
 }
 
 function closure_for_music_player() {
@@ -160,12 +145,12 @@ function reset_music_progress(selector)
     });
 }
 
-//closure_for_lockscreen();
-closure_for_music_player();
-closure_for_timer_picker();
-
 window.addEventListener("load", (event) => {
     let elem = document.getElementById("mainContent");
     post_hvml_event('load', elem);
 });
+
+closure_for_music_player();
+closure_for_timer_picker();
+start_lockscreen_timer();
 

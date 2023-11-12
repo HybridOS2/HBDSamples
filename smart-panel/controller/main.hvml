@@ -8,8 +8,10 @@
     </inherit>
     <test on $?.name>
         <match for "AS 'lock'" exclusively>
+            <request on '#mainContent' to="call:stop_lockscreen_timer()" noreturn />
         </match>
         <match for "AS 'unlock'" exclusively>
+            <request on '#mainContent' to="call:start_lockscreen_timer()" noreturn />
         </match>
 
         <match for="ANY">
@@ -52,10 +54,8 @@
     </choose>
 </observe>
 
-<observe on '#theLockScreen' for 'locked'>
-    <inherit>
-        $STREAM.stdout.writelines("screen locked")
-    </inherit>
+<observe on '#mainContent' for 'locked'>
+    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
 
 <observe on '#theLockScreen' for 'unlocked'>
