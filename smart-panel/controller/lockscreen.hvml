@@ -1,0 +1,136 @@
+<init as 'weather_map'>
+    {
+        bingbao:    [! 'bi bi-cloud-sleet-fill',            'bg-weather-sleet' ],
+        lei:        [! 'bi bi-cloud-lightning-rain-fill',   'bg-weather-lightning' ],
+        qing:       [! 'bi bi-sun-fill',                    'bg-weather-sun' ],
+        shachen:    [! 'bi bi-wind',                        'bg-weather-sandstorm' ],
+        wu:         [! 'bi bi-cloud-fog-fill',              'bg-weather-fog' ],
+        xue:        [! 'bi bi-cloud-snow-fill',             'bg-weather-snow' ],
+        yin:        [! 'bi bi-cloud-fill',                  'bg-weather-cloud' ],
+        yun:        [! 'bi bi-cloud-sun-fill',              'bg-weather-cloud-sun' ],
+        yu:         [! 'bi bi-cloud-rain-fill',             'bg-weather-rain' ],
+    }
+</init>
+
+<init as "lockscreen_week">
+    [
+        "星期日",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六"
+    ]
+</init>
+
+<define as 'lock' at="_topmost">
+    <request on="$RDR" to="updatePlainWindow">
+    {
+        "data": {
+            layoutStyle: 'window-position:50% -480px; window-size:480px 480px;',
+            transitionStyle: 'window-transition-move: linear 200'
+        }
+    }
+    </request>
+</define>
+
+<define as 'unlock' at="_topmost">
+    <request on="$RDR" to="updatePlainWindow">
+    {
+        "data": {
+            layoutStyle: 'window-position:center; window-size:480px 480px;',
+            transitionStyle: 'window-transition-move: linear 200'
+        }
+    }
+    </request>
+</define>
+
+<observe on $chIn for 'receivable'>
+    <choose on $chIn.recv() silently>
+        <test on $?.type>
+            <match for "AS 'weather'" exclusively>
+                <inherit>
+                    $STREAM.stdout.writelines("Got a weather change message: $3?.value.wea_img")
+                </inherit>
+
+                <update on '#theWeatherIcon' to 'displace' at 'attr.class' with $weather_map[$3?.value.wea_img][0] />
+                <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
+                <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
+                <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
+                <update on $running_state to 'displace' at '.bg_lockscreen' with $weather_map[$3?.value.wea_img][1] />
+                <request on '#theLockScreen' to 'call:ELEMENT.classList.add(ARG)' with $running_state.bg_lockscreen noreturn />
+            </match>
+
+            <match for "AS 'network'" exclusively>
+            </match>
+
+            <match for="ANY">
+            </match>
+        </test>
+    </choose>
+</observe>
+
+<init as 'lockscreen_hm'>
+    {
+        "hour": 0,
+        "min": 0
+    }
+</init>
+
+<init as 'lockscreen_mdw'>
+    {
+        "mon": 0,
+        "mday": 0,
+        "wday": 0
+    }
+</init>
+
+<observe on $TIMERS for "expired:clock_timer">
+    <init as dt with $DATETIME.localtime() temp />
+    <test with $L.or($L.ne($dt.hour, $lockscreen_hm.hour), $L.ne($dt.min, $lockscreen_hm.min)) >
+        <update on '#theCurrentTime' at 'textContent' with $DATETIME.fmttime("%H:%M") />
+        <update on $lockscreen_hm at ".hour .min" with [$dt.hour, $dt.min] />
+    </test>
+
+    <test with $L.or($L.ne($dt.mon, $lockscreen_mdw.mon), $L.ne($dt.mday, $lockscreen_mdw.mday), $L.ne($dt.wday, $lockscreen_mdw.wday)) >
+        <update on "#theCurrentDate" at content with "$DATETIME.fmttime('%m月%d日') $lockscreen_week[$dt.wday]" />
+        <update on $lockscreen_mdw at ".mon .mday .wday" with [$dt.mon, $dt.mday, $dt.wday] />
+    </test>
+</observe>
+
+<observe on '#theLockScreen' for 'locked'>
+    <inherit>
+        $STREAM.stdout.writelines("screen locked")
+    </inherit>
+</observe>
+
+<observe on '#theLockScreen' for 'unlocked'>
+    <inherit>
+        $STREAM.stdout.writelines("screen unlocked")
+    </inherit>
+</observe>
+
+<observe on '.time-to-lock-screen' for 'click'>
+    <choose on $DOC.query("#theLockScreen").attr('data-time-to-lock') >
+        <test with $L.ne($?, $2?.originValue) >
+            <inherit>
+                $STREAM.stdout.writelines("Changing time-to-lock to $3?.originValue $3?.originId")
+            </inherit>
+
+            <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.originValue" />
+            <request on "#theTimeToLock{$?} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on "#$3?.originId span" to 'call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+        </test>
+    </choose>
+
+</observe>
+
+<observe on "#id__unlock__btn" for "click">
+    <include with $lock />
+</observe>
+
+<observe on "$TIMERS" for "expired:lock_screen">
+    <include with $unlock />
+</observe>
+

@@ -95,6 +95,7 @@ list:
         <update on $TIMERS to 'unite'>
             [
                 { "id" : "clock_timer", "interval" : 500, "active" : "yes" }
+                { "id" : "lock_screen", "interval" : 10000, "active" : "yes" }
             ]
         </update>
 
@@ -135,7 +136,7 @@ list:
 
           <div class="offcanvas-footer">
             <div class="text-center fs-5 text-shadow">
-              <div class="text-light">
+              <div id="id__unlock__btn" class="text-light" hvml-events="click">
                 <span class="ps-5 pe-5 pb-2"><i class="bi bi-chevron-double-up"></i></span>
               </div>
             </div>
@@ -143,8 +144,8 @@ list:
         </div>
 
         <!-- controller for system -->
-        <define as 'controllerSystem' from 'controller/system.hvml' temp />
-        <include with $controllerSystem />
+        <define as 'controllerLockscreen' from 'controller/lockscreen.hvml' temp />
+        <include with $controllerLockscreen />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
