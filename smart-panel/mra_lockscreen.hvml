@@ -95,7 +95,6 @@ list:
         <update on $TIMERS to 'unite'>
             [
                 { "id" : "clock_timer", "interval" : 500, "active" : "yes" }
-                { "id" : "lock_screen", "interval" : 10000, "active" : "yes" }
             ]
         </update>
 

@@ -24,7 +24,7 @@
     ]
 </init>
 
-<define as 'lock' at="_topmost">
+<define as 'unlock' at="_topmost">
     <request on="$RDR" to="updatePlainWindow">
     {
         "data": {
@@ -35,7 +35,7 @@
     </request>
 </define>
 
-<define as 'unlock' at="_topmost">
+<define as 'lock' at="_topmost">
     <request on="$RDR" to="updatePlainWindow">
     {
         "data": {
@@ -44,6 +44,23 @@
         }
     }
     </request>
+</define>
+
+<define as 'on_lockscreen_event' at="_topmost">
+    <inherit>
+        $STREAM.stdout.writelines("on_lockscreen_event $?")
+    </inherit>
+    <test on $?.name>
+        <match for "AS 'lock'" exclusively>
+            <include with $lock />
+        </match>
+        <match for "AS 'unlock'" exclusively>
+            <include with $unlock />
+        </match>
+
+        <match for="ANY">
+        </match>
+    </test>
 </define>
 
 <observe on $chIn for 'receivable'>
@@ -63,6 +80,10 @@
             </match>
 
             <match for "AS 'network'" exclusively>
+            </match>
+
+            <match for "AS 'lockscreen'" exclusively>
+                <include with $on_lockscreen_event on $3? />
             </match>
 
             <match for="ANY">
@@ -127,10 +148,7 @@
 </observe>
 
 <observe on "#id__unlock__btn" for "click">
-    <include with $lock />
-</observe>
-
-<observe on "$TIMERS" for "expired:lock_screen">
     <include with $unlock />
 </observe>
+
 
