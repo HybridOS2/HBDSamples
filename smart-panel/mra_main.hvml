@@ -97,7 +97,7 @@ list:
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
-        <div id="mainContent" class="ps-4 pe-4">
+        <div id="mainContent" class="ps-4 pe-4" data-time-to-lock="10">
             <div class="d-grid">
                 <!-- scenario -->
                 <define as 'widgetScenario' from 'widget/scenario.hvml' temp />
