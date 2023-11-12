@@ -58,12 +58,6 @@
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
 
-<observe on '#theLockScreen' for 'unlocked'>
-    <inherit>
-        $STREAM.stdout.writelines("screen unlocked")
-    </inherit>
-</observe>
-
 <observe on '.time-to-lock-screen' for 'click'>
     <inherit>
         $STREAM.stdout.writelines("############################## $?.originValue")
