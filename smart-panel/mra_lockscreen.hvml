@@ -98,12 +98,12 @@ list:
             ]
         </update>
 
-        <init as chIn with {{ $RUNNER.chan(! "panelMain", 10 ) && $RUNNER.chan( "panelMain" ) }} at '_topmost' />↵
+        <init as chIn with {{ $RUNNER.chan(! "chanLockscreen", 10 ) && $RUNNER.chan( "chanLockscreen" ) }} at '_topmost' />↵
     </head>
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
 
-        <load from "$CRTN.base/service/init_service.hvml" onto 'null:' as 'network' async />
+        <load from "$CRTN.base/service/lockscreen_service.hvml" onto 'null:' as 'network' async />
 
         <define as 'widgetMusic' from 'widget/music.hvml' />
 
