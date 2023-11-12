@@ -148,7 +148,7 @@ list:
           </div>
         </div>
 
-        <!-- controller for system -->
+        <!-- controller for lockscreen -->
         <define as 'controllerLockscreen' from 'controller/lockscreen.hvml' temp />
         <include with $controllerLockscreen />
 

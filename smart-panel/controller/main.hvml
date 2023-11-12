@@ -1,0 +1,76 @@
+<define as 'post_event_to_lockscreen' at="_topmost">
+    <request on="/-/lockscreen/CHAN/chanLockscreen" to="post" with=$? />
+</define>
+
+<define as 'on_lockscreen_state_event' at="_topmost">
+    <inherit>
+        $STREAM.stdout.writelines("on_lockscreen_state_event: $?")
+    </inherit>
+    <test on $?.name>
+        <match for "AS 'lock'" exclusively>
+        </match>
+        <match for "AS 'unlock'" exclusively>
+        </match>
+
+        <match for="ANY">
+        </match>
+    </test>
+</define>
+
+<define as 'on_music_player_event' at="_topmost">
+    <inherit>
+        $STREAM.stdout.writelines("on_lockscreen_state_event: $?")
+    </inherit>
+    <test on $?.name>
+        <match for "AS 'play'" exclusively>
+        </match>
+        <match for "AS 'pause'" exclusively>
+        </match>
+
+        <match for="ANY">
+        </match>
+    </test>
+</define>
+
+<observe on $chIn for 'receivable'>
+    <choose on $chIn.recv() silently>
+        <test on $?.type>
+            <match for "AS 'lockscreenState'" exclusively>
+                <include with $on_lockscreen_state_event on $3? />
+            </match>
+
+            <match for "AS 'musicPlayer'" exclusively>
+                <include with $on_music_player_event on $3? />
+            </match>
+
+            <match for "AS 'network'" exclusively>
+            </match>
+
+            <match for="ANY">
+            </match>
+        </test>
+    </choose>
+</observe>
+
+<observe on '#theLockScreen' for 'locked'>
+    <inherit>
+        $STREAM.stdout.writelines("screen locked")
+    </inherit>
+</observe>
+
+<observe on '#theLockScreen' for 'unlocked'>
+    <inherit>
+        $STREAM.stdout.writelines("screen unlocked")
+    </inherit>
+</observe>
+
+<observe on '.time-to-lock-screen' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("############################## $?.originValue")
+    </inherit>
+</observe>
+
+<observe on '#mainContent' for 'load'>
+    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'enableUnlock'} />
+</observe>
+

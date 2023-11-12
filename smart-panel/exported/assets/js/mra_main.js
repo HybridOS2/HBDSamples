@@ -160,7 +160,12 @@ function reset_music_progress(selector)
     });
 }
 
-closure_for_lockscreen();
+//closure_for_lockscreen();
 closure_for_music_player();
 closure_for_timer_picker();
+
+window.addEventListener("load", (event) => {
+    let elem = document.getElementById("mainContent");
+    post_hvml_event('load', elem);
+});
 

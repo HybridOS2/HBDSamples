@@ -92,13 +92,7 @@ list:
 }
         </init>
 
-        <update on $TIMERS to 'unite'>
-            [
-                { "id" : "clock_timer", "interval" : 500, "active" : "yes" }
-            ]
-        </update>
-
-        <init as chIn with {{ $RUNNER.chan(! "panelMain", 10 ) && $RUNNER.chan( "panelMain" ) }} at '_topmost' />↵
+        <init as chIn with {{ $RUNNER.chan(! "chanMain", 10 ) && $RUNNER.chan( "chanMain" ) }} at '_topmost' />↵
     </head>
 
     <body id='theMainBody' data-bs-theme="light" class="page_base">
@@ -147,9 +141,9 @@ list:
         <define as 'compToasts' from 'component/toasts.hvml' temp />
         <include with $compToasts />
 
-        <!-- controller for system -->
-        <define as 'controllerSystem' from 'controller/system.hvml' temp />
-        <include with $controllerSystem />
+        <!-- controller for main -->
+        <define as 'controllerMain' from 'controller/main.hvml' temp />
+        <include with $controllerMain />
 
         <!-- controller for scenario -->
         <define as 'controllerScenario' from 'controller/scenario.hvml' temp />
@@ -181,7 +175,7 @@ list:
 
         <audio id="theMusicPlayer" src="$music_info.list[$music_info.current].src" hvml-events="ended"></audio>
 
-        <script src='exported/assets/js/main.js' type="text/javascript"></script>
+        <script src='exported/assets/js/mra_main.js' type="text/javascript"></script>
     </body>
 </hvml>
 

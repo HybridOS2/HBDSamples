@@ -33,7 +33,7 @@
                     "layoutStyle":"window-size:480px 480px; window-position:center"
                 },
                 "request": {},
-                "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/test_request_channel.hvml"
+                "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_main.hvml"
             }],
             "renderer": {
                 "commMethod": "socket",

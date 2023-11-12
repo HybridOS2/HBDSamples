@@ -24,6 +24,10 @@
     ]
 </init>
 
+<define as 'post_event_to_main' at="_topmost">
+    <request on="/-/main/CHAN/chanMain" to="post" with=$? />
+</define>
+
 <define as 'unlock' at="_topmost">
     <request on="$RDR" to="updatePlainWindow">
     {
@@ -33,6 +37,7 @@
         }
     }
     </request>
+    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'unlock'} />
 </define>
 
 <define as 'lock' at="_topmost">
@@ -43,6 +48,7 @@
             transitionStyle: 'window-transition-move: linear 200'
         }
     }
+    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
     </request>
 </define>
 
