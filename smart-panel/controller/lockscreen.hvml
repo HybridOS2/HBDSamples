@@ -51,6 +51,11 @@
         $STREAM.stdout.writelines("on_lockscreen_event $?")
     </inherit>
     <test on $?.name>
+        <match for "AS 'enableUnlock'" exclusively>
+            <update on "$lockscreen_option" at '.enableUnlock' with true />
+            <request on "#id__unlock__btn" to 'call:ELEMENT.classList.remove(ARG)' with 'text-secondary' noreturn />
+            <request on "#id__unlock__btn" to 'call:ELEMENT.classList.add(ARG)' with 'text-light' noreturn />
+        </match>
         <match for "AS 'lock'" exclusively>
             <include with $lock />
         </match>
@@ -148,7 +153,14 @@
 </observe>
 
 <observe on "#id__unlock__btn" for "click">
-    <include with $unlock />
+    <test with $lockscreen_option.enableUnlock >
+        <include with $unlock />
+        <differ>
+            <inherit>
+                $STREAM.stdout.writelines("#####> not allow unlock")
+            </inherit>
+        </differ>
+    </test>
 </observe>
 
 

@@ -2,6 +2,11 @@
 <hvml target="html">
     <head>
         <meta charset="utf-8" />
+        <update on $TIMERS to 'unite'>
+            [
+                { "id" : "enable_unlock", "interval" : 10000, "active" : "yes" }
+            ]
+        </update>
     </head>
     <body>
         <button id="id_btn" hvml-events="click">send channel</button>
@@ -11,6 +16,14 @@
             {
                 "type":"lockscreen",
                 "name":"lock"
+            }
+            </request>
+        </observe>
+        <observe on $TIMERS for "expired:enable_unlock">
+            <request on="/-/lockscreen/CHAN/chanLockscreen" to="post">
+            {
+                "type":"lockscreen",
+                "name":"enableUnlock"
             }
             </request>
         </observe>
