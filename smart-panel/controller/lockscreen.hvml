@@ -48,7 +48,7 @@
 
 <define as 'on_lockscreen_event' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("on_lockscreen_event $?")
+        $STREAM.stdout.writelines("on_lockscreen_event: $?")
     </inherit>
     <test on $?.name>
         <match for "AS 'enableUnlock'" exclusively>
@@ -61,6 +61,34 @@
         </match>
         <match for "AS 'unlock'" exclusively>
             <include with $unlock />
+        </match>
+
+        <match for="ANY">
+        </match>
+    </test>
+</define>
+
+<define as 'on_music_player_event' at="_topmost">
+    <inherit>
+        $STREAM.stdout.writelines("on_music_player_event: $?")
+    </inherit>
+    <test on $?.name>
+        <match for "AS 'playerState'" exclusively>
+            <inherit>
+                $STREAM.stdout.writelines("on_music_player_event playerState: $3?")
+            </inherit>
+            <test on $3?.playState>
+                <match for "AS 'playing'" exclusively>
+                    <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+                    <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-play-circle-fill', 'bi-pause-circle-fill'] noreturn />
+                    <update on $music_info at '.playing' with true />
+                </match>
+                <match for "AS 'paused'" exclusively>
+                    <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+                    <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-pause-circle-fill', 'bi-play-circle-fill'] noreturn />
+                    <update on $music_info at '.playing' with false />
+                </match>
+            </test>
         </match>
 
         <match for="ANY">
@@ -89,6 +117,10 @@
 
             <match for "AS 'lockscreen'" exclusively>
                 <include with $on_lockscreen_event on $3? />
+            </match>
+
+            <match for "AS 'musicPlayer'" exclusively>
+                <include with $on_music_player_event on $3? />
             </match>
 
             <match for="ANY">
