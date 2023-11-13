@@ -45,6 +45,9 @@
         </match>
         <match for "AS 'volume'" exclusively>
             <request on '#mainContent' to="call:music_player_volume_change(ARG)" with $3?.value noreturn />
+            <!--
+            <request on '#mainContent' to="call:post_music_player_state_change_event()" noreturn />
+            -->
         </match>
         <match for "AS 'mute'" exclusively>
             <request on '#mainContent' to="call:music_player_mute_click()" noreturn />
@@ -105,3 +108,11 @@
 <observe on '.switch-theme-to-light' for 'click'>
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToLight'} />
 </observe>
+
+<observe on '#theMusicPlayer' for 'stateChange'>
+    <choose on $?.originValue silently>
+        <include with $post_event_to_lockscreen on $? />
+    </choose>
+</observe>
+
+

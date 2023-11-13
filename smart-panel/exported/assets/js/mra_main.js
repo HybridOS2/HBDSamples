@@ -12,6 +12,20 @@ function post_hvml_event(evt, elem) {
     HVML.post(evt, "handle", data.originHandle, JSON.stringify(data));
 }
 
+function post_hvml_event_with_data(evt, elem, value) {
+    let data = {
+            originTag: elem.tagName,
+            originHandle: elem.hvmlHandleText ? elem.hvmlHandleText : elem.getAttribute('hvml-handle'),
+            originId: elem.id,
+            originClass: elem.className,
+            originName: elem.getAttribute('name'),
+            originValue: value,
+            targetDiffersOrigin: false,
+    };
+
+    HVML.post(evt, "handle", data.originHandle, JSON.stringify(data));
+}
+
 var lock_count = 0;
 function on_any_input(evt) {
     lock_count = 0;
@@ -45,6 +59,44 @@ function stop_lockscreen_timer() {
     mainContent.removeEventListener("touchmove", on_any_input);
 }
 
+function post_music_player_event(data) {
+    const musicPlayer = document.getElementById('theMusicPlayer');
+    post_hvml_event_with_data('stateChange', musicPlayer, data);
+}
+
+function post_music_player_state_change_event() {
+    const musicPlayer = document.getElementById('theMusicPlayer');
+    var data = {
+        "type":"musicPlayer",
+        "name":"playerState",
+        "muted":musicPlayer.muted,
+        "volume":musicPlayer.volume,
+        "duration":musicPlayer.duration,
+        "currentTime":musicPlayer.currentTime,
+        "progress": (musicPlayer.currentTime / musicPlayer.duration * 100)
+    };
+    if (musicPlayer.paused) {
+        data.playState = "paused";
+    }
+    else {
+        data.playState = "playing";
+    }
+    const musicPic = document.querySelectorAll('.music-pic');
+    if (musicPic.length > 0) {
+        data.img = musicPic[0].src;
+    }
+    const musicTitle = document.querySelectorAll('.music-title');
+    if (musicTitle.length > 0) {
+        data.title = musicTitle[0].textContent;
+    }
+    const musicArtist = document.querySelectorAll('.music-artist');
+    if (musicArtist.length > 0) {
+        data.artist = musicArtist[0].textContent;
+    }
+    post_hvml_event_with_data('stateChange', musicPlayer, data);
+}
+
+var music_player_post_progress_time;
 function closure_for_music_player() {
     const musicPlayer = document.getElementById('theMusicPlayer');
     musicPlayer.volume = 0.8;
@@ -63,6 +115,16 @@ function closure_for_music_player() {
                 progress.nextSibling.textContent = total_minutes.toString().padStart(2, "0") + ":" + total_seconds.toString().padStart(2, "0");
                 progress.firstChild.style = "width:" + (musicPlayer.currentTime / musicPlayer.duration * 100) + "%";
             });
+            post_music_player_event({
+                type:"musicPlayer",
+                name:"timeupdate",
+                duration:musicPlayer.duration,
+                currentTime:musicPlayer.currentTime,
+                progress: (musicPlayer.currentTime / musicPlayer.duration * 100),
+                prevContent:curr_minutes.toString().padStart(2, "0") + ":" + curr_seconds.toString().padStart(2, "0"),
+                nextContent:total_minutes.toString().padStart(2, "0") + ":" + total_seconds.toString().padStart(2, "0"),
+                progressFill: "width:" + (musicPlayer.currentTime / musicPlayer.duration * 100) + "%"
+            });
         }
     });
 
@@ -75,6 +137,11 @@ function closure_for_music_player() {
                 if (other != evt.target) {
                     other.value = evt.target.value;
                 }
+            });
+            post_music_player_event({
+                type:"musicPlayer",
+                name:"volumeChange",
+                volume:musicPlayer.volume
             });
         });
 
@@ -95,6 +162,11 @@ function closure_for_music_player() {
                     other.previousSibling.firstChild.classList.replace('text-danger', 'text-secondary');
                     other.nextSibling.firstChild.classList.replace('text-secondary', 'text-primary');
                 }
+            });
+            post_music_player_event({
+                type:"musicPlayer",
+                name:"mutedChange",
+                muted:musicPlayer.muted
             });
         });
     });
@@ -167,6 +239,7 @@ function closure_for_timer_picker() {
 
 function reset_music_progress(selector)
 {
+    music_player_post_progress_time = 0;
     let playProgresses = document.querySelectorAll(selector);
     playProgresses.forEach(function(progress) {
         progress.previousSibling.textContent = "00:00";

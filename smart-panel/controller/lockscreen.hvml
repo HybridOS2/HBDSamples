@@ -105,6 +105,18 @@
             </test>
         </match>
 
+        <match for "AS 'timeupdate'" exclusively>
+            <update on "#id_progress_prev" at 'textContent' with $3?.prevContent />
+            <update on "#id_progress_next" at 'textContent' with $3?.nextContent />
+            <update on "#id_progress_fill" at 'attr.style' with $3?.progressFill />
+        </match>
+
+        <match for "AS 'volumeChange'" exclusively>
+        </match>
+
+        <match for "AS 'mutedChange'" exclusively>
+        </match>
+
         <match for="ANY">
         </match>
     </test>
