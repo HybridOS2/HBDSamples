@@ -9,8 +9,8 @@
     <update on '.music-artist' at 'textContent' with $music_info.list[$item].artist />
     <update on '#theMusicPlayer' at 'attr.src' with $music_info.list[$item].src />
 
+    <request on '#theMusicPlayer' to="call:reset_music_progress(ARG)" with '.music-play-progress' noreturn />
     <test with $music_info.playing >
-        <request on '#theMusicPlayer' to="call:reset_music_progress(ARG)" with '.music-play-progress' noreturn />
         <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
     </test>
 </define>

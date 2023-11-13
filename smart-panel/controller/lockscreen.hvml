@@ -112,9 +112,24 @@
         </match>
 
         <match for "AS 'volumeChange'" exclusively>
+            <update on "#id__volume__value" at 'attr.value' with $3?.volume />
         </match>
 
         <match for "AS 'mutedChange'" exclusively>
+            <test with $3?.muted >
+                <request on "#id__volume__mute__icon" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['text-secondary', 'text-danger'] noreturn />
+                <request on "#id__volume__up__icon" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['text-primary', 'text-secondary'] noreturn />
+                <differ>
+                    <request on "#id__volume__mute__icon" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['text-danger', 'text-secondary'] noreturn />
+                    <request on "#id__volume__up__icon" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['text-secondary', 'text-primary'] noreturn />
+                </differ>
+            </test>
+        </match>
+
+        <match for "AS 'musicChange'" exclusively>
+            <update on '.music-pic' at 'attr.src' with $3?.img />
+            <update on '.music-title' at 'textContent' with $3?.title />
+            <update on '.music-artist' at 'textContent' with $3?.artist />
         </match>
 
         <match for="ANY">
