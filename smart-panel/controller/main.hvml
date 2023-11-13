@@ -13,6 +13,16 @@
         <match for "AS 'unlock'" exclusively>
             <request on '#mainContent' to="call:start_lockscreen_timer()" noreturn />
         </match>
+        <match for "AS 'autoSwitchThemeLight'" exclusively>
+            <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.add("active")' noreturn />
+            <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.remove("active")' noreturn />
+            <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+        </match>
+        <match for "AS 'autoSwitchThemeDark'" exclusively>
+            <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.remove("active")' noreturn />
+            <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.add("active")' noreturn />
+            <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+        </match>
 
         <match for="ANY">
         </match>

@@ -169,6 +169,23 @@
         <update on "#theCurrentDate" at content with "$DATETIME.fmttime('%m月%d日') $lockscreen_week[$dt.wday]" />
         <update on $lockscreen_mdw at ".mon .mday .wday" with [$dt.mon, $dt.mday, $dt.wday] />
     </test>
+
+    <test with $L.eq($theme_option.user, 0)>
+        <test with $L.and($L.ge($dt.hour, 8), $L.lt($dt.hour, 18)) >↵
+            <test with $L.ne($running_state.theme, 2)>↵
+                <update on $running_state at ".theme" with 2L />↵
+                <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+                <include with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeLight'} />
+            </test>↵
+            <differ>↵
+                <test with $L.ne($running_state.theme, 1)>↵
+                    <update on $running_state at ".theme" with 1L />↵
+                    <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+                    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeDark'} />
+                </test>↵
+            </differ>↵
+        </test>↵
+    </test>
 </observe>
 
 <observe on '#theLockScreen' for 'locked'>
