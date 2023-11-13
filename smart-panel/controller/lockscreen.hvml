@@ -48,8 +48,8 @@
             transitionStyle: 'window-transition-move: linear 200'
         }
     }
-    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
     </request>
+    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
 </define>
 
 <define as 'on_lockscreen_event' at="_topmost">
@@ -224,6 +224,42 @@
             </inherit>
         </differ>
     </test>
+</observe>
+
+
+<observe on '.music-switch-to-prev' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-switch-to-prev clicked")
+    </inherit>
+    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
+</observe>
+
+<observe on '.music-switch-to-next' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-switch-to-next clicked")
+    </inherit>
+    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
+</observe>
+
+<observe on '.music-play-or-pause' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-play-or-pause clicked")
+    </inherit>
+    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
+</observe>
+
+<observe on '.range-for-music-volume' for 'change'>
+    <inherit>
+        $STREAM.stdout.writelines("music-player volume change $?.targetValue")
+    </inherit>
+    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'volume', 'value':$?.targetValue} />
+</observe>
+
+<observe on '#id__volume__mute' for 'click'>
+    <inherit>
+        $STREAM.stdout.writelines("music-player volumn mute")
+    </inherit>
+    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'mute'} />
 </observe>
 
 

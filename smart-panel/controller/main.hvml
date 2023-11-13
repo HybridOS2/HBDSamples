@@ -34,9 +34,15 @@
         $STREAM.stdout.writelines("on_lockscreen_state_event: $?")
     </inherit>
     <test on $?.name>
-        <match for "AS 'play'" exclusively>
+        <match for "AS 'playOrPause'" exclusively>
         </match>
-        <match for "AS 'pause'" exclusively>
+        <match for "AS 'prev'" exclusively>
+        </match>
+        <match for "AS 'next'" exclusively>
+        </match>
+        <match for "AS 'volume'" exclusively>
+        </match>
+        <match for "AS 'mute'" exclusively>
         </match>
 
         <match for="ANY">
