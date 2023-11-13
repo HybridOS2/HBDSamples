@@ -77,3 +77,10 @@
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'enableUnlock'} />
 </observe>
 
+<observe on '.switch-theme-to-dark' for 'click'>
+    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToDark'} />
+</observe>
+
+<observe on '.switch-theme-to-light' for 'click'>
+    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToLight'} />
+</observe>

@@ -68,6 +68,14 @@
         <match for "AS 'unlock'" exclusively>
             <include with $unlock />
         </match>
+        <match for "AS 'themeToDark'" exclusively>
+            <update on $theme_option at ".user" with 1L />
+            <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
+        </match>
+        <match for "AS 'themeToLight'" exclusively>
+            <update on $theme_option at ".user" with 2L />
+            <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
+        </match>
 
         <match for="ANY">
         </match>
