@@ -100,6 +100,36 @@ function closure_for_music_player() {
     });
 }
 
+function music_player_mute_click() {
+    const musicPlayer = document.getElementById('theMusicPlayer');
+    if (musicPlayer.muted) {
+        musicPlayer.muted = false;
+    }
+    else {
+        musicPlayer.muted = true;
+    }
+
+    musicVolumeControllers.forEach(function(other) {
+        if (musicPlayer.muted) {
+            other.previousSibling.firstChild.classList.replace('text-secondary', 'text-danger');
+            other.nextSibling.firstChild.classList.replace('text-primary', 'text-secondary');
+        }
+        else {
+            other.previousSibling.firstChild.classList.replace('text-danger', 'text-secondary');
+            other.nextSibling.firstChild.classList.replace('text-secondary', 'text-primary');
+        }
+    });
+}
+
+function music_player_volume_change(value) {
+    const musicPlayer = document.getElementById('theMusicPlayer');
+    musicPlayer.volume = value / 100.0;
+    const musicVolumeControllers = document.querySelectorAll('.range-for-music-volume');
+    musicVolumeControllers.forEach(function(other) {
+        other.value = value;
+    });
+}
+
 function closure_for_timer_picker() {
     const timePickers = document.querySelectorAll('hipicker.time');
     timePickers.forEach(function(picker) {

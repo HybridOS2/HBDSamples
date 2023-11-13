@@ -35,14 +35,19 @@
     </inherit>
     <test on $?.name>
         <match for "AS 'playOrPause'" exclusively>
+            <fire on '.music-play-or-pause' for 'click' />
         </match>
         <match for "AS 'prev'" exclusively>
+            <fire on '.music-switch-to-prev' for 'click' />
         </match>
         <match for "AS 'next'" exclusively>
+            <fire on '.music-switch-to-next' for 'click' />
         </match>
         <match for "AS 'volume'" exclusively>
+            <request on '#mainContent' to="call:music_player_volume_change(ARG)" with $3?.value noreturn />
         </match>
         <match for "AS 'mute'" exclusively>
+            <request on '#mainContent' to="call:music_player_mute_click()" noreturn />
         </match>
 
         <match for="ANY">
