@@ -32,7 +32,9 @@ function on_any_input(evt) {
 }
 
 var lock_timer;
+var allow_post_music_event = true;
 function start_lockscreen_timer() {
+    allow_post_music_event = false;
     const mainContent = document.getElementById('mainContent');
     lock_count = 0;
     lock_timer = setInterval(() => {
@@ -51,6 +53,7 @@ function start_lockscreen_timer() {
 }
 
 function stop_lockscreen_timer() {
+    allow_post_music_event = true;
     clearInterval(lock_timer);
     const mainContent = document.getElementById('mainContent');
     mainContent.removeEventListener("mousedown", on_any_input);
@@ -60,8 +63,10 @@ function stop_lockscreen_timer() {
 }
 
 function post_music_player_event(data) {
-    const musicPlayer = document.getElementById('theMusicPlayer');
-    post_hvml_event_with_data('stateChange', musicPlayer, data);
+    if (allow_post_music_event) {
+        const musicPlayer = document.getElementById('theMusicPlayer');
+        post_hvml_event_with_data('stateChange', musicPlayer, data);
+    }
 }
 
 function post_music_player_state_change_event() {
