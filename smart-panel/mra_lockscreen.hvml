@@ -14,7 +14,8 @@
 
         <init as 'lockscreen_option' at '_runner'>
             {
-                "enableUnlock": false
+                "enableUnlock": false,
+                "enablePostEvent": $REQ.enablePostEvent
             }
         </init>
 

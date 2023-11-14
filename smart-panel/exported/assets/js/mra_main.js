@@ -34,6 +34,7 @@ function on_any_input(evt) {
 var lock_timer;
 var allow_post_music_event = true;
 function start_lockscreen_timer() {
+    console.log("############################################### start lockscreen timer");
     allow_post_music_event = false;
     const mainContent = document.getElementById('mainContent');
     lock_count = 0;
@@ -53,6 +54,7 @@ function start_lockscreen_timer() {
 }
 
 function stop_lockscreen_timer() {
+    console.log("############################################### stop lockscreen timer");
     allow_post_music_event = true;
     clearInterval(lock_timer);
     const mainContent = document.getElementById('mainContent');

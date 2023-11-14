@@ -25,15 +25,19 @@
 </init>
 
 <define as 'post_event_to_main' at="_topmost">
-    <request on="/-/main/CHAN/chanMain" to="post" with=$? />
+    <inherit>
+        $STREAM.stdout.writelines("#################      lockscreen post event: $?")
+    </inherit>
+    <test with $lockscreen_option.enablePostEvent >
+        <request on="/-/main/CHAN/chanMain" to="post" with=$2? />
+    </test>
 </define>
 
 <define as 'unlock' at="_topmost">
     <request on="$RDR" to="updatePlainWindow">
     {
         "data": {
-            layoutStyle: 'window-position:50% -480px; window-size:480px 480px;',
-            transitionStyle: 'window-transition-move: linear 200'
+            layoutStyle: 'window-position:50% -480px; window-size:480px 480px;'
         }
     }
     </request>
@@ -44,8 +48,7 @@
     <request on="$RDR" to="updatePlainWindow">
     {
         "data": {
-            layoutStyle: 'window-position:center; window-size:480px 480px;',
-            transitionStyle: 'window-transition-move: linear 200'
+            layoutStyle: 'window-position:center; window-size:480px 480px;'
         }
     }
     </request>
@@ -83,14 +86,8 @@
 </define>
 
 <define as 'on_music_player_event' at="_topmost">
-    <inherit>
-        $STREAM.stdout.writelines("on_music_player_event: $?")
-    </inherit>
     <test on $?.name>
         <match for "AS 'playerState'" exclusively>
-            <inherit>
-                $STREAM.stdout.writelines("on_music_player_event playerState: $3?")
-            </inherit>
             <test on $3?.playState>
                 <match for "AS 'playing'" exclusively>
                     <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
@@ -168,6 +165,9 @@
             </match>
         </test>
     </choose>
+    <test with $L.gt($chIn.len, 0)>
+        <fire on $chIn for 'receivable' />
+    </test>
 </observe>
 
 <init as 'lockscreen_hm'>
