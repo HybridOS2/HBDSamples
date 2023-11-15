@@ -6,7 +6,7 @@
             </svg>
         </div>
         <div class="message-content">
-            <div class="carousel slide" data-bs-ride="carousel">
+            <div id="#id_carousel_slide" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner fs-6">
                     <iterate on $messages >
                         <div class="carousel-item{{ $L.eq($%, 0) && ' active' || '' }}" data-bs-interval="5000">
