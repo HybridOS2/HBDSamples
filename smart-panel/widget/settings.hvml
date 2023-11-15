@@ -8,7 +8,11 @@
       <div class="icon-btn">
         <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4HouseSettings" aria-controls="offcanvas4HouseSettings">
-            <i class="bi bi-house-gear-fill"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house-gear-fill" viewBox="0 0 16 16">
+                <path d="M7.293 1.5a1 1 0 0 1 1.414 0L11 3.793V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3.293l2.354 2.353a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5Z"/>
+                <path d="M11.07 9.047a1.5 1.5 0 0 0-1.742.26l-.02.021a1.5 1.5 0 0 0-.261 1.742 1.5 1.5 0 0 0 0 2.86 1.504 1.504 0 0 0-.12 1.07H3.5A1.5 1.5 0 0 1 2 13.5V9.293l6-6 4.724 4.724a1.5 1.5 0 0 0-1.654 1.03Z"/>
+                <path d="m13.158 9.608-.043-.148c-.181-.613-1.049-.613-1.23 0l-.043.148a.64.64 0 0 1-.921.382l-.136-.074c-.561-.306-1.175.308-.87.869l.075.136a.64.64 0 0 1-.382.92l-.148.045c-.613.18-.613 1.048 0 1.229l.148.043a.64.64 0 0 1 .382.921l-.074.136c-.306.561.308 1.175.869.87l.136-.075a.64.64 0 0 1 .92.382l.045.149c.18.612 1.048.612 1.229 0l.043-.15a.64.64 0 0 1 .921-.38l.136.074c.561.305 1.175-.309.87-.87l-.075-.136a.64.64 0 0 1 .382-.92l.149-.044c.612-.181.612-1.049 0-1.23l-.15-.043a.64.64 0 0 1-.38-.921l.074-.136c.305-.561-.309-1.175-.87-.87l-.136.075a.64.64 0 0 1-.92-.382ZM12.5 14a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/>
+            </svg>
           </a>
         </div>
         <div class="name mt-1">家居</div>
@@ -17,7 +21,9 @@
       <div class="icon-btn">
         <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4PersonSettings" aria-controls="offcanvas4PersonSettings">
-            <i class="bi bi-person-fill-gear"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-fill-gear" viewBox="0 0 16 16">
+                <path d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Zm9.886-3.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z"/>
+            </svg>
           </a>
         </div>
         <div class="name mt-1">人员</div>
@@ -26,7 +32,9 @@
       <div class="icon-btn">
         <div class="icon">
           <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4SystemSettings" aria-controls="offcanvas4SystemSettings">
-            <i class="bi bi-gear-fill"></i>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-gear-fill" viewBox="0 0 16 16">
+                <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+            </svg>
           </a>
         </div>
         <div class="name mt-1">系统</div>
@@ -39,7 +47,11 @@
   <div class="offcanvas-header">
     <h6 class="offcanvas-title" id="offcanvas4SystemSettingsLabel">系统设置</h6>
     <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
-       <div class="ps-5"><i class="bi bi-x-lg"></i></div>
+       <div class="ps-5">
+           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+               <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+           </svg>
+       </div>
     </a>
   </div>
   <div class="offcanvas-body">
@@ -48,15 +60,27 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="5" id="theTimeToLock5" hvml-events="click">
         5 秒
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="10" id="theTimeToLock10" hvml-events="click">
         10 秒
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="30" id="theTimeToLock30" hvml-events="click">
         30 秒
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
@@ -88,11 +112,19 @@
 
       <li class="list-group-item d-flex justify-content-between align-items-center">
         显示全部
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         仅显示重要消息
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
 
     </ul>
@@ -101,19 +133,35 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-never" value="0" id="theTimeToOffScreenNever" hvml-events="click">
         永不
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-5-minutes" value="5" id="theTimeToOffScreen5" hvml-events="click">
         锁屏后 5 分钟
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-10-minutes" value="10" id="theTimeToOffScreen10" hvml-events="click">
         锁屏后 10 分钟
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-off-screen-30-minutes" value="30" id="theTimeToOffScreen30" hvml-events="click">
         锁屏后 30 分钟
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
@@ -143,15 +191,27 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中文简体
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中文繁体
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         English
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
@@ -159,15 +219,27 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         小
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         大
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
@@ -198,15 +270,27 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中文简体
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中文繁体
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         English
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
@@ -214,15 +298,27 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center">
         小
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         中
-        <span><i class="bi bi-check2 text-primary"></i></span>
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center">
         大
-        <span class="d-none"><i class="bi bi-check2 text-primary"></i></span>
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
       </li>
     </ul>
 
