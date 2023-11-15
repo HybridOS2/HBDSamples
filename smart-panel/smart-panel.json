@@ -19,11 +19,11 @@
                 "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_lockscreen.hvml"
             }],
             "renderer": {
-                "commMethod": "thread",
-                "uri": "edpt://localhost/cn.fmsoft.hvml.renderer/seeker",
+                "commMethod": "socket",
+                "uri": "unix:///var/tmp/purcmc.sock",
                 "workspaceName": null
             },
-            "allowSwitchingRdr": true,
+            "allowSwitchingRdr": false,
             "runner": "lockscreen"
         },
         {
@@ -38,8 +38,8 @@
                 "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_main.hvml"
             }],
             "renderer": {
-                "commMethod": "thread",
-                "uri": "edpt://localhost/cn.fmsoft.hvml.renderer/seeker",
+                "commMethod": "socket",
+                "uri": "unix:///var/tmp/purcmc.sock",
                 "workspaceName": null
             },
             "allowSwitchingRdr": true,
