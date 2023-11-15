@@ -1,4 +1,7 @@
 <define as 'post_event_to_lockscreen' at="_topmost">
+    <inherit>
+        $STREAM.stdout.writelines("########################################################: post to lockscreen: $?")
+    </inherit>
     <request on="/-/lockscreen/CHAN/chanLockscreen" to="post" with=$? />
 </define>
 
@@ -63,20 +66,22 @@
         <inherit>
             $STREAM.stdout.writelines("#####   main Got a message: $?.type")
         </inherit>
-        <test on $?.type>
-            <match for "AS 'lockscreenState'" exclusively>
-                <include with $on_lockscreen_state_event on $3? />
-            </match>
+        <test with $L.streq('caseless', 'object', $DATA.type($?))>
+            <test on $?.type>
+                <match for "AS 'lockscreenState'" exclusively>
+                    <include with $on_lockscreen_state_event on $3? />
+                </match>
 
-            <match for "AS 'musicPlayer'" exclusively>
-                <include with $on_music_player_event on $3? />
-            </match>
+                <match for "AS 'musicPlayer'" exclusively>
+                    <include with $on_music_player_event on $3? />
+                </match>
 
-            <match for "AS 'network'" exclusively>
-            </match>
+                <match for "AS 'network'" exclusively>
+                </match>
 
-            <match for="ANY">
-            </match>
+                <match for="ANY">
+                </match>
+            </test>
         </test>
     </choose>
     <test with $L.gt($chIn.len, 0)>

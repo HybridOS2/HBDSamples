@@ -421,10 +421,16 @@
 </observe>
 
 
-<init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
+<init as 'network_state' from 'https://ws.fmsoft.cn/tools/echo.php' />
 <include with $show_main_page />
+    <inherit>
+        $STREAM.stdout.writelines("################################## network check success")
+    </inherit>
 
 <catch for `RequestFailed`>
+    <inherit>
+        $STREAM.stdout.writelines("################################## request failed")
+    </inherit>
     <include with="$do_network_check" />
 </catch>
 
