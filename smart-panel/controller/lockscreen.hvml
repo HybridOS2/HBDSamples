@@ -91,12 +91,14 @@
             <test on $3?.playState>
                 <match for "AS 'playing'" exclusively>
                     <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
-                    <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-play-circle-fill', 'bi-pause-circle-fill'] noreturn />
+                    <request on "#id_music_play_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+                    <request on "#id_music_pause_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
                     <update on $music_info at '.playing' with true />
                 </match>
                 <match for "AS 'paused'" exclusively>
                     <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
-                    <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-pause-circle-fill', 'bi-play-circle-fill'] noreturn />
+                    <request on "#id_music_play_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+                    <request on "#id_music_pause_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
                     <update on $music_info at '.playing' with false />
                 </match>
             </test>

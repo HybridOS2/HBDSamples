@@ -53,12 +53,14 @@
 
     <test with $music_info.playing >
         <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
-        <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-pause-circle-fill', 'bi-play-circle-fill'] noreturn />
+        <request on "#id_music_play_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+        <request on "#id_music_pause_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
         <update on $music_info at '.playing' with false />
         <request on '#theMusicPlayer' to="call:ELEMENT.pause()" noreturn />
         <differ>
             <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
-            <request on ".music-play-or-pause i" to='call:ELEMENT.classList.replace(ARG[0], ARG[1])' with ['bi-play-circle-fill', 'bi-pause-circle-fill'] noreturn />
+            <request on "#id_music_play_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+            <request on "#id_music_pause_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
             <update on $music_info at '.playing' with true />
             <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
         </differ>
