@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.css" />
         <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.min.js"></script>
 
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
@@ -98,7 +97,9 @@
 
             <div class="d-flex justify-content-between text-light text-shadow mb-2">
                 <div class="fw-normal mt-2 lh-base">
-                  <span class="fs-1 mt-2 me-2"><i id="theWeatherIcon" class="bi bi-cloud-sun-fill"></i></span>
+                  <span class="fs-1 mt-2 me-2">
+                      <i id="theWeatherIcon" class="bi bi-cloud-sun-fill"></i>
+                  </span>
                   <span id="theWeatherTemp" class="fs-4 me-2">26</span><span class="fs-4 me-2">°C</span><br />
                   <p class="lh-base">
                     <span id="theWeatherCity" class="fs-5">中国</span>
@@ -121,7 +122,10 @@
           <div>
             <div class="text-center fs-5 text-shadow">
               <div id="id__unlock__btn" class="text-secondary" hvml-events="click">
-                <span class="ps-5 pe-5 pb-2"><i class="bi bi-chevron-double-up"></i></span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.25rem" height="1.25rem" fill="currentColor" class="bi bi-chevron-double-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.646 2.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 3.707 2.354 9.354a.5.5 0 1 1-.708-.708l6-6z"/>
+                    <path fill-rule="evenodd" d="M7.646 6.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 7.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                </svg>
               </div>
             </div>
           </div>
