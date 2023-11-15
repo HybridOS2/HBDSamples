@@ -84,7 +84,7 @@ a:active {
     background-position: left top;
     background-repeat: no-repeat;
     background-size: cover;
-    --bs-offcanvas-height: 100vh;
+    height: 100vh;
 }
 
 #theLockScreen .time {
@@ -306,3 +306,9 @@ hipicker.minute::-hi-picker-selected-after {
     content: "分";
 }
 
+.lockscreen__body {
+  flex-grow: 1;
+  padding-top: 1rem;
+  padding-bottom: 0.8rem;
+  overflow-y: auto;
+}
