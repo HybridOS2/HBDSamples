@@ -312,3 +312,9 @@ hipicker.minute::-hi-picker-selected-after {
   padding-bottom: 0.8rem;
   overflow-y: auto;
 }
+
+.weather__icon {
+    filter:invert(1);
+    width: calc(1.375rem + 1.5vw);
+    height: calc(1.375rem + 1.5vw);
+}

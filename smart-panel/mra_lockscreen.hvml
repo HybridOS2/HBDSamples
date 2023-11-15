@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.css" />
         <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.min.js"></script>
 
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
@@ -98,7 +99,7 @@
             <div class="d-flex justify-content-between text-light text-shadow mb-2">
                 <div class="fw-normal mt-2 lh-base">
                   <span class="fs-1 mt-2 me-2">
-                      <i id="theWeatherIcon" class="bi bi-cloud-sun-fill"></i>
+                      <img id="theWeatherIcon" class="weather__icon" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-sun-fill.svg" />
                   </span>
                   <span id="theWeatherTemp" class="fs-4 me-2">26</span><span class="fs-4 me-2">°C</span><br />
                   <p class="lh-base">

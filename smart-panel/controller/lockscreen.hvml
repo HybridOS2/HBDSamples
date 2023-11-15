@@ -1,14 +1,14 @@
 <init as 'weather_map'>
     {
-        bingbao:    [! 'bi bi-cloud-sleet-fill',            'bg-weather-sleet' ],
-        lei:        [! 'bi bi-cloud-lightning-rain-fill',   'bg-weather-lightning' ],
-        qing:       [! 'bi bi-sun-fill',                    'bg-weather-sun' ],
-        shachen:    [! 'bi bi-wind',                        'bg-weather-sandstorm' ],
-        wu:         [! 'bi bi-cloud-fog-fill',              'bg-weather-fog' ],
-        xue:        [! 'bi bi-cloud-snow-fill',             'bg-weather-snow' ],
-        yin:        [! 'bi bi-cloud-fill',                  'bg-weather-cloud' ],
-        yun:        [! 'bi bi-cloud-sun-fill',              'bg-weather-cloud-sun' ],
-        yu:         [! 'bi bi-cloud-rain-fill',             'bg-weather-rain' ],
+        bingbao:    [! 'bi bi-cloud-sleet-fill',            'bg-weather-sleet' ,'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-sleet-fill.svg'],
+        lei:        [! 'bi bi-cloud-lightning-rain-fill',   'bg-weather-lightning' ,'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-lightning-rain-fill.svg'],
+        qing:       [! 'bi bi-sun-fill',                    'bg-weather-sun' ,'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/sun-fill.svg'],
+        shachen:    [! 'bi bi-wind',                        'bg-weather-sandstorm', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/wind.svg'],
+        wu:         [! 'bi bi-cloud-fog-fill',              'bg-weather-fog', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-fog-fill.svg'],
+        xue:        [! 'bi bi-cloud-snow-fill',             'bg-weather-snow', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-snow-fill.svg'],
+        yin:        [! 'bi bi-cloud-fill',                  'bg-weather-cloud', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-fill.svg'],
+        yun:        [! 'bi bi-cloud-sun-fill',              'bg-weather-cloud-sun', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-sun-fill.svg'],
+        yu:         [! 'bi bi-cloud-rain-fill',             'bg-weather-rain', 'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-rain-fill.svg'],
     }
 </init>
 
@@ -142,7 +142,7 @@
                     $STREAM.stdout.writelines("Got a weather change message: $3?.value.wea_img")
                 </inherit>
 
-                <update on '#theWeatherIcon' to 'displace' at 'attr.class' with $weather_map[$3?.value.wea_img][0] />
+                <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
                 <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
                 <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
                 <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
