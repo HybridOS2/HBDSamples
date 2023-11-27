@@ -10,7 +10,7 @@
                 <div class="carousel-inner fs-6">
                     <iterate on $messages >
                         <div class="carousel-item{{ $L.eq($%, 0) && ' active' || '' }}" data-bs-interval="5000">
-                            <small><a class="message-title text-$?.text" href="$?.url" target="_blank">$?.title</a></small>
+                            <small><a class="message-title text-$?.text" href="$?.url" hvml-events="click" target="_blank">$?.title</a></small>
                         </div>
                     </iterate>
                 </div>

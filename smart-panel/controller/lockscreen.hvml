@@ -300,3 +300,7 @@
 </observe>
 
 
+<observe on '.message-title' for 'click'>
+    <include with $unlock />
+</observe>
+
