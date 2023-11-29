@@ -32,7 +32,10 @@
                 "renderer": {
                     "pageName": "main",
                     "pageType": "plainwin",
-                    "layoutStyle":"window-size:480px 480px; window-position:center"
+                    "layoutStyle":"window-size:480px 480px; window-position:center",
+                    "toolkitStyle": {
+                        "windowLevel":"normal"
+                    }
                 },
                 "request": {},
                 "url": "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/mra_main.hvml"

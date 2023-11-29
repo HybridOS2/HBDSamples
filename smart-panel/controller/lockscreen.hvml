@@ -142,7 +142,7 @@
 <observe on $chIn for 'receivable'>
     <choose on $chIn.recv() silently>
         <inherit>
-            $STREAM.stdout.writelines("chan         lockscreen recv : $?")
+            $STREAM.stdout.writelines("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ chan         lockscreen recv : $?")
         </inherit>
         <test with $L.streq('caseless', 'object', $DATA.type($?))>
             <test on $?.type>
