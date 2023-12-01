@@ -57,6 +57,7 @@
                 src: url('hvml://localhost/_system/_filesystem/-/app/smartbox/assets/siyuan-heavt.otf');
             }
         </style>
+        <title>智能音箱</title>
 
         <update on="$TIMERS" to="unite">
             [

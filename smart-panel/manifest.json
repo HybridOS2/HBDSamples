@@ -6,12 +6,12 @@
   "versionName": "1.0",
   "minPlatformVersion": 1,
   "label": {
-      "en": "Smart Panel",
+      "en": "智能面板",
       "zh_CN": "智能面板",
       "zh": "智慧面板"
   },
   "description": {
-      "en": "The smart panel applicaton.",
+      "en": "智能面板应用",
       "zh_CN": "智能面板应用",
       "zh": "智慧面板應用"
   },
@@ -20,7 +20,7 @@
       "name": "lockscreen",
       "type": "hvml",
       "label": {
-          "en": "LockScreen",
+          "en": "锁屏",
           "zh_CN": "锁屏",
           "zh": "鎖定畫面"
       }
@@ -29,7 +29,7 @@
       "name": "main",
       "type": "hvml",
       "label": {
-          "en": "Main Page",
+          "en": "主页面",
           "zh_CN": "主页面",
           "zh": "主頁面"
       }

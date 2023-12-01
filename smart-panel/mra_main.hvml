@@ -10,6 +10,7 @@
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
 
         <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <title> 智能面板(主页) </title>
 
         <init as 'theme_option' at '_runner'>
             {

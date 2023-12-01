@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="exported/assets/css/main.css" />
         <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.min.js"></script>
+        <title> 智能面板(锁屏) </title>
 
         <init as 'lockscreen_option' at '_runner'>
             {
