@@ -24,6 +24,7 @@
                 "workspaceName": null
             },
             "allowSwitchingRdr": false,
+            "allowScalingByDensity": true,
             "runner": "lockscreen"
         },
         {
@@ -46,6 +47,7 @@
                 "workspaceName": null
             },
             "allowSwitchingRdr": true,
+            "allowScalingByDensity": true,
             "runner": "main"
         }
     ]
