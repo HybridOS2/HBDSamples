@@ -1,0 +1,37 @@
+{
+  "name": "cn.fmsoft.hybridos.settings",
+  "group": "cn.fmsoft.hybridos",
+  "type": "normal",
+  "versionCode": 1,
+  "versionName": "1.0",
+  "minPlatformVersion": 1,
+  "label": {
+      "en": "智能音箱",
+      "zh_CN": "智能音箱",
+      "zh": "智慧音箱"
+  },
+  "description": {
+      "en": "智能音箱是一种智能家居产品，它可以通过语音交互，为用户提供音乐播放、智能家居控制、语音助手等功能。",
+      "zh_CN": "智能音箱是一种智能家居产品，它可以通过语音交互，为用户提供音乐播放、智能家居控制、语音助手等功能。",
+      "zh": "智能音箱是一种智能家居产品，它可以通过语音交互，为用户提供音乐播放、智能家居控制、语音助手等功能。"
+  },
+  "icon": {
+      "ldpi": "_static/assets/images/appicon-72.png",
+      "mdpi": "_static/assets/images/appicon-96.png",
+      "hdpi": "_static/assets/images/appicon-144.png",
+      "xhdpi": "_static/assets/images/appicon-192.png",
+      "xxhdpi": "_static/assets/images/appicon-288.png"
+  },
+  "runners": [
+    {
+      "name": "radio",
+      "type": "hvml",
+      "label": {
+          "en": "主页",
+          "zh_CN": "主页",
+          "zh": "主页"
+      }
+    }
+  ]
+}
+
