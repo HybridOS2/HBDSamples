@@ -12,6 +12,22 @@
         <script type="text/javascript" src="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/js/bootstrap.min.js"></script>
         <title> 智能面板(锁屏) </title>
 
+        <script raw>
+            function set_music_play_or_pause_btn_icon(playing)
+            {
+                let pause_icon = document.getElementById("id_music_pause_icon");
+                let play_icon = document.getElementById("id_music_play_icon");
+                if (playing === 'true') {
+                    play_icon.classList.add('d-none');
+                    pause_icon.classList.remove('d-none');
+                }
+                else {
+                    pause_icon.classList.add('d-none');
+                    play_icon.classList.remove('d-none');
+                }
+            }
+        </script>
+
         <init as 'lockscreen_option' at '_runner'>
             {
                 "enableUnlock": false,

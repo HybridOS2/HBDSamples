@@ -94,14 +94,12 @@
             <test on $3?.playState>
                 <match for "AS 'playing'" exclusively>
                     <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
-                    <request on "#id_music_play_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-                    <request on "#id_music_pause_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
+                    <request on "#theLockScreen" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
                     <update on $music_info at '.playing' with true />
                 </match>
                 <match for "AS 'paused'" exclusively>
                     <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
-                    <request on "#id_music_play_icon" to='call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
-                    <request on "#id_music_pause_icon" to='call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
+                    <request on "#theLockScreen" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'false' noreturn />
                     <update on $music_info at '.playing' with false />
                 </match>
             </test>

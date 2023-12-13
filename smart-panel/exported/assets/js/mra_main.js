@@ -301,6 +301,20 @@ function reset_music_progress(selector)
     post_music_player_music_change_event();
 }
 
+function set_music_play_or_pause_btn_icon(playing)
+{
+    let pause_icon = document.getElementById("id_music_pause_icon");
+    let play_icon = document.getElementById("id_music_play_icon");
+    if (playing === 'true') {
+        play_icon.classList.add('d-none');
+        pause_icon.classList.remove('d-none');
+    }
+    else {
+        pause_icon.classList.add('d-none');
+        play_icon.classList.remove('d-none');
+    }
+}
+
 window.addEventListener("load", (event) => {
     let elem = document.getElementById("mainContent");
     post_hvml_event('load', elem);
