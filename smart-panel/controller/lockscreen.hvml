@@ -26,7 +26,7 @@
 
 <define as 'post_event_to_main' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("#################      lockscreen post event: $?")
+        $STREAM.stdout.writelines("##### lockscreen post event: $?  $SYS.time")
     </inherit>
     <test with $lockscreen_option.enablePostEvent >
         <request on="/-/main/CHAN/chanMain" to="post" with=$2? />
@@ -57,7 +57,7 @@
 
 <define as 'on_lockscreen_event' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("on_lockscreen_event: $?")
+        $STREAM.stdout.writelines("##### on_lockscreen_event: $?")
     </inherit>
     <test on $?.name>
         <match for "AS 'enableUnlock'" exclusively>
@@ -87,7 +87,7 @@
 
 <define as 'on_music_player_event' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("on_music_player_event: $?")
+        $STREAM.stdout.writelines("##### on_music_player_event: $?")
     </inherit>
     <test on $?.name>
         <match for "AS 'playerState'" exclusively>
@@ -138,44 +138,43 @@
 </define>
 
 <observe on $chIn for 'receivable'>
-    <choose on $chIn.recv() silently>
-        <inherit>
-            $STREAM.stdout.writelines("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ chan         lockscreen recv : $?")
-        </inherit>
-        <test with $L.streq('caseless', 'object', $DATA.type($?))>
-            <test on $?.type>
-                <match for "AS 'weather'" exclusively>
-                    <inherit>
-                        $STREAM.stdout.writelines("Got a weather change message: $3?.value.wea_img")
-                    </inherit>
+    <inherit>
+        $STREAM.stdout.writelines("#####  lockscreen recv count ($chIn.len) msg is : $?")
+    </inherit>
+    <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
+        <choose on $chIn.recv() silently>
+            <test with $L.streq('caseless', 'object', $DATA.type($?))>
+                <test on $?.type>
+                    <match for "AS 'weather'" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("##### Got a weather change message: $3?.value.wea_img")
+                        </inherit>
 
-                    <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
-                    <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
-                    <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
-                    <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
-                    <update on $running_state to 'displace' at '.bg_lockscreen' with $weather_map[$3?.value.wea_img][1] />
-                    <request on '#theLockScreen' to 'call:ELEMENT.classList.add(ARG)' with $running_state.bg_lockscreen noreturn />
-                </match>
+                        <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
+                        <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
+                        <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
+                        <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
+                        <update on $running_state to 'displace' at '.bg_lockscreen' with $weather_map[$3?.value.wea_img][1] />
+                        <request on '#theLockScreen' to 'call:ELEMENT.classList.add(ARG)' with $running_state.bg_lockscreen noreturn />
+                    </match>
 
-                <match for "AS 'network'" exclusively>
-                </match>
+                    <match for "AS 'network'" exclusively>
+                    </match>
 
-                <match for "AS 'lockscreen'" exclusively>
-                    <include with $on_lockscreen_event on $3? />
-                </match>
+                    <match for "AS 'lockscreen'" exclusively>
+                        <include with $on_lockscreen_event on $3? />
+                    </match>
 
-                <match for "AS 'musicPlayer'" exclusively>
-                    <include with $on_music_player_event on $3? />
-                </match>
+                    <match for "AS 'musicPlayer'" exclusively>
+                        <include with $on_music_player_event on $3? />
+                    </match>
 
-                <match for="ANY">
-                </match>
+                    <match for="ANY">
+                    </match>
+                </test>
             </test>
-        </test>
-    </choose>
-    <test with $L.gt($chIn.len, 0)>
-        <fire on $chIn for 'receivable' />
-    </test>
+        </choose>
+    </iterate>
 </observe>
 
 <init as 'lockscreen_hm'>
@@ -225,13 +224,13 @@
 
 <observe on '#theLockScreen' for 'locked'>
     <inherit>
-        $STREAM.stdout.writelines("screen locked")
+        $STREAM.stdout.writelines("##### screen locked")
     </inherit>
 </observe>
 
 <observe on '#theLockScreen' for 'unlocked'>
     <inherit>
-        $STREAM.stdout.writelines("screen unlocked")
+        $STREAM.stdout.writelines("##### screen unlocked")
     </inherit>
 </observe>
 
@@ -239,7 +238,7 @@
     <choose on $DOC.query("#theLockScreen").attr('data-time-to-lock') >
         <test with $L.ne($?, $2?.originValue) >
             <inherit>
-                $STREAM.stdout.writelines("Changing time-to-lock to $3?.originValue $3?.originId")
+                $STREAM.stdout.writelines("##### Changing time-to-lock to $3?.originValue $3?.originId")
             </inherit>
 
             <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.originValue" />
@@ -255,7 +254,7 @@
         <include with $unlock />
         <differ>
             <inherit>
-                $STREAM.stdout.writelines("#####> not allow unlock")
+                $STREAM.stdout.writelines("##### not allow unlock")
             </inherit>
         </differ>
     </test>
@@ -264,35 +263,35 @@
 
 <observe on '.music-switch-to-prev' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("music-switch-to-prev clicked")
+        $STREAM.stdout.writelines("##### music-switch-to-prev clicked")
     </inherit>
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
 </observe>
 
 <observe on '.music-switch-to-next' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("music-switch-to-next clicked")
+        $STREAM.stdout.writelines("##### music-switch-to-next clicked")
     </inherit>
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
 </observe>
 
 <observe on '.music-play-or-pause' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("music-play-or-pause clicked")
+        $STREAM.stdout.writelines("##### music-play-or-pause clicked")
     </inherit>
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
 </observe>
 
 <observe on '.range-for-music-volume' for 'change'>
     <inherit>
-        $STREAM.stdout.writelines("music-player volume change $?.targetValue")
+        $STREAM.stdout.writelines("##### music-player volume change $?.targetValue")
     </inherit>
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'volume', 'value':$?.targetValue} />
 </observe>
 
 <observe on '#id__volume__mute' for 'click'>
     <inherit>
-        $STREAM.stdout.writelines("music-player volumn mute")
+        $STREAM.stdout.writelines("##### music-player volumn mute")
     </inherit>
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'mute'} />
 </observe>

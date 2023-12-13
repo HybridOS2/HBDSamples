@@ -1,13 +1,13 @@
 <define as 'post_event_to_lockscreen' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("########################################################: post to lockscreen: $?")
+        $STREAM.stdout.writelines("@@@@@ post to lockscreen: $?")
     </inherit>
     <request on="/-/lockscreen/CHAN/chanLockscreen" to="post" with=$? />
 </define>
 
 <define as 'on_lockscreen_state_event' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("################################: on_lockscreen_state_event: $?")
+        $STREAM.stdout.writelines("@@@@@ on_lockscreen_state_event: $?")
     </inherit>
     <test on $?.name>
         <match for "AS 'lock'" exclusively>
@@ -34,7 +34,7 @@
 
 <define as 'on_music_player_event' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("on_music_player_event: $?")
+        $STREAM.stdout.writelines("@@@@@ on_music_player_event: $?")
     </inherit>
     <test on $?.name>
         <match for "AS 'playOrPause'" exclusively>
@@ -62,31 +62,33 @@
 </define>
 
 <observe on $chIn for 'receivable'>
-    <choose on $chIn.recv() silently>
-        <inherit>
-            $STREAM.stdout.writelines("#####   main Got a message: $?.type")
-        </inherit>
-        <test with $L.streq('caseless', 'object', $DATA.type($?))>
-            <test on $?.type>
-                <match for "AS 'lockscreenState'" exclusively>
-                    <include with $on_lockscreen_state_event on $3? />
-                </match>
+    <inherit>
+        $STREAM.stdout.writelines("@@@@@  main recv count ($chIn.len) msg is : $?")
+    </inherit>
+    <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
+        <choose on $chIn.recv() silently>
+            <inherit>
+                $STREAM.stdout.writelines("@@@@@  main Got a message: $?.type")
+            </inherit>
+            <test with $L.streq('caseless', 'object', $DATA.type($?))>
+                <test on $?.type>
+                    <match for "AS 'lockscreenState'" exclusively>
+                        <include with $on_lockscreen_state_event on $3? />
+                    </match>
 
-                <match for "AS 'musicPlayer'" exclusively>
-                    <include with $on_music_player_event on $3? />
-                </match>
+                    <match for "AS 'musicPlayer'" exclusively>
+                        <include with $on_music_player_event on $3? />
+                    </match>
 
-                <match for "AS 'network'" exclusively>
-                </match>
+                    <match for "AS 'network'" exclusively>
+                    </match>
 
-                <match for="ANY">
-                </match>
+                    <match for="ANY">
+                    </match>
+                </test>
             </test>
-        </test>
-    </choose>
-    <test with $L.gt($chIn.len, 0)>
-        <fire on $chIn for 'receivable' />
-    </test>
+        </choose>
+    </iterate>
 </observe>
 
 <observe on '#mainContent' for 'locked'>
@@ -97,7 +99,7 @@
     <choose on $DOC.query("#mainContent").attr('data-time-to-lock') >
         <test with $L.ne($?, $2?.originValue) >
             <inherit>
-                $STREAM.stdout.writelines("Changing time-to-lock to $3?.originValue $3?.originId")
+                $STREAM.stdout.writelines("@@@@@ Changing time-to-lock to $3?.originValue $3?.originId")
             </inherit>
 
             <update on '#mainContent' at 'attr.data-time-to-lock' with "$3?.originValue" />
@@ -128,7 +130,7 @@
 
 <observe on $CRTN for "rdrState:newRenderer">
     <inherit>
-        $STREAM.stdout.writelines("################################: switch to new rdr")
+        $STREAM.stdout.writelines("@@@@@ switch to new rdr")
     </inherit>
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
