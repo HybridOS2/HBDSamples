@@ -94,7 +94,9 @@ list:
 
         <init as 'main_data' at '_runner'>
             {
-                "curtainRange": "30"
+                "curtainRange": "30",
+                "airConditionerTemp": "25",
+                "airConditionerStyleWidth": "50%",
             }
         </init>
 

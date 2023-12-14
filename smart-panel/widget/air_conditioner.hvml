@@ -24,7 +24,7 @@
 
       <div class="progress h-icon-btn-l me-2 temp-change-for-air-conditioner" name="$roomName" role="progressbar" style="width: 100%" hvml-events="click"
             aria-label="空调温度" aria-valuenow="25" aria-valuemin="15" aria-valuemax="35" >
-        <div class="progress-bar fs-2 bg-success overflow-visible" id="theACTempFor$roomName" data-current-temp="25" style="width: 50%">25°C</div>
+        <div class="progress-bar fs-2 bg-success overflow-visible" id="theACTempFor$roomName" data-current-temp="$main_data.airConditionerTemp" style="width: $main_data.airConditionerStyleWidth">$main_data.airConditionerTemp°C</div>
       </div>
 
       <div class="d-grid gap-1">

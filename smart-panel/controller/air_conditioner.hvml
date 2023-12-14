@@ -18,6 +18,9 @@
             <update on "#theACTempFor$?.originName" to 'displace' at 'textContent' with "$targetTemp°C" />
             <update on "#theACTempFor$?.originName" to 'displace' at 'attr.style' with "width: $MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp })%" />
 
+            <update on $main_data at '.airConditionerTemp' with "$targetTemp" />
+            <update on $main_data at '.airConditionerStyleWidth' with "$MATH.eval('(x - 15) * 100 / 20', { x: $targetTemp }) %" />
+
             <test with $L.eq($targetTemp, 30L) >
                 <request on "#theACTempFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-warning' noreturn />
             </test>
