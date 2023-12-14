@@ -1,14 +1,19 @@
-<define as 'post_event_to_lockscreen' at="_topmost">
+
+<define as 'main_log' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("@@@@@ post to lockscreen: $?")
+    <!--
+        $STREAM.stdout.writelines("$?")
+    -->
     </inherit>
+</define>
+
+<define as 'post_event_to_lockscreen' at="_topmost">
+    <include with $main_log on "@@@@@ post to lockscreen: $?" />
     <request on="/-/lockscreen/CHAN/chanLockscreen" to="post" with=$? />
 </define>
 
 <define as 'on_lockscreen_state_event' at="_topmost">
-    <inherit>
-        $STREAM.stdout.writelines("@@@@@ on_lockscreen_state_event: $?")
-    </inherit>
+    <include with $main_log on "@@@@@ on_lockscreen_state_event: $?" />
     <test on $?.name>
         <match for "AS 'lock'" exclusively>
             <request on '#mainContent' to="call:enable_post_music_event()" noreturn />
@@ -34,9 +39,7 @@
 </define>
 
 <define as 'on_music_player_event' at="_topmost">
-    <inherit>
-        $STREAM.stdout.writelines("@@@@@ on_music_player_event: $?")
-    </inherit>
+    <include with $main_log on "@@@@@ on_music_player_event: $?" />
     <test on $?.name>
         <match for "AS 'playOrPause'" exclusively>
             <fire on '.music-play-or-pause' for 'click' />
@@ -63,14 +66,10 @@
 </define>
 
 <observe on $chIn for 'receivable'>
-    <inherit>
-        $STREAM.stdout.writelines("@@@@@  main recv count ($chIn.len) ")
-    </inherit>
+    <include with $main_log on "@@@@@  main recv count ($chIn.len)" />
     <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
         <choose on $chIn.recv() silently>
-            <inherit>
-                $STREAM.stdout.writelines("@@@@@  main Got a message: $?")
-            </inherit>
+            <include with $main_log on "@@@@@  main Got a message: $?" />
             <test with $L.streq('caseless', 'object', $DATA.type($?))>
                 <test on $?.type>
                     <match for "AS 'lockscreenState'" exclusively>
@@ -97,14 +96,8 @@
 </observe>
 
 <observe on '.time-to-lock-screen' for 'click'>
-        <inherit>
-            $STREAM.stdout.writelines("@@@@@  #####################################################click $?.originValue")
-        </inherit>
     <test with $L.ne($main_data.lockscreenTimeout, $?.originValue) >
-        <inherit>
-            $STREAM.stdout.writelines("@@@@@ Changing time-to-lock to $2?.originValue $2?.originId")
-        </inherit>
-
+        <include with $main_log on "@@@@@ Changing time-to-lock to $2?.originValue $2?.originId" />
         <update on "#theTimeToLockIcon{$main_data.lockscreenTimeout}" to 'displace' at 'attr.class' with 'd-none' />
         <update on "#theTimeToLockIcon{$2?.originValue}" to 'displace' at 'attr.class' with 'x-show' />
         <update on $main_data at '.lockscreenTimeout' with "$2?.originValue" />
@@ -133,9 +126,7 @@
 </observe>
 
 <observe on '#theMusicPlayer' for 'stateChange'>
-    <inherit>
-        $STREAM.stdout.writelines("@@@@@ stateChange")
-    </inherit>
+    <include with $main_log on "@@@@@ stateChange" />
     <choose on $?.originValue silently>
         <include with $post_event_to_lockscreen on $? />
         <test on $?.name>
@@ -147,9 +138,7 @@
 </observe>
 
 <observe on $CRTN for "rdrState:newRenderer">
-    <inherit>
-        $STREAM.stdout.writelines("@@@@@ switch to new rdr")
-    </inherit>
+    <include with $main_log on "@@@@@ switch to new rdr" />
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
 

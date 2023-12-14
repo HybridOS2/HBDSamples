@@ -24,10 +24,16 @@
     ]
 </init>
 
-<define as 'post_event_to_main' at="_topmost">
+<define as 'logger' at="_topmost">
     <inherit>
-        $STREAM.stdout.writelines("##### lockscreen post event: $?  $SYS.time")
+    <!--
+        $STREAM.stdout.writelines("$?")
+    -->
     </inherit>
+</define>
+
+<define as 'post_event_to_main' at="_topmost">
+    <include with $logger on "##### lockscreen post event: $?  $SYS.time" />
     <test with $lockscreen_option.enablePostEvent >
         <request on="/-/main/CHAN/chanMain" to="post" with=$2? />
     </test>
@@ -58,9 +64,7 @@
 </define>
 
 <define as 'on_lockscreen_event' at="_topmost">
-    <inherit>
-        $STREAM.stdout.writelines("##### on_lockscreen_event: $?")
-    </inherit>
+    <include with $logger on "##### on_lockscreen_event: $?" />
     <test on $?.name>
         <match for "AS 'enableUnlock'" exclusively>
             <update on "$lockscreen_option" at '.enableUnlock' with true />
@@ -91,9 +95,7 @@
 </define>
 
 <define as 'on_music_player_event' at="_topmost">
-    <inherit>
-        $STREAM.stdout.writelines("##### on_music_player_event: $?")
-    </inherit>
+    <include with $logger on "##### on_music_player_event: $?" />
     <test on $?.name>
         <match for "AS 'playerState'" exclusively>
             <test on $3?.playState>
@@ -143,20 +145,14 @@
 </define>
 
 <observe on $chIn for 'receivable'>
-    <inherit>
-        $STREAM.stdout.writelines("#####  lockscreen recv count ($chIn.len) ")
-    </inherit>
+    <include with $logger on "#####  lockscreen recv count ($chIn.len) " />
     <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
         <choose on $chIn.recv() silently>
-            <inherit>
-                $STREAM.stdout.writelines("#####  lockscreen Got a message: $?")
-            </inherit>
+            <include with $logger on "#####  lockscreen Got a message: $? " />
             <test with $L.streq('caseless', 'object', $DATA.type($?))>
                 <test on $?.type>
                     <match for "AS 'weather'" exclusively>
-                        <inherit>
-                            $STREAM.stdout.writelines("##### Got a weather change message: $3?.value.wea_img")
-                        </inherit>
+                        <include with $logger on "##### Got a weather change message: $3?.value.wea_img" />
 
                         <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
                         <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
@@ -231,23 +227,17 @@
 </observe>
 
 <observe on '#theLockScreen' for 'locked'>
-    <inherit>
-        $STREAM.stdout.writelines("##### screen locked")
-    </inherit>
+    <include with $logger on "##### screen locked" />
 </observe>
 
 <observe on '#theLockScreen' for 'unlocked'>
-    <inherit>
-        $STREAM.stdout.writelines("##### screen unlocked")
-    </inherit>
+    <include with $logger on "##### screen unlocked" />
 </observe>
 
 <observe on '.time-to-lock-screen' for 'click'>
     <choose on $DOC.query("#theLockScreen").attr('data-time-to-lock') >
         <test with $L.ne($?, $2?.originValue) >
-            <inherit>
-                $STREAM.stdout.writelines("##### Changing time-to-lock to $3?.originValue $3?.originId")
-            </inherit>
+            <include with $logger on "##### Changing time-to-lock to $3?.originValue $3?.originId" />
 
             <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.originValue" />
             <request on "#theTimeToLock{$?} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
@@ -261,46 +251,34 @@
     <test with $lockscreen_option.enableUnlock >
         <include with $unlock />
         <differ>
-            <inherit>
-                $STREAM.stdout.writelines("##### not allow unlock")
-            </inherit>
+            <include with $logger on "##### not allow unlock" />
         </differ>
     </test>
 </observe>
 
 
 <observe on '.music-switch-to-prev' for 'click'>
-    <inherit>
-        $STREAM.stdout.writelines("##### music-switch-to-prev clicked")
-    </inherit>
+    <include with $logger on "##### music-switch-to-prev clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
 </observe>
 
 <observe on '.music-switch-to-next' for 'click'>
-    <inherit>
-        $STREAM.stdout.writelines("##### music-switch-to-next clicked")
-    </inherit>
+    <include with $logger on "##### music-switch-to-next clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
 </observe>
 
 <observe on '.music-play-or-pause' for 'click'>
-    <inherit>
-        $STREAM.stdout.writelines("##### music-play-or-pause clicked")
-    </inherit>
+    <include with $logger on "##### music-play-or-pause clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
 </observe>
 
 <observe on '.range-for-music-volume' for 'change'>
-    <inherit>
-        $STREAM.stdout.writelines("##### music-player volume change $?.targetValue")
-    </inherit>
+    <include with $logger on "##### music-player volume change $?.targetValue" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'volume', 'value':$?.targetValue} />
 </observe>
 
 <observe on '#id__volume__mute' for 'click'>
-    <inherit>
-        $STREAM.stdout.writelines("##### music-player volumn mute")
-    </inherit>
+    <include with $logger on "##### music-player volumn mute" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'mute'} />
 </observe>
 
@@ -310,13 +288,10 @@
 </observe>
 
 <observe on $CRTN for 'rdrState:idle' >
-    <inherit>
-        $STREAM.stdout.writelines("##### idle $? ")
-    </inherit>
+    <include with $logger on "##### idle $? " />
     <test with $L.and($L.ge($?, $lockscreen_option.lockTimeOut), $L.not($lockscreen_option.locked)) >↵
         <include with $lock />
-        <inherit>
-            $STREAM.stdout.writelines("##### idle $? call locked")
-        </inherit>
+        <include with $logger on "##### idle $? call locked" />
     </test>
 </observe>
+
