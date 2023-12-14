@@ -22,10 +22,11 @@
         </div>
       </div>
 
-      <div class="d-flex gears" id="theLevel4AirPurifier$roomName" data-current-level="LevelTwo">
+      <div class="d-flex gears" id="theLevel4AirPurifier$roomName" data-current-level="$main_data.airPurifierLevel">
         <div class="gear level-for-air-purifier" id="theLevelOne4AirPurifier$roomName" name="$roomName" value="LevelOne" hvml-events="click">一档</div>
-        <div class="gear level-for-air-purifier text-bg-primary" id="theLevelTwo4AirPurifier$roomName" name="$roomName" value="LevelTwo" hvml-events="click">二档</div>
+        <div class="gear level-for-air-purifier" id="theLevelTwo4AirPurifier$roomName" name="$roomName" value="LevelTwo" hvml-events="click">二档</div>
         <div class="gear level-for-air-purifier" id="theLevelThree4AirPurifier$roomName" name="$roomName" value="LevelThree" hvml-events="click">三档</div>
+        <update on "#the{$main_data.airPurifierLevel}4AirPurifier$roomName" to 'displace' at 'attr.class' with 'gear level-for-air-purifier text-bg-primary' />
       </div>
 
     </div>

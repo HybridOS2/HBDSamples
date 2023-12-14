@@ -99,6 +99,7 @@ list:
                 "airConditionerStyleWidth": "50%",
                 "dimmerLightness": "80",
                 "dimmerLightnessStyleWidth": "80%",
+                "airPurifierLevel": "LevelTwo",
             }
         </init>
 

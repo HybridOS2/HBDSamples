@@ -3,12 +3,10 @@
         $STREAM.stdout.writelines("Level $?.targetValue of air purifier for $?.targetName clicked")
     </inherit>
 
-    <init as 'currentLevel' with $DOC.query("#theLevel4AirPurifier$?.targetName").attr('data-current-level') temp />
-
-    <test with $L.strne('caseless', $currentLevel, $?.targetValue) >
-        <request on "#the{$currentLevel}4AirPurifier$?.targetName" to 'call:ELEMENT.classList.remove(ARG)' with 'text-bg-primary' noreturn />
-        <update on "#theLevel4AirPurifier$?.targetName" to 'displace' at 'attr.data-current-level' with $?.targetValue />
-        <request on "#the{$?.targetValue}4AirPurifier$?.targetName" to 'call:ELEMENT.classList.add(ARG)' with 'text-bg-primary' noreturn />
+    <test with $L.strne('caseless', $main_data.airPurifierLevel, $?.targetValue) >
+        <update on "#the{$main_data.airPurifierLevel}4AirPurifier$?.targetName" to 'displace' at 'attr.class' with 'gear level-for-air-purifier' />
+        <update on "#the{$?.targetValue}4AirPurifier$?.targetName" to 'displace' at 'attr.class' with 'gear level-for-air-purifier text-bg-primary' />
+        <update on $main_data at '.airPurifierLevel' with "$?.targetValue" />
     </test>
 </observe>
 
