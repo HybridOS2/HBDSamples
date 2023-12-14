@@ -115,6 +115,12 @@
 
 <observe on '#mainContent' for 'load'>
     <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'enableUnlock'} />
+    <test with $music_info.playing >
+        <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+        <request on "#theMusicPlayer" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
+        <update on $music_info at '.playing' with true />
+        <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
+    </test>
 </observe>
 
 <observe on '.switch-theme-to-dark' for 'click'>
