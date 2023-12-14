@@ -13,9 +13,9 @@
     </test>
 
     <div class="d-flex justify-content-between pt-3 pb-3">
-        <label for="theRange4Curtain$roomName" class="form-label text-primary fs-1 me-2" id="theCurtainValue$roomName">20%</label>
+        <label for="theRange4Curtain$roomName" class="form-label text-primary fs-1 me-2" id="theCurtainValue$roomName">$main_data.curtainRange%</label>
         <input type="range" class="form-range fs-1 mt-2 range-for-curtain" id="theRange4Curtain$roomName" name="$roomName"
-                min="0" max="100" value="20" step="10" hvml-events="change" />
+                min="0" max="100" value="$main_data.curtainRange" step="10" hvml-events="change" />
     </div>
 </div>
 

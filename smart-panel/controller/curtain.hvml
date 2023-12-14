@@ -4,6 +4,7 @@
     </inherit>
 
     <update on "#theCurtainValue$?.targetName" at 'textContent' with "$?.targetValue%" />
+    <update on $main_data at '.curtainRange' with "$?.targetValue" />
 </observe>
 
 <observe on '.time-to-open-curtain' for 'change'>

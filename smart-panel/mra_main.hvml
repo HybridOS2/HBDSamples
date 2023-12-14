@@ -92,6 +92,12 @@ list:
 }
         </init>
 
+        <init as 'main_data' at '_runner'>
+            {
+                "curtainRange": "30"
+            }
+        </init>
+
         <init as chIn with {{ $RUNNER.chan(! "chanMain", 10 ) && $RUNNER.chan( "chanMain" ) }} at '_topmost' />↵
     </head>
 
