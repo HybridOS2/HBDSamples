@@ -31,6 +31,7 @@
         <init as 'lockscreen_option' at '_runner'>
             {
                 "locked":true,
+                "lockTimeOut": 10,
                 "enableUnlock": false,
                 "enablePostEvent": $REQ.enablePostEvent
             }

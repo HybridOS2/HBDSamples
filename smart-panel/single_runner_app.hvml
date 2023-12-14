@@ -100,6 +100,7 @@ list:
                 "dimmerLightness": "80",
                 "dimmerLightnessStyleWidth": "80%",
                 "airPurifierLevel": "LevelTwo",
+                "lockscreenTimeout": "10",
             }
         </init>
 

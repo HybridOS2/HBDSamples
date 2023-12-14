@@ -97,18 +97,20 @@
 </observe>
 
 <observe on '.time-to-lock-screen' for 'click'>
-    <choose on $DOC.query("#mainContent").attr('data-time-to-lock') >
-        <test with $L.ne($?, $2?.originValue) >
-            <inherit>
-                $STREAM.stdout.writelines("@@@@@ Changing time-to-lock to $3?.originValue $3?.originId")
-            </inherit>
+        <inherit>
+            $STREAM.stdout.writelines("@@@@@  #####################################################click $?.originValue")
+        </inherit>
+    <test with $L.ne($main_data.lockscreenTimeout, $?.originValue) >
+        <inherit>
+            $STREAM.stdout.writelines("@@@@@ Changing time-to-lock to $2?.originValue $2?.originId")
+        </inherit>
 
-            <update on '#mainContent' at 'attr.data-time-to-lock' with "$3?.originValue" />
-            <request on "#theTimeToLock{$?} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
-            <request on "#$3?.originId span" to 'call:ELEMENT.classList.remove(ARG)' with 'd-none' noreturn />
-        </test>
-    </choose>
+        <update on "#theTimeToLockIcon{$main_data.lockscreenTimeout}" to 'displace' at 'attr.class' with 'd-none' />
+        <update on "#theTimeToLockIcon{$2?.originValue}" to 'displace' at 'attr.class' with 'x-show' />
+        <update on $main_data at '.lockscreenTimeout' with "$2?.originValue" />
 
+        <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'timeOut', 'data':$2?.originValue} />
+    </test>
 </observe>
 
 <observe on '#mainContent' for 'load'>

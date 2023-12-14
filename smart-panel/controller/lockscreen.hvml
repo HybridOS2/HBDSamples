@@ -81,6 +81,9 @@
             <update on $theme_option at ".user" with 2L />
             <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
         </match>
+        <match for "AS 'timeOut'" exclusively>
+            <update on "$lockscreen_option" at '.lockTimeOut' with $3?.data />
+        </match>
 
         <match for="ANY">
         </match>
@@ -310,7 +313,7 @@
     <inherit>
         $STREAM.stdout.writelines("##### idle $? ")
     </inherit>
-    <test with $L.and($L.ge($?, 10), $L.not($lockscreen_option.locked)) >↵
+    <test with $L.and($L.ge($?, $lockscreen_option.lockTimeOut), $L.not($lockscreen_option.locked)) >↵
         <include with $lock />
         <inherit>
             $STREAM.stdout.writelines("##### idle $? call locked")

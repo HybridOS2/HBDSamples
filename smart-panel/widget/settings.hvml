@@ -60,7 +60,7 @@
     <ul class="list-group mb-5">
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="5" id="theTimeToLock5" hvml-events="click">
         5 秒
-        <span class="d-none">
+        <span id="theTimeToLockIcon5" class="d-none">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
                 <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
             </svg>
@@ -68,7 +68,7 @@
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="10" id="theTimeToLock10" hvml-events="click">
         10 秒
-        <span>
+        <span id="theTimeToLockIcon10" class="d-none">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
                 <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
             </svg>
@@ -76,13 +76,15 @@
       </li>
       <li class="list-group-item d-flex justify-content-between align-items-center time-to-lock-screen" value="30" id="theTimeToLock30" hvml-events="click">
         30 秒
-        <span class="d-none">
+        <span id="theTimeToLockIcon30" class="d-none">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
                 <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
             </svg>
         </span>
       </li>
     </ul>
+
+    <update on "#theTimeToLockIcon{$main_data.lockscreenTimeout}" to 'displace' at 'attr.class' with 'x-show' />
 
     <h6>锁屏小构件</h6>
     <ul class="list-group mb-5">
