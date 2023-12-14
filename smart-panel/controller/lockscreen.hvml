@@ -41,6 +41,7 @@
         }
     }
     </request>
+    <update on "$lockscreen_option" at '.locked' with false />
     <include with $post_event_to_main on {'type':'lockscreenState', 'name':'unlock'} />
 </define>
 
@@ -52,6 +53,7 @@
         }
     }
     </request>
+    <update on "$lockscreen_option" at '.locked' with true />
     <include with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
 </define>
 
@@ -139,10 +141,13 @@
 
 <observe on $chIn for 'receivable'>
     <inherit>
-        $STREAM.stdout.writelines("#####  lockscreen recv count ($chIn.len) msg is : $?")
+        $STREAM.stdout.writelines("#####  lockscreen recv count ($chIn.len) ")
     </inherit>
     <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
         <choose on $chIn.recv() silently>
+            <inherit>
+                $STREAM.stdout.writelines("#####  lockscreen Got a message: $?")
+            </inherit>
             <test with $L.streq('caseless', 'object', $DATA.type($?))>
                 <test on $?.type>
                     <match for "AS 'weather'" exclusively>
@@ -301,3 +306,14 @@
     <include with $unlock />
 </observe>
 
+<observe on $CRTN for 'rdrState:idle' >
+    <inherit>
+        $STREAM.stdout.writelines("##### idle $? ")
+    </inherit>
+    <test with $L.and($L.ge($?, 10), $L.not($lockscreen_option.locked)) >↵
+        <include with $lock />
+        <inherit>
+            $STREAM.stdout.writelines("##### idle $? call locked")
+        </inherit>
+    </test>
+</observe>

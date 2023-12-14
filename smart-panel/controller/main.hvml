@@ -11,11 +11,12 @@
     </inherit>
     <test on $?.name>
         <match for "AS 'lock'" exclusively>
-            <request on '#mainContent' to="call:stop_lockscreen_timer()" noreturn />
+            <request on '#mainContent' to="call:enable_post_music_event()" noreturn />
         </match>
         <match for "AS 'unlock'" exclusively>
-            <request on '#mainContent' to="call:start_lockscreen_timer()" noreturn />
+            <request on '#mainContent' to="call:disable_post_music_event()" noreturn />
         </match>
+
         <match for "AS 'autoSwitchThemeLight'" exclusively>
             <request on '.switch-theme-to-light' to 'call:ELEMENT.classList.add("active")' noreturn />
             <request on '.switch-theme-to-dark' to 'call:ELEMENT.classList.remove("active")' noreturn />
@@ -63,12 +64,12 @@
 
 <observe on $chIn for 'receivable'>
     <inherit>
-        $STREAM.stdout.writelines("@@@@@  main recv count ($chIn.len) msg is : $?")
+        $STREAM.stdout.writelines("@@@@@  main recv count ($chIn.len) ")
     </inherit>
     <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
         <choose on $chIn.recv() silently>
             <inherit>
-                $STREAM.stdout.writelines("@@@@@  main Got a message: $?.type")
+                $STREAM.stdout.writelines("@@@@@  main Got a message: $?")
             </inherit>
             <test with $L.streq('caseless', 'object', $DATA.type($?))>
                 <test on $?.type>
@@ -123,6 +124,9 @@
 </observe>
 
 <observe on '#theMusicPlayer' for 'stateChange'>
+    <inherit>
+        $STREAM.stdout.writelines("@@@@@ stateChange")
+    </inherit>
     <choose on $?.originValue silently>
         <include with $post_event_to_lockscreen on $? />
     </choose>
