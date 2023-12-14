@@ -17,6 +17,9 @@
             <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'textContent' with "$targetLightness%" />
             <update on "#theDimmerLightnessFor$?.originName" to 'displace' at 'attr.style' with "width: $targetLightness%" />
 
+            <update on $main_data at '.dimmerLightness' with "$targetLightness" />
+            <update on $main_data at '.dimmerLightnessStyleWidth' with "$targetLightness%" />
+
             <test with $L.eq($targetLightness, 85L) >
                 <request on "#theDimmerLightnessFor$?.originName" to='call:ELEMENT.classList.replace("bg-success", ARG)' with 'bg-warning' noreturn />
             </test>

@@ -97,6 +97,8 @@ list:
                 "curtainRange": "30",
                 "airConditionerTemp": "25",
                 "airConditionerStyleWidth": "50%",
+                "dimmerLightness": "80",
+                "dimmerLightnessStyleWidth": "80%",
             }
         </init>
 
