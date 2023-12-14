@@ -58,6 +58,7 @@
 {
 playing: false,
 current: 0L,
+currentTime: 0.0,
 list:
     [
         {

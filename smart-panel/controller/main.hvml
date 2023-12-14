@@ -120,6 +120,7 @@
         <request on "#theMusicPlayer" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
         <update on $music_info at '.playing' with true />
         <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
+        <request on '#theMusicPlayer' to="call:ELEMENT.currentTime=ARG" with $music_info.currentTime noreturn />
     </test>
 </observe>
 
@@ -137,6 +138,11 @@
     </inherit>
     <choose on $?.originValue silently>
         <include with $post_event_to_lockscreen on $? />
+        <test on $?.name>
+            <match for "AS 'timeupdate'" exclusively>
+                <update on $music_info at '.currentTime' with $3?.currentTime />
+            </match>
+        </test>
     </choose>
 </observe>
 
