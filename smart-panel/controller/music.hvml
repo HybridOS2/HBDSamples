@@ -4,9 +4,9 @@
     </inherit>
 
     <update on $music_info at '.current' with $item />
-    <update on '.music-pic' at 'attr.src' with $music_info.list[$item].img />
-    <update on '.music-title' at 'textContent' with $music_info.list[$item].title />
-    <update on '.music-artist' at 'textContent' with $music_info.list[$item].artist />
+    <update on '#id_music_pic' at 'attr.src' with $music_info.list[$item].img />
+    <update on '#id_music_title' at 'textContent' with $music_info.list[$item].title />
+    <update on '#id_music_artist' at 'textContent' with $music_info.list[$item].artist />
     <update on '#theMusicPlayer' at 'attr.src' with $music_info.list[$item].src />
 
     <request on '#theMusicPlayer' to="call:reset_music_progress(ARG)" with '.music-play-progress' noreturn />
@@ -24,7 +24,7 @@
     <call on $switchToMusic with { item: $prev } />
 </define>
 
-<observe on '.music-switch-to-prev' for 'click'>
+<observe on '#id_music_switch_to_prev' for 'click'>
     <inherit>
         $STREAM.stdout.writelines("music-switch-to-prev clicked")
     </inherit>
@@ -38,7 +38,7 @@
     <call on $switchToMusic with { item: $next } />
 </define>
 
-<observe on '.music-switch-to-next' for 'click'>
+<observe on '#id_music_switch_to_next' for 'click'>
     <inherit>
         $STREAM.stdout.writelines("music-switch-to-next clicked")
     </inherit>
@@ -46,18 +46,18 @@
     <call on $switchToNextMusic />
 </observe>
 
-<observe on '.music-play-or-pause' for 'click'>
+<observe on '#id_music_play_or_pause' for 'click'>
     <inherit>
         $STREAM.stdout.writelines("music-play-or-pause clicked")
     </inherit>
 
     <test with $music_info.playing >
-        <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+        <request on "#id_music_pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
         <request on "#theMusicPlayer" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'false' noreturn />
         <update on $music_info at '.playing' with false />
         <request on '#theMusicPlayer' to="call:ELEMENT.pause()" noreturn />
         <differ>
-            <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+            <request on "#id_music_pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
             <request on "#theMusicPlayer" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
             <update on $music_info at '.playing' with true />
             <request on '#theMusicPlayer' to="call:ELEMENT.play()" noreturn />
@@ -70,7 +70,7 @@
         $STREAM.stdout.writelines("#theMusicPlayer play")
     </inherit>
 
-    <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+    <request on "#id_music_pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
 </observe>
 
 <observe on '#theMusicPlayer' for 'pause'>
@@ -78,7 +78,7 @@
         $STREAM.stdout.writelines("#theMusicPlayer pause")
     </inherit>
 
-    <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+    <request on "#id_music_pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
 </observe>
 
 <observe on '#theMusicPlayer' for 'ended'>

@@ -100,12 +100,12 @@
         <match for "AS 'playerState'" exclusively>
             <test on $3?.playState>
                 <match for "AS 'playing'" exclusively>
-                    <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
+                    <request on "#id_music_pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
                     <request on "#theLockScreen" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
                     <update on $music_info at '.playing' with true />
                 </match>
                 <match for "AS 'paused'" exclusively>
-                    <request on ".music-pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
+                    <request on "#id_music_pic" to='call:ELEMENT.classList.remove("animate-img")' noreturn />
                     <request on "#theLockScreen" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'false' noreturn />
                     <update on $music_info at '.playing' with false />
                 </match>
@@ -134,9 +134,9 @@
         </match>
 
         <match for "AS 'musicChange'" exclusively>
-            <update on '.music-pic' at 'attr.src' with $3?.img />
-            <update on '.music-title' at 'textContent' with $3?.title />
-            <update on '.music-artist' at 'textContent' with $3?.artist />
+            <update on '#id_music_pic' at 'attr.src' with $3?.img />
+            <update on '#id_music_title' at 'textContent' with $3?.title />
+            <update on '#id_music_artist' at 'textContent' with $3?.artist />
         </match>
 
         <match for="ANY">
@@ -272,17 +272,17 @@
 </observe>
 
 
-<observe on '.music-switch-to-prev' for 'click'>
+<observe on '#id_music_switch_to_prev' for 'click'>
     <include with $logger on "##### music-switch-to-prev clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
 </observe>
 
-<observe on '.music-switch-to-next' for 'click'>
+<observe on '#id_music_switch_to_next' for 'click'>
     <include with $logger on "##### music-switch-to-next clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
 </observe>
 
-<observe on '.music-play-or-pause' for 'click'>
+<observe on '#id_music_play_or_pause' for 'click'>
     <include with $logger on "##### music-play-or-pause clicked" />
     <include with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
 </observe>

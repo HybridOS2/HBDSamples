@@ -13,15 +13,15 @@
     </test>
 
     <div class="music-controller pt-1 pb-1">
-        <img class="music-pic" src="$music_info.list[$music_info.current].img" alt="" />
+        <img id='id_music_pic' class="music-pic" src="$music_info.list[$music_info.current].img" alt="" />
         <div class="music-info mx-2 overflow-hidden" style="width: 100px">
-            <span class="music-title align-text-top text-nowrap">$music_info.list[$music_info.current].title</span><br />
-            <span class="music-artist align-text-bottom text-nowrap">$music_info.list[$music_info.current].artist</span>
+            <span id='id_music_title' class="music-title align-text-top text-nowrap">$music_info.list[$music_info.current].title</span><br />
+            <span id='id_music_artist' class="music-artist align-text-bottom text-nowrap">$music_info.list[$music_info.current].artist</span>
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
 
-          <div class="music-switch-to-prev icon-btn me-2" hvml-events="click">
+          <div id='id_music_switch_to_prev' class="music-switch-to-prev icon-btn me-2" hvml-events="click">
             <div class="icon small">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
                     <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0V4z"/>
@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <div class="music-play-or-pause icon-btn me-2" hvml-events="click">
+          <div id='id_music_play_or_pause' class="music-play-or-pause icon-btn me-2" hvml-events="click">
             <div class="icon">
               <svg id="id_music_play_icon" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
                   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
@@ -41,7 +41,7 @@
             </div>
           </div>
 
-          <div class="music-switch-to-next icon-btn" hvml-events="click">
+          <div id='id_music_switch_to_next' class="music-switch-to-next icon-btn" hvml-events="click">
             <div class="icon small">
                 <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-skip-end-fill" viewBox="0 0 16 16">
                     <path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0V4z"/>
