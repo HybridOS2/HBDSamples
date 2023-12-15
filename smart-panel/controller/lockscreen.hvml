@@ -144,40 +144,55 @@
     </test>
 </define>
 
+<define as 'on_channel_event' at="_topmost">
+    <include with $logger on "#####  lockscreen Got a message: $? " />
+    <test on $?.type>
+        <match for "AS 'weather'" exclusively>
+            <include with $logger on "##### Got a weather change message: $3?.value.wea_img" />
+
+            <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
+            <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
+            <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
+            <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
+            <update on $running_state to 'displace' at '.bg_lockscreen' with $weather_map[$3?.value.wea_img][1] />
+            <request on '#theLockScreen' to 'call:ELEMENT.classList.add(ARG)' with $running_state.bg_lockscreen noreturn />
+        </match>
+
+        <match for "AS 'network'" exclusively>
+        </match>
+
+        <match for "AS 'lockscreen'" exclusively>
+            <include with $on_lockscreen_event on $3? />
+        </match>
+
+        <match for "AS 'musicPlayer'" exclusively>
+            <include with $on_music_player_event on $3? />
+        </match>
+
+        <match for="ANY">
+        </match>
+    </test>
+</define>
+
+<observe on $chIn for 'innerEvent'>
+    <include with $on_channel_event on $? />
+</observe>
+
 <observe on $chIn for 'receivable'>
     <include with $logger on "#####  lockscreen recv count ($chIn.len) " />
+    <init as 'dataArray' temp>
+        []
+    </init>
     <iterate on 1 onlyif $L.gt($chIn.len, 0) with 1L nosetotail>
         <choose on $chIn.recv() silently>
-            <include with $logger on "#####  lockscreen Got a message: $? " />
             <test with $L.streq('caseless', 'object', $DATA.type($?))>
-                <test on $?.type>
-                    <match for "AS 'weather'" exclusively>
-                        <include with $logger on "##### Got a weather change message: $3?.value.wea_img" />
-
-                        <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
-                        <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
-                        <update on '#theWeatherCity' to 'displace' at 'textContent' with $3?.value.city />
-                        <request on '#theLockScreen' to 'call:ELEMENT.classList.remove(ARG)' with $running_state.bg_lockscreen noreturn />
-                        <update on $running_state to 'displace' at '.bg_lockscreen' with $weather_map[$3?.value.wea_img][1] />
-                        <request on '#theLockScreen' to 'call:ELEMENT.classList.add(ARG)' with $running_state.bg_lockscreen noreturn />
-                    </match>
-
-                    <match for "AS 'network'" exclusively>
-                    </match>
-
-                    <match for "AS 'lockscreen'" exclusively>
-                        <include with $on_lockscreen_event on $3? />
-                    </match>
-
-                    <match for "AS 'musicPlayer'" exclusively>
-                        <include with $on_music_player_event on $3? />
-                    </match>
-
-                    <match for="ANY">
-                    </match>
-                </test>
+                <update on $dataArray to 'append' with $? />
             </test>
         </choose>
+    </iterate>
+
+    <iterate on $dataArray>
+        <include with $on_channel_event on $? />
     </iterate>
 </observe>
 
