@@ -11,7 +11,7 @@
         <div class="content">
             <span>$STR.substr($weatherSource.data[$?].date,5)</span>
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[$?].wea_img.svg" />
-            <span>$STR.join($weatherSource.data[$?].tem_day,'-',$weatherSource.data[$?].tem_night,'°C')</span>
+            <span>$STR.join($weatherSource.data[$?].tem_day,' - ',$weatherSource.data[$?].tem_night,'°C')</span>
         </div>
     </div>
 </archetype>
@@ -30,7 +30,7 @@
             </div> -->
             <div class="info">
                 <div style="line-height:40px" id="weather-info-city">$weatherData.city</div>
-                <div>$DATETIME.fmttime("%m月%d日")</div>
+                <div>$DATETIME.fmttime("%m月%d日",null,'Asia/Shanghai')</div>
                 <div style="font-size: 60px;font-family:heavt;">
                     <span id="weather-info-tem">27-18°C</span>
                     <span id="weather-info-wea">阴转晴</span>
@@ -67,9 +67,13 @@
 
     <update on="#weather-info-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherData.current.wea_img.svg" />
     <update on="#weather-info-city" at="textContent" with="$weatherData.city" />
-    <update on="#weather-info-tem" at="textContent" with="$STR.join($weatherData.current.tem_day,'-',$weatherData.current.tem_night,'°C')" />
+    <update on="#weather-info-tem" at="textContent" with="$STR.join($weatherData.current.tem_day,' - ',$weatherData.current.tem_night,'°C')" />
     <update on="#weather-info-wea" at="textContent" with="$weatherData.current.wea" />
     <request on="#weather-info" to="call:ELEMENT.style.background=ARG; return true" with "url('hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/background-$weatherData.current.wea_img.jpg')" />
+    
+    <update on "$wifiInfo" at=".canDeviceChange" with="true" />
+    <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "none" />
+    
 </observe>
 
 <observe on="#weather-info-goBack" for="click">

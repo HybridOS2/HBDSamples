@@ -110,7 +110,11 @@
             {
                 "ssid":"",
                 "bssid":"",
-                "password":""
+                "password":"",
+                "levelIcon":"hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-0.png",
+                "keymgmt":"NONE",
+                "capabilities":"",
+                "passphrase":"",
             }
         </init>
 
@@ -208,11 +212,11 @@
             <update on="$clickTime" at=".timestamp" with="$SYS.time" />
         </observe>
 
-        <!--
+        
         <observe on "#all-body" for="newClick">
             <inherit>$STREAM.stdout.writelines($DATA.serialize($?))</inherit>
         </observe>
-        -->
+        
 
 
         <!-- **********************屏保事件 开始************************** -->
@@ -226,7 +230,7 @@
             <test with="$L.gt($clickTime.freetime,$clickTime.settingFreeTime)" >
                 <update on="$DOC.query('.screenSaver')" at="attr.class" with="dialog screenSaver popIn show" />
             </test>
-            <update on="$currentTimeInfo" to="displace" with {hourMin:$DATETIME.fmttime('%H:%M'),day:$DATETIME.fmttime("%m月%d日"),wday:$DATETIME.utctime().wday } />
+            <update on="$currentTimeInfo" to="displace" with {hourMin:$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai'),day:$DATETIME.fmttime("%m月%d日",null,'Asia/Shanghai'),wday:$DATETIME.utctime().wday } />
         </observe>
         <!-- **********************屏保事件 结束************************** -->
 
@@ -237,7 +241,7 @@
                     <test with $L.streq('case',$clockData[$?].open,'on')>
                         <iterate on="0" onlyif $L.lt($0<,$DATA.count($clockData[$2?]["week"])) with $DATA.arith('+',$0<,1) nosetotail>
                             <test with $L.eq($clockData[$3?][week][$?],$DATETIME.utctime().wday)>
-                                <test with $L.streq('case',$DATA.stringify($clockData[$4?].time),$DATA.stringify($DATETIME.fmttime('%H:%M')))>
+                                <test with $L.streq('case',$DATA.stringify($clockData[$4?].time),$DATA.stringify($DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')))>
                                     <!--
                                     <update on="$DOC.query('.clockingInfo')" at="attr.class" with="dialog clockingInfo popIn show" />
                                     <update on="#muisc-player-audio-source" at="attr.src" with="$clockUrl" />
@@ -273,9 +277,9 @@
                         {"id":"load","active":"off"}
                     ]
                 </update>
-
+                
                 <request on="#all-body" to="call:keyboardReady(); return true;" />
-
+                
                 <request on="#bottom-load" to="call:ELEMENT.style.visibility=ARG; return true" with "hidden" />
             </test>
             
@@ -302,11 +306,6 @@
             
             </test>
         </observe>
-        <!-- **********************加载页面 结束************************** -->
-
-
-
-
-            
+        <!-- **********************加载页面 结束************************** -->            
     </body>
 </hvml>

@@ -307,6 +307,7 @@ function keyboardReady(){
 
     //************************视频控件 开始************************
     var url = "https://files.fmsoft.cn/hvml/smartbox/mp4/708b22d7d52f4edba7c33d3d63612335.mp4"
+    var cover = ""
     var videoPlayer = videojs("my-video",{controlBar: {fullscreenToggle: false}});
     videoPlayer.ready(function(){
         videoPlayer.on("fullscreenchange", function(){
@@ -319,7 +320,10 @@ function keyboardReady(){
     document.querySelectorAll(".video-content .video-item").forEach((item)=>{
         item.addEventListener('click',function(evt){
             url = this.getAttribute('data')
+            cover = this.getAttribute('cover')
             videoPlayer.src(url)
+            document.querySelector("#my-video").setAttribute('poster',cover)
+            document.querySelector('.vjs-poster img').src = cover
             
             var muiscplayer = document.querySelector('#muisc-player-audio');
             muiscplayer.pause()
@@ -355,5 +359,24 @@ function reloadImg(){
     })
 }
 //**********************重载网络图片资源 结束*******************
+
+//**********************退回按钮 开始**************************
+function goBackPage(classname){
+    document.querySelector('.'+classname).className = "dialog popOut show "+classname
+}
+//**********************退回按钮 结束**************************
+
+//**********************wifi图标修改 **************************
+function changeWifiLoading(wifibssid){
+    // var wifiinfo = JSON.parse(wifiInfoStr);
+    // document.querySelector('#getNetTxt').textContent = wifibssid
+    document.querySelectorAll('#wifi-my-group .wifi-item').forEach((item)=>{
+        var bssid = item.getAttribute('id')
+        if(bssid == wifibssid){
+            item.childNodes[0].className = "wifi-icon"
+            item.childNodes[2].className = "wifi-icon hidden"
+        }
+    })
+}
 
 

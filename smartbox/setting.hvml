@@ -44,7 +44,10 @@
     </div>
 </div>
 <observe on="#setting-info-goBack" for="click">
+    <request on="#setting-info-goBack" to="call:goBackPage('setting'); return true;" />
+    <!--
     <update on="$DOC.query('.setting')" at="attr.class" with="dialog setting popOut show" />
+    -->
 </observe>
 
 <define as="settingWifi" from="file://$SYS.cwd/settingWifi.hvml" />

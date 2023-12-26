@@ -26,10 +26,9 @@
 
 <observe on=".photo-list .photo-content .photo-item" for="click">
     <init as index with $?.targetId />
-    
     <iterate on="$photoData">
-        <update on="$currentPhoto" to="displace" with="$?" />
-        <test with="$L.streq('case',$index,$currentPhoto.id)">
+        <test with="$L.streq('case',$index,$?.id)">
+            <update on="$currentPhoto" to="displace" with="$2?" />
             <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
         </test>
     </iterate>

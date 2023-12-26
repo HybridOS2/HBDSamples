@@ -10,7 +10,7 @@
     <div class="item-weather">
         <div>$STR.substr($weatherSource.data[$?].date,5)</div>
         <div><img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[$?].wea_img.svg" /></div>
-        <div>$STR.join($weatherSource.data[$?].tem_day,'-',$weatherSource.data[$?].tem_night,'°C')</div>
+        <div>$STR.join($weatherSource.data[$?].tem_day,' - ',$weatherSource.data[$?].tem_night,'°C')</div>
     </div>
 </archetype>
 
@@ -21,7 +21,7 @@
             <span><img id="main-index-wifi-icon" hvml-events="click"  style="width:120px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-0.png" /></span>
         </div>
 
-        <div><span id="time-span" class="time-span">$DATETIME.fmttime('%H:%M')</span></div>
+        <div><span id="time-span" class="time-span">$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')</span></div>
     </div>
     <div class="main-container popIn">
         <div class="menu">
@@ -47,11 +47,11 @@
                     <div class="content">
                         <img id="main-weather-icon" style="filter: invert(1);height:200px" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/qing.svg" />
                         <div style="margin: 20 0 0 32px;">
-                            <div style="font-size: 30px;">
+                            <div style="font-size: 30px;color:#fff">
                                 <div id="main-weather-city" style="line-height:45px;">武汉市</div>
-                                <div>$DATETIME.fmttime("%m月%d日")</div>
+                                <div>$DATETIME.fmttime("%m月%d日",null,'Asia/Shanghai')</div>
                             </div>
-                            <div style="font-size: 40px;font-family:heavt;">
+                            <div style="font-size: 40px;font-family:heavt;color:#fff">
                                 <span id="main-weather-tem">20-13°C </span>
                                 <span id="main-weather-wea">阵雨转大雨</span>
                             </div>
@@ -70,7 +70,7 @@
                         <div class="foot">
                             <div>
                                 <img style="width: 81px;height: 81px;margin-right: 33px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/menu-photo-icon.png" />
-                                <span style="font-size: 35px;font-family:heavt;">本地相册</span>
+                                <span style="font-size: 35px;font-family:heavt;color:#fff">本地相册</span>
                             </div>
                             <div style="display: grid;margin: 20px 0;">
                                 <div class="dot"></div>
@@ -91,7 +91,7 @@
 </div>
 
 <observe on="$TIMERS" for="expired:time-span">
-    <update on="#time-span" at="textContent" with="$DATETIME.fmttime('%H:%M')" />
+    <update on="#time-span" at="textContent" with="$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')" />
 </observe>
 
 <observe on=".main-index .head-container" for="click">
@@ -138,7 +138,7 @@
 
     <update on="#main-weather-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherMainData.current.wea_img.svg" />
     <update on="#main-weather-city" at="textContent" with="$weatherMainData.city" />
-    <update on="#main-weather-tem" at="textContent" with="$STR.join($weatherMainData.current.tem_day,'-',$weatherMainData.current.tem_night,'°C')" />
+    <update on="#main-weather-tem" at="textContent" with="$STR.join($weatherMainData.current.tem_day,' - ',$weatherMainData.current.tem_night,'°C')" />
     <update on="#main-weather-wea" at="textContent" with="$weatherMainData.current.wea" />
 </observe>
 <!-- **************天气接口事件 结束******************* -->
@@ -161,7 +161,4 @@
 </observe>
 <observe on=".menu-time" for="click">
     <update on="$DOC.query('.clockList')" at="attr.class" with="dialog clockList popIn show" />
-</observe>
-<observe on="#main-index-wifi-icon" for="click">
-    <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog clockList popIn show" />
 </observe>

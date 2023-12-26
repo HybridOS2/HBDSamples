@@ -1,5 +1,5 @@
 <div class="setting-screen">
-    <div class="go-back" hvml-events="click" >
+    <div id="setting-goBack" class="go-back" hvml-events="click" >
         <img style="width:80px;" src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/go-back.png" />
     </div>
     <div class="setting-header">
@@ -34,7 +34,7 @@
     </div>
 </div>
 
-<observe on=".setting-screen .go-back" for="click">
+<observe on="#setting-goBack" for="click">
     <update on=".settingScreen" at="attr.class" with="dialog settingScreen popOut show" />
 </observe>
 

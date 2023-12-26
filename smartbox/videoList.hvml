@@ -1,6 +1,6 @@
 <init as "videoData" from "file://$SYS.cwd/json/video-data.json" />
 <archetype name="video_item">
-    <div id="$?.id" hvml-events="click" class="video-item" data="$?.url">
+    <div id="$?.id" hvml-events="click" class="video-item" data="$?.url" cover="$?.cover">
         <div class="video-cover">
             <img src="$?.cover" />
         </div>

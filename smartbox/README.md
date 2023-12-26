@@ -63,3 +63,9 @@ $ purc -c socket -d remote -a cn.fmsoft.hybridos.settings -r radio -v main.hvml 
 ```
 ## 初始化wifi
 删除 `/etc/wpa_supplicant-hbd.conf`中的内容
+
+## 更新
+1. wifi开启没有自动连接
+1. wifi加入的时候的loading提示
+1. wifi需要密码时有图标显示
+1. 处理wifi连接状态显示BUG

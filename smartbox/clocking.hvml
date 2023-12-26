@@ -2,7 +2,7 @@
     <div class="bg"></div>
     <div class="head-container"></div>
     <div class="content">
-        <div id="screenSaverTime" class="time">$DATETIME.fmttime('%H:%M')</div>
+        <div id="screenSaverTime" class="time">$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')</div>
         <div class="date-info">
            点击关闭闹钟
         </div>
@@ -12,7 +12,7 @@
 
 
 <observe on="$TIMERS" for="expired:time-span">
-    <update on="#screenSaverTime" at="textContent" with="$DATETIME.fmttime('%H:%M')" />
+    <update on="#screenSaverTime" at="textContent" with="$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')" />
 </observe>
 
 <observe on=".clocking-info" for="click">
@@ -21,6 +21,6 @@
 </observe>
 
 <observe against="weatherSource" for="change:displaced">
-    <update on="#screen-weather-tem" at="textContent" with="$STR.join($weatherSource.data[0].tem_day,'-',$weatherSource.data[0].tem_night,'°C')" />
+    <update on="#screen-weather-tem" at="textContent" with="$STR.join($weatherSource.data[0].tem_day,' - ',$weatherSource.data[0].tem_night,'°C')" />
     <update on="#screen-weather-icon" at="attr.src" with="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/weather/$weatherSource.data[0].wea_img.svg" />
 </observe>

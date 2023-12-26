@@ -1,4 +1,4 @@
-<div class="tools-top" hvml-events="click" >
+<div id="tools-top" class="tools-top" hvml-events="click" >
     <div class="set-control">
         <div class="tools-container">
             <div class="tools-select"></div>
@@ -64,7 +64,10 @@
 </div>
 
 <observe on=".tools-top" for="click">
+    <request on="#tools-top" to="call:goBackPage('toolsTop'); return true;" />
+    <!--
     <update on="$DOC.query('.toolsTop')" at="attr.class" with="dialog toolsTop popOut show" />
+    -->
 </observe>
 
 <observe on="#muisc-tool-img" for="muiscplay">

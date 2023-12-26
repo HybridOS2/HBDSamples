@@ -28,6 +28,9 @@
             <update on="$currentPhoto" to="displace" with="$photoData[$MATH.sub($photoIndex.index,1)]" />
         </differ>
     </test>
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentPhoto));
+    </inherit>
     <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
 </observe>
 
@@ -48,6 +51,9 @@
             <update on="$currentPhoto" to="displace" with="$photoData[$MATH.add($photoIndex.index,1)]" />
         </differ>
     </test>
+     <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($currentPhoto));
+    </inherit>
     <update on="#photo-view-img" at="attr.src" with="$currentPhoto.url" />
 </observe>
 

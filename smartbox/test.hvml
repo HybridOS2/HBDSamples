@@ -1,0 +1,34 @@
+<!DOCTYPE hvml SYSTEM 'f: MATH'>
+<hvml target="html">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1"/>
+        <link rel="stylesheet" href="//localhost/_renderer/_builtin/-/assets/bootstrap-5.1.3-dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="//localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.8.3/bootstrap-icons.css" />
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+    </head>
+    <body>
+        <update on="$TIMERS" to="unite">
+            [
+                {"id":"time-span","interval":1000,"active":"yes"},
+            ]
+        </update>
+
+        <div>
+            <span id="time-span" class="time-span">$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')</span>
+        </div>
+
+        
+        <inherit>
+            $STREAM.stdout.writelines($DATA.serialize($SYS.time))
+        </inherit>
+        <observe on="$TIMERS" for="expired:time-span">
+            
+            <update on="#time-span" at="textContent" with="$DATETIME.fmttime('%H:%M',null,'Asia/Shanghai')" />
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+    </body>
+</hvml>
