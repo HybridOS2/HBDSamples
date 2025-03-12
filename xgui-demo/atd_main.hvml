@@ -1,0 +1,93 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        </style>
+    </head>
+    
+    
+    
+    <body>
+        <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />
+        
+        <archetype name="pwd_piece">
+            <p>请输入用户名密码:</p>
+            <p>
+                <label>用户名:</label>
+                <input type="text" value="admin"/>
+            </p>
+            <p>
+                <label>密&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+                <input type="password" value="password"/>
+            </p>
+        </archetype>
+        
+        <archetype name="cert_piece">
+            <div id="cert_ok">
+                <img src="icon/link.png" width="70" height="70"/>
+            </div>
+        </archetype>
+        
+        <div id="main_pane">
+            <iterate on [ "home", "setting", "lock"] >
+                <img id="$?" class="top" src="icon/$?.png" width="40" height="40" hvml-events="click" />
+            </iterate>
+            <div id="day">
+                <p><span id="clock">$DATETIME.fmttime("%m月%e日 ")</span>
+                    <span id="week">$weeks[$DATETIME.localtime().wday]</span>
+                </p>
+                <p id="curr_time">
+                    $DATETIME.fmttime("%H:%M")
+                </p>
+            </div>
+            <div id="right-btn">
+                <iterate on [ "user", "weather", "go-back"] >
+                    <p>
+                    <img id="$?" class="top" src="icon/$?.png" width="60" height="60" hvml-events="click" />
+                    </p>
+                </iterate>
+            </div>
+            
+            <div id="center_pane">
+            </div>
+            
+        </div>
+        
+        <observe on="#go-back" for="click">
+            <load from 'atd_setting.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#home" for="click">
+            <load from 'atd_cert.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#setting" for="click">
+            <load from 'atd_cert.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#lock" for="click">
+            <update on "#center_pane" at "content" with $cert_piece /> 
+        </observe>
+                             
+        <observe on $TIMERS for "expired:clock">
+            <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
+            <update on "#week" at "textContent" to "displace" with "$weeks[$DATETIME.localtime().wday]" />
+            <update on "#curr_time" at "textContent" to "displace" with "$DATETIME.fmttime('%H:%M')" />
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

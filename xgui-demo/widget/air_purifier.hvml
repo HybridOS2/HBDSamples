@@ -1,0 +1,106 @@
+<div class="widget-block shadow mt-3 mb-3">
+    <test with $withTitle>
+        <div class="d-flex justify-content-between pt-3">
+          <h6>空气净化器-$roomName</h6>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4AirPurifier" aria-controls="offcanvas4AirPurifier">
+            <div class="ps-5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+            </div>
+          </a>
+        </div>
+    </test>
+
+    <div class="d-flex justify-content-between pt-3 pb-4">
+      <div class="icon-btn pe-3">
+        <div class="icon" hvml-events="click">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-power text-success" viewBox="0 0 16 16">
+              <path d="M7.5 1v7h1V1h-1z"/>
+              <path d="M3 8.812a4.999 4.999 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812z"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="d-flex gears" id="theLevel4AirPurifier$roomName" data-current-level="$main_data.airPurifierLevel">
+        <div class="gear level-for-air-purifier" id="theLevelOne4AirPurifier$roomName" name="$roomName" value="LevelOne" hvml-events="click">一档</div>
+        <div class="gear level-for-air-purifier" id="theLevelTwo4AirPurifier$roomName" name="$roomName" value="LevelTwo" hvml-events="click">二档</div>
+        <div class="gear level-for-air-purifier" id="theLevelThree4AirPurifier$roomName" name="$roomName" value="LevelThree" hvml-events="click">三档</div>
+        <update on "#the{$main_data.airPurifierLevel}4AirPurifier$roomName" to 'displace' at 'attr.class' with 'gear level-for-air-purifier text-bg-primary' />
+      </div>
+
+    </div>
+</div>
+
+<test with $withTitle>
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4AirPurifier" aria-labelledby="offcanvas4AirPurifierLabel">
+  <div class="offcanvas-header">
+    <h6 class="offcanvas-title" id="offcanvas4AirPurifierLabel">空气净化器-$roomName 设置</h6>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="ps-5">
+           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+               <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+           </svg>
+       </div>
+    </a>
+  </div>
+  <div class="offcanvas-body">
+
+    <h6>控制模式</h6>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        手动
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        定时
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        自动
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+    </ul>
+    <p class="mt-1 mb-5">根据空气质量自动开关空气净化器。</p>
+
+    <h6>自定时段</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-4">
+            <label for="timeAirPurifierOpen" class="col-form-label">开启</label>
+          </div>
+          <div class="col-8">
+            <input type="time" id="timeAirPurifierOpen" class="form-control" value="07:00" min="5:00" max="11:00" />
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item">
+        <div class="row">
+          <div class="col-4">
+            <label for="timeAirPurifierClose" class="col-form-label">关闭</label>
+          </div>
+          <div class="col-8">
+            <input type="time" id="timeAirPurifierClose" class="form-control" value="19:00" min="12:00" max="22:00" />
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+</div>
+</test>
+

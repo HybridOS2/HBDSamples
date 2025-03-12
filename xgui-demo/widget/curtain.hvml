@@ -1,0 +1,108 @@
+<div class="widget-block shadow mt-3 mb-3">
+    <test with $withTitle>
+        <div class="d-flex justify-content-between pt-3">
+          <h6>窗帘-$roomName</h6>
+          <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvas4Curtain" aria-controls="offcanvas4Curtain">
+            <div class="ps-5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+                    <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+                </svg>
+            </div>
+          </a>
+        </div>
+    </test>
+
+    <div class="d-flex justify-content-between pt-3 pb-3">
+        <label for="theRange4Curtain$roomName" class="form-label text-primary fs-1 me-2" id="theCurtainValue$roomName">$main_data.curtainRange%</label>
+        <input type="range" class="form-range fs-1 mt-2 range-for-curtain" id="theRange4Curtain$roomName" name="$roomName"
+                min="0" max="100" value="$main_data.curtainRange" step="10" hvml-events="change" />
+    </div>
+</div>
+
+<test with $withTitle>
+<div class="offcanvas offcanvas-end offcanvas-setting" tabindex="-1" id="offcanvas4Curtain" aria-labelledby="offcanvas4CurtainLabel">
+  <div class="offcanvas-header">
+    <h6 class="offcanvas-title" id="offcanvas4CurtainLabel">窗帘-$roomName 设置</h6>
+    <a href="#" data-bs-dismiss="offcanvas" aria-label="关闭">
+       <div class="ps-5">
+           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+               <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+           </svg>
+       </div>
+    </a>
+  </div>
+  <div class="offcanvas-body">
+
+    <h6>控制模式</h6>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        手动
+        <span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        定时
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        自动
+        <span class="d-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2 text-primary" viewBox="0 0 16 16">
+                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+            </svg>
+        </span>
+      </li>
+    </ul>
+    <p class="mt-1 mb-5">根据日落日出自动开关窗帘。</p>
+
+    <h6>自定时段</h6>
+    <ul class="list-group mb-5">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        开启
+        <div class="dropdown">
+          <a class="btn btn-outline dropdown-toggle time-to-open-curtain" id="theTimeToOpenCurtainFor$roomName" name="$roomName" value="07:00"
+                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            07:00
+          </a>
+          <div class="dropdown-menu p-4">
+            <hipicker tabindex="-1" type="integer" class="time hour" for="theTimeToOpenCurtainFor$roomName"
+                    value="7" min="0" max="23" step="1" endtoend="endtoend" width="100" height="200">
+            </hipicker>
+            <hipicker tabindex="-1" type="integer" class="time minute" for="theTimeToOpenCurtainFor$roomName"
+                    value="0" min="0" max="59" step="1" endtoend="endtoend" width="100" height="200">
+            </hipicker>
+          </div>
+        </div>
+      </li>
+
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        关闭
+        <div class="dropdown">
+          <a class="btn btn-outline dropdown-toggle time-to-close-curtain" id="theTimeToCloseCurtainFor$roomName" name="$roomName" value="07:00"
+                data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+            19:00
+          </a>
+          <div class="dropdown-menu p-4">
+            <hipicker tabindex="-1" type="integer" class="time hour" for="theTimeToCloseCurtainFor$roomName"
+                    value="19" min="0" max="23" step="1" endtoend="endtoend" width="100" height="200">
+            </hipicker>
+            <hipicker tabindex="-1" type="integer" class="time minute" for="theTimeToCloseCurtainFor$roomName"
+                    value="0" min="0" max="59" step="1" endtoend="endtoend" width="100" height="200">
+            </hipicker>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</div>
+</test>
+

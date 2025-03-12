@@ -1,0 +1,320 @@
+@charset "utf-8";
+
+.page_base {
+    --theme-font-size-xx-small: 11px;
+    --theme-font-size-x-small: 12px;
+    --theme-font-size-small: 14px;
+    --theme-font-size-medium: 16px;
+    --theme-font-size-normal: 18px;
+    --theme-font-size-x-normal: 20px;
+    --theme-font-size-large: 30px;
+    --theme-font-size-x-large: 50px;
+    --theme-font-size-xx-large: 60px;
+}
+
+a {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:visited {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:link {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:hover {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+a:active {
+    outline:none;
+    text-decoration: none;
+    color: var(--bs-secondary-color);
+}
+
+.bg-weather-cloud {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-cloud-h480.jpg");
+}
+
+.bg-weather-cloud-sun {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-cloud-sun-h480.jpg");
+}
+
+.bg-weather-fog {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-fog-h480.jpg");
+}
+
+.bg-weather-lightning {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-lightning-h480.jpg");
+}
+
+.bg-weather-rain {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-rain-h480.jpg");
+}
+
+.bg-weather-sandstorm {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-sandstorm-h480.jpg");
+}
+
+.bg-weather-sleet {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-sleet-h480.jpg");
+}
+
+.bg-weather-snow {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-snow-h480.jpg");
+}
+
+.bg-weather-sun {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/weather-sun-h480.jpg");
+}
+
+#theLockScreen {
+    background-color: #000000;
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+#theLockScreen .time {
+    font-size: var(--theme-font-size-xx-large);
+    font-weight: 100;
+}
+
+#theLockScreen .date {
+    font-size: var(--theme-font-size-normal);
+    font-weight: 600;
+}
+
+.widget-block {
+    width: 420px;
+    padding: 0 20px;
+    border-radius: 16px;
+    background: rgba(var(--bs-tertiary-bg-rgb), 0.75);
+}
+
+.music-controller {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.music-pic {
+    width: 66px;
+    height: 66px;
+    border-radius: 50%;
+    border: 2px solid var(--bs-border-color);
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-img {
+    animation: rotate 10s linear infinite;
+}
+
+.music-info {
+    width: 200px;
+    font-size: var(--theme-font-size-medium);
+}
+
+.message-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between !important;
+}
+
+.message-block .bubble-icon {
+    width: 66px;
+    height: 66px;
+    font-size: var(--theme-font-size-large);
+}
+
+.message-block .message-content {
+    width: 79%;
+}
+
+.message-block .message-title {
+    height: 60px;
+    width: 288px;
+    min-width: 0;
+    display:flex;
+    justify-content:left;
+    align-items:center;
+}
+
+#mainContent {
+    background-image: url("file:///app/cn.fmsoft.hybridos.smartcontrolpanel/exported/assets/img/bg-480x480.jpg");
+    background-attachment: fixed;
+    background-position: left top;
+    background-repeat: no-repeat;
+}
+
+.offcanvas-setting {
+    --bs-offcanvas-width:320px;
+}
+
+.turn-up {
+   transform: rotate(-90deg);
+}
+
+.turn-down {
+    transform: rotate(90deg);
+}
+
+.h-icon-btn-l {
+    height: 85px;
+    line-height: 85px;
+}
+
+.w-icon-btn-l {
+    width: 85px;
+}
+
+.icon-btn .icon {
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    width: 85px;
+    height: 85px;
+    line-height: 85px;
+    border-radius: 50%;
+    text-align: center;
+    background-color: var(--bs-secondary-bg);
+}
+
+.icon-btn .icon i {
+    font-size: var(--theme-font-size-large);
+}
+
+.icon-btn .icon.small {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
+
+.icon-btn .icon.small i {
+   font-size: var(--theme-font-size-normal);
+}
+
+.icon-btn .icon.active {
+   color: var(--bs-primary);
+}
+
+.icon-btn .name {
+    font-size: var(--theme-font-size-normal);
+    text-align: center;
+}
+
+.gears {
+    width: 74%;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-left: 16px;
+    border: 2px solid var(--bs-border-color);
+}
+
+.gear {
+    padding: 20px;
+    margin: 1px;
+    width: 33%;
+    text-align: center;
+    font-size: var(--theme-font-size-medium);
+}
+
+.text-shadow {
+    text-shadow: 1px 1px var(--bs-dark-bg-subtle);
+}
+
+.offcanvas-body h6 {
+    font-size: var(--theme-font-size-small);
+}
+
+.offcanvas-body .list-group-item {
+    font-size: var(--theme-font-size-x-small) !important;
+}
+
+.offcanvas-body p {
+    font-size: var(--theme-font-size-xx-small);
+}
+
+.offcanvas-body .dropdown {
+    --bs-dropdown-zindex:2000;
+}
+
+hipicker::-hi-picker-items {
+    font-size: var(--theme-font-size-x-small);
+    color: var(--bs-tertiary-color);
+    mask: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
+}
+
+hipicker.time {
+    display: inline-block;
+    width: 50px;
+    height: 180px;
+    outline: none;
+    overflow-y: auto;
+}
+
+hipicker.hour {
+    margin-right: 15px;
+    -hi-picker-rotate-y: 10deg;      /* 向右倾斜 10 度。*/
+    -hi-picker-damping-factor: 50;  /* 选项少，旋转速度低。*/
+}
+
+hipicker.minute {
+    margin-left: 15px;
+    -hi-picker-rotate-y: -10deg;      /* 向左倾斜 10 度。*/
+    -hi-picker-damping-factor: 100; /* 选项多，旋转速度高。*/
+}
+
+hipicker.hour::-hi-picker-selected,
+hipicker.minute::-hi-picker-selected {
+    color: var(--bs-secondary-color);
+    font-size: var(--theme-font-size-small);
+    border-style: solid none solid none;
+    border-width: 1px;
+    border-color: var(--bs-border-color);
+}
+
+hipicker.hour::-hi-picker-selected-after {
+    font-size: var(--theme-font-size-small);
+    content: "时";
+}
+
+hipicker.minute::-hi-picker-selected-after {
+    font-size: var(--theme-font-size-small);
+    content: "分";
+}
+
+.lockscreen__body {
+  flex-grow: 1;
+  padding-top: 1rem;
+  padding-bottom: 0.8rem;
+  overflow-y: auto;
+}
+
+.weather__icon {
+    filter:invert(1);
+    width: calc(1.375rem + 1.5vw);
+    height: calc(1.375rem + 1.5vw);
+}

@@ -1,0 +1,94 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        #go-back{
+            float:left;
+        }
+        #dpart-add{
+            float:right;
+        }
+        #title_h1{
+            margin-left:220px;
+            margin-top:5px;
+            font-size:2em;
+            width:200px;
+            height:50px;
+            float:left;
+        }
+        
+        #list_content{
+            margin-left:5px;
+            margin-top:0px;
+            width:630px;
+            height:200px;
+            position:relative;
+            top: 100px;
+        }
+        
+        .item > img{
+            float:right;
+        }
+        .item{
+            margin-left:12px;
+            width:600px;
+            height:40px;
+            font-size:24px;
+            text-align:left;
+            border-style: solid;
+            border-color:#FFFFFF;
+            border-width:2px;
+        }
+        </style>
+    </head>
+    
+    <body>
+        
+        <init as 'items' with [ "网络设置", "超时时间设置", "设备密码设置"] />
+        <div id="main_pane">
+            <img id="go-back" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div id="title_h1">系统设置</div>
+            <div id="list_content">
+                <div id="item-0" class="item" hvml-events="click" >
+                <img id="item-$?-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
+                <p>网络设置</p>
+                </div>
+                <div id="item-1" class="item" hvml-events="click" >
+                <img id="item-$?-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
+                <p>超时时间设置</p>
+                </div>
+                <div id="item-1" class="item" hvml-events="click" >
+                <img id="item-$?-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
+                <p>设备密码设置</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <observe on="#go-back" for="click">
+            <load from 'atd_main.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on=".item" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("item_index=$?")
+            </inherit>
+            <load from "$?.targetId.hvml" onto 'self:' />
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>
