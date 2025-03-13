@@ -3,8 +3,7 @@
 <init as 'scanTimes' at="_root" with 1 />
 <init as 'wifiList' with [] />
 <init as 'wifiMyList' with [] />
-<init as 'wifiArr' with [] />
-<init as 'wifiInfo' at="_runner">
+<init as 'wifiInfo'>
 {
     isWifiOpen:true,
     isConnected:false,
@@ -58,7 +57,7 @@
     <div class="setting-header">
         <div class="setting-title">
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/setting.png" />
-            <span id="getNetTxt">获取网络</span>
+            <span>获取网络</span>
         </div>
     </div>
     <div class="setting-content">
@@ -140,40 +139,18 @@
 <!-- *************WiFi列表渲染*********** -->
 <define as 'loadWifiList'>
     <test with "$L.gt($DATA.count($?),0)">
-        <update on "$wifiArr" to "displace" with [] />
         <update on "$wifiList" to "displace" with [] />
         <update on "$wifiMyList" to "displace" with [] />
         <update on "#wifi-other-group" at "content" to="displace" with ' ' />
         <update on "#wifi-my-group" at "content" to="displace" with ' ' />
     </test>
-
-    <iterate on $?>
-        <test with="$L.gt($DATA.count($wifiArr),0)">
-            <init as "uniqueFlag">
-                {
-                    "value":true
-                }
-            </init>
-            <iterate on $wifiArr>
-                <test with="$L.streq('case',$?.ssid,$3?.ssid)" >
-                    <update on "$uniqueFlag" at ".value" with false/>
-                </test>
-            </iterate>
-            <test with="$L.eq($uniqueFlag.value,true)">
-                <update on "$wifiArr" to "append" with $? />
-            </test>
-            <differ>
-                <update on "$wifiArr" to "append" with $? />
-            </differ>
-        </test>
-    </iterate>
-
     <inherit>
-        $STREAM.stdout.writelines("wifiArr:");
-        $STREAM.stdout.writelines($DATA.serialize($wifiArr));
+        $STREAM.stdout.writelines("测试我的wifi列表1");
+        $STREAM.stdout.writelines($DATA.serialize($wifiMyList));
+        $STREAM.stdout.writelines($DATA.serialize($?));
     </inherit>
 
-    <iterate on $wifiArr>
+    <iterate on $?>
         <test with="$L.eq($?.isSaved,false)">
             <update on "$wifiList" to "append" with $2? />
             <differ>
@@ -202,8 +179,7 @@
                 statusText:"",
                 statusClass:"label",
                 wifiClass:"hidden",
-                lockClass:"wifi-icon",
-                passphrase:""
+                lockClass:"wifi-icon"
             }
             </init>
 
@@ -256,8 +232,7 @@
                 statusText:"",
                 statusClass:"label",
                 wifiClass:"hidden",
-                loadingClass:"wifi-icon hidden",
-                passphrase:""
+                loadingClass:"wifi-icon hidden"
             }
             </init>
 
@@ -311,6 +286,9 @@
 <!-- ***********WiFi连接渲染************** -->
 <define as 'connectedWifi'>
     <init as 'wifiListTmp' with [] />
+    <!--
+    <init as="weatherSource" at="_runner" from="https://v0.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+    -->
     <iterate on $wifiList>
         
         <test with="$L.streq('case',$?.bssid,$2?.bssid)">
@@ -417,17 +395,15 @@
                         $STREAM.stdout.writelines('DeviceConfigured')
                     </inherit>
                     <call on $showBubbleData with $? >
-                        <!-- ****************修改wifi图标和文字***************** -->
                         <inherit>
                             $STREAM.stdout.writelines($DATA.serialize($?))
                             $STREAM.stdout.writelines("开始调用天气接口")
                             $STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))
+                            <init as 'weatherSource' at='_runner' with undefined />
+                            <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+                            <request on="#muisc-player-audio" to="call:reloadImg(); return true;" />
+                            <init as="netTimeTemp" at="_runner" from="http://api.m.taobao.com/rest/api3.do?api=mtop.common.getTimestamp" via="GET" async />
                         </inherit>
-                        <init as 'weatherSource' at='_runner' with undefined />
-                        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
-                        <request on="#muisc-player-audio" to="call:reloadImg(); return true;" />
-                        <update on "$wifiInfo" at=".canDeviceChange" with="false" />
-                        <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" />
                     </call>
                 </observe>
                 <!-- ***********适配器设置完成************* -->
@@ -482,12 +458,10 @@
                     <call on $showBubbleData with $?>
                         <update on $globalState at '.ssid' with $?.ssid />
                         <update on $wifiInfo at '.isConnected' with true />
-                        
+                        $STREAM.stdout.writelines("WiFi连接")
                         <inherit>
-                            $STREAM.stdout.writelines("WiFi连接")
                             $STREAM.stdout.writelines($DATA.serialize($?))
                         </inherit>
-
                         <call on $connectedWifi with $? />
                     </call>
                 </observe>
@@ -500,7 +474,6 @@
                             $STREAM.stdout.writelines($STR.join("WiFi热点已断开",$DATA.serialize($?)))
                         </inherit>
                         <update on $wifiInfo at '.isConnected' with false />
-                        
                         <call on $disconnectedWifi with $? />
                     </call>
                 </observe>
@@ -519,7 +492,6 @@
                 <!-- ****************无线信号强度发生变化********************* -->
                 <observe on $databus for 'event:WiFiSignalLevelChanged'>
                     <call on $showBubbleData with $?>
-
                         $STREAM.stdout.writelines("无线信号强度发生变化")
                         <inherit>
                             $STREAM.stdout.writelines($DATA.serialize($?))
@@ -538,9 +510,10 @@
                             <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
                         </test>
 
-                        <request on="#wifi-my-group" to="call:changeWifiLoading('$?.bssid'); return true;" />
-                        
-                       
+                        <update on "#$STR.join('wi-',$?.bssid)" at="attr.class" with="wifi-icon" />
+
+                        <update on "#$STR.join('loading-',$?.bssid)" at="attr.class" with="wifi-icon hidden" />
+                        <!-- ****************修改wifi图标和文字***************** -->
                     </call>
                 </observe>
                 <!-- ****************无线信号强度发生变化********************* -->
@@ -797,6 +770,7 @@
                     <update on="$DOC.query('.settingWifiPassword')" at="attr.class" with="dialog settingWifiPassword popIn show" />
                     <differ>
                         <update on="$currentWifiInfo" at=".keymgmt" with="NONE" />
+                        <update on="$currentWifiInfo" at=".passphrase" with="" />
                         <fire on $globalState for 'wifiConnect' with $currentWifiInfo />
                     </differ>
                 </test>
@@ -819,6 +793,7 @@
                     <update on="$DOC.query('.settingWifiPassword')" at="attr.class" with="dialog settingWifiPassword popIn show" />
                     <differ>
                         <update on="$currentWifiInfo" at=".keymgmt" with="NONE" />
+                        <update on="$currentWifiInfo" at=".passphrase" with="" />
                         <fire on $globalState for 'wifiConnect' with $currentWifiInfo />
                     </differ>
                 </test>
@@ -865,6 +840,8 @@
     <request on="#keyboardSubmit" to="call:goBackPage('settingWifiPassword'); return true;" />
 </observe>
 
-
-
-
+<observe against="netTimeTemp" for="change:displaced" >
+    <inherit>
+        $STREAM.stdout.writelines($DATA.serialize($SYS.time_us()));
+    </inherit>
+</observe>

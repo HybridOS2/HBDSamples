@@ -24,7 +24,10 @@
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/lock.png" />
         </div>
         <div class="$?.statusClass">
-            <div class="wifi-name">$?.ssid<span class="$?.wifiClass">【5G】</span></div>
+            <div class="wifi-name">
+                $?.ssid
+                <!-- <span class="$?.wifiClass">【5G】</span> -->
+            </div>
             <!-- <div class="wifi-status">$?.statusText</div> -->
         </div>
         <div class="icon">
@@ -39,7 +42,10 @@
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/link.png" />
         </div>
         <div class="$?.statusClass">
-            <div class="wifi-name">$?.ssid<span class="$?.wifiClass">【5G】</span></div>
+            <div class="wifi-name">
+                $?.ssid
+                <!-- <span class="$?.wifiClass">【5G】</span> -->
+            </div>
             <!-- <div class="wifi-status">$?.statusText</div> -->
         </div>
         <div id="loading-$?.bssid"  class="$?.loadingClass" >
@@ -146,32 +152,40 @@
         <update on "#wifi-other-group" at "content" to="displace" with ' ' />
         <update on "#wifi-my-group" at "content" to="displace" with ' ' />
     </test>
-
-    <iterate on $?>
-        <test with="$L.gt($DATA.count($wifiArr),0)">
-            <init as "uniqueFlag">
-                {
-                    "value":true
-                }
-            </init>
-            <iterate on $wifiArr>
-                <test with="$L.streq('case',$?.ssid,$3?.ssid)" >
-                    <update on "$uniqueFlag" at ".value" with false/>
+    <sort on=$? against="frequency" descendingly>
+        <iterate on $?>
+            <!--
+            <inherit>
+                $STREAM.stdout.writelines($DATA.serialize($?));
+            </inherit>
+            -->
+            <test with="$L.gt($DATA.count($wifiArr),0)">
+                <init as "uniqueFlag">
+                    {
+                        "value":true
+                    }
+                </init>
+                <iterate on $wifiArr>
+                    <test with="$L.streq('case',$?.ssid,$3?.ssid)" >
+                        <update on "$uniqueFlag" at ".value" with false/>
+                    </test>
+                </iterate>
+                <test with="$L.eq($uniqueFlag.value,true)">
+                    <update on "$wifiArr" to "append" with $? />
                 </test>
-            </iterate>
-            <test with="$L.eq($uniqueFlag.value,true)">
-                <update on "$wifiArr" to "append" with $? />
+                <differ>
+                    <update on "$wifiArr" to "append" with $? />
+                </differ>
             </test>
-            <differ>
-                <update on "$wifiArr" to "append" with $? />
-            </differ>
-        </test>
-    </iterate>
+        </iterate>
+    </sort>
 
+    
     <inherit>
         $STREAM.stdout.writelines("wifiArr:");
         $STREAM.stdout.writelines($DATA.serialize($wifiArr));
     </inherit>
+    
 
     <iterate on $wifiArr>
         <test with="$L.eq($?.isSaved,false)">
@@ -182,10 +196,12 @@
         </test>
     </iterate>
 
+    <!--
     <inherit>
         $STREAM.stdout.writelines($STR.join("wifiList",$DATA.serialize($DATA.count($wifiList))));
         $STREAM.stdout.writelines($STR.join("wifiMyList",$DATA.serialize($DATA.count($wifiMyList))));
     </inherit>
+    -->
     
     <sort on=$wifiList against="signalLevel" descendingly>
         <iterate on $?>
@@ -208,15 +224,15 @@
             </init>
 
             <!-- *****************wifi信号强度******************* -->
-            <test with="$L.ge($wifiItem.signalLevel,-33)">
+            <test with="$L.ge($wifiItem.signalLevel,-60)">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
             </test>
 
-            <test with="$L.le($wifiItem.signalLevel,-66)">
+            <test with="$L.le($wifiItem.signalLevel,-90)">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
             </test>
 
-            <test with="$L.and($L.lt($wifiItem.signalLevel,-33),$L.gt($wifiItem.signalLevel,-66))">
+            <test with="$L.and($L.lt($wifiItem.signalLevel,-60),$L.gt($wifiItem.signalLevel,-90))">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
             </test>
             <!-- *****************wifi信号强度******************* -->
@@ -262,15 +278,15 @@
             </init>
 
             <!-- *****************wifi信号强度******************* -->
-            <test with="$L.ge($wifiItem.signalLevel,-33)">
+            <test with="$L.ge($wifiItem.signalLevel,-60)">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
             </test>
 
-            <test with="$L.le($wifiItem.signalLevel,-66)">
+            <test with="$L.le($wifiItem.signalLevel,-90)">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
             </test>
 
-            <test with="$L.and($L.lt($wifiItem.signalLevel,-33),$L.gt($wifiItem.signalLevel,-66))">
+            <test with="$L.and($L.lt($wifiItem.signalLevel,-60),$L.gt($wifiItem.signalLevel,-90))">
                 <update on "$wifiItem" at ".levelIcon" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
             </test>
             <!-- *****************wifi信号强度******************* -->
@@ -526,15 +542,15 @@
                         </inherit>
                         
                         <!-- ****************修改wifi图标和文字***************** -->
-                        <test with="$L.ge($?.signalLevel,-33)">
+                        <test with="$L.ge($?.signalLevel,-60)">
                             <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-3.png" />
                         </test>
 
-                        <test with="$L.le($?.signalLevel,-66)">
+                        <test with="$L.le($?.signalLevel,-90)">
                             <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-1.png" />
                         </test>
 
-                        <test with="$L.and($L.lt($?.signalLevel,-33),$L.gt($?.signalLevel,-66))">
+                        <test with="$L.and($L.lt($?.signalLevel,-60),$L.gt($?.signalLevel,-90))">
                             <update on "#main-index-wifi-icon" at "attr.src" with "hvml://localhost/_system/_filesystem/-$SYS.cwd/static/wifi-level-2.png" />
                         </test>
 

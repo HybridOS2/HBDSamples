@@ -16,7 +16,7 @@
 
 <archetype name="muisc_item">
     <li class="list-group-item" id="$?.id" hvml-events="click" value="$?.title">
-        <div class="content-item">
+        <div class="content-item muisc-cover">
             <img src="$?.cover" />
             <div class="author">
                 <div>$?.title</div>

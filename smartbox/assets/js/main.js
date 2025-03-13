@@ -55,8 +55,7 @@ function keyboardReady(){
         }
     })
     document.querySelectorAll('.keyboardContent ul li').forEach((item) => {
-
-        item.addEventListener('click', function (evt) {
+        item.onclick = function (evt) {
             content = document.querySelector('.setting-wifi-password .input').value;
             switch (item.textContent) {
                 case 'back':
@@ -117,7 +116,7 @@ function keyboardReady(){
                     break;
             }
             document.querySelector('.setting-wifi-password .input').value = content
-        })
+        }
     })
     //**************************键盘事件 结束************************
 
@@ -357,6 +356,9 @@ function reloadImg(){
     document.querySelectorAll('.video-cover img').forEach((item)=>{
         item.src = item.src.replace(/&r=\d+/, "&r="+ ~~(Math.random()*1e7));
     })
+    document.querySelectorAll('.muisc-cover img').forEach((item)=>{
+        item.src = item.src.replace(/&r=\d+/, "&r="+ ~~(Math.random()*1e7));
+    })
 }
 //**********************重载网络图片资源 结束*******************
 
@@ -377,6 +379,17 @@ function changeWifiLoading(wifibssid){
             item.childNodes[2].className = "wifi-icon hidden"
         }
     })
+}
+
+function changePassword(){
+    var password_type = document.querySelector("#wifi-password").type;
+    if(password_type == 'password'){
+        document.querySelector("#wifi-password").type = 'text';
+        document.querySelector('#passwordEye img').src = "hvml://localhost/_system/_filesystem/-/app/smartbox/static/eye-open.png"
+    }else{
+        document.querySelector("#wifi-password").type = 'password';
+        document.querySelector('#passwordEye img').src = "hvml://localhost/_system/_filesystem/-/app/smartbox/static/eye-close.png"
+    }
 }
 
 

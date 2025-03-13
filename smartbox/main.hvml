@@ -212,11 +212,11 @@
             <update on="$clickTime" at=".timestamp" with="$SYS.time" />
         </observe>
 
-        
+        <!--
         <observe on "#all-body" for="newClick">
             <inherit>$STREAM.stdout.writelines($DATA.serialize($?))</inherit>
         </observe>
-        
+        -->
 
 
         <!-- **********************屏保事件 开始************************** -->
