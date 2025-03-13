@@ -39,9 +39,6 @@
         </archetype>
         
         <div id="main_pane">
-            <iterate on [ "home", "setting", "lock"] >
-                <img id="$?" class="top" src="icon/$?.png" width="40" height="40" hvml-events="click" />
-            </iterate>
             <div id="day">
                 <p><span id="clock">$DATETIME.fmttime("%m月%e日 ")</span>
                     <span id="week">$weeks[$DATETIME.localtime().wday]</span>
@@ -51,7 +48,7 @@
                 </p>
             </div>
             <div id="right-btn">
-                <iterate on [ "user", "weather", "go-back"] >
+                <iterate on [ "setting"] >
                     <p>
                     <img id="$?" class="top" src="icon/$?.png" width="60" height="60" hvml-events="click" />
                     </p>
@@ -68,11 +65,11 @@
         </observe>
         
         <observe on="#home" for="click">
-            <load from 'atd_cert.hvml' onto 'self:' />
+            <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
         
         <observe on="#setting" for="click">
-            <load from 'atd_cert.hvml' onto 'self:' />
+            <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
         
         <observe on="#lock" for="click">

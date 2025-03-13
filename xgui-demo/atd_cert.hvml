@@ -12,51 +12,44 @@
             ]
         </update>
         <style hvml:raw>
-        #go-back{
-            float:left;
-        }
         #in_stat{
-            margin-left:220px;
+            margin-left:235px;
             margin-top:5px;
             width:320px;
             height:20px;
             position:relative;
-            top: 30px;
+            top: 40px;
         }
         .in_num{
             width:20px;
             height:15px;
-            color:#FFFFFF;
-            margin-left: 10px;
+            margin-left: 5px;
             font-size: 8px;
             float:left;
         }
         
         #key_bd{
-            margin-left:180px;
-            margin-top:5px;
-            width:320px;
+            margin-left:210px;
+            margin-top:50px;
+            width:200px;
             height:320px;
-            position:relative;
-            top: 50px;
         }
         .key_v{
             border-style: solid;
-            width:70px;
-            height:58px;
-            background-color:#11A2FD;
-            border-color:#FFFFFF;
+            width:50px;
+            height:47px;
+            border-color:#5C5C5C;
             border-width:2px;
-            border-top-left-radius:35px; 
-            border-top-right-radius:35px;
-            border-bottom-left-radius:35px; 
-            border-bottom-right-radius:35px;
-            margin-left:10px;
-            margin-top:10px;
+            border-top-left-radius:25px; 
+            border-top-right-radius:25px;
+            border-bottom-left-radius:25px; 
+            border-bottom-right-radius:25px;
+            margin-left:8px;
+            margin-top:8px;
             font-size:2em;
             float:left;
             text-align:center;
-            padding-top:12px;
+            padding-top:3px;
         }
         </style>
     </head>

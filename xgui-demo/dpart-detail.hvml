@@ -12,12 +12,6 @@
             ]
         </update>
         <style hvml:raw>
-        #go-back{
-            float:left;
-        }
-        #dpart-add{
-            float:right;
-        }
         #title_h1{
             margin-left:220px;
             margin-top:5px;
@@ -46,7 +40,7 @@
             font-size:24px;
             text-align:left;
             border-style: solid;
-            border-color:#FFFFFF;
+            border-color:#808080;
             border-width:2px;
         }
         </style>
@@ -60,7 +54,6 @@
     </head>
     
     <body>
-        
         <init as 'items' with [ "部门编号", "部门名称"] />
         <div id="main_pane">
             <img id="go-back" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
@@ -78,7 +71,7 @@
         
         
         <observe on="#go-back" for="click">
-            <load from 'atd_main.hvml' onto 'self:' />
+            <load from 'item-0.hvml' onto 'self:' />
         </observe>
         
         <observe on=".item" for="click">

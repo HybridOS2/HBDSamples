@@ -12,9 +12,6 @@
             ]
         </update>
         <style hvml:raw>
-        #go-back{
-            float:left;
-        }
         #title_h1{
             margin-left:220px;
             margin-top:5px;
@@ -26,16 +23,15 @@
         
         #list_content{
             margin-left:75px;
-            margin-top:50px;
+            margin-top:60px;
             width:480px;
             height:240px;
         }
         
         .item > div{
             margin-left:20px;
-            border-color:#FFFFFF;
             border-style: solid;
-            border-color:#FFFFFF;
+            border-color:#5C5C5C;
             border-width:2px;
             border-top-left-radius:5px; 
             border-top-right-radius:5px;
@@ -77,9 +73,6 @@
         </observe>
         
         <observe on=".item" for="click">
-            <inherit>
-                $STREAM.stderr.writelines("item_index=$?")
-            </inherit>
             <load from "$?.targetId.hvml" onto 'self:' />
         </observe>
         

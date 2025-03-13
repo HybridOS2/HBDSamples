@@ -12,12 +12,6 @@
             ]
         </update>
         <style hvml:raw>
-        #go-back{
-            float:left;
-        }
-        #dpart-add{
-            float:right;
-        }
         #title_h1{
             margin-left:220px;
             margin-top:5px;
@@ -33,7 +27,7 @@
             width:630px;
             height:200px;
             position:relative;
-            top: 100px;
+            top: 60px;
         }
         
         .item > img{
@@ -46,7 +40,7 @@
             font-size:24px;
             text-align:left;
             border-style: solid;
-            border-color:#FFFFFF;
+            border-color:#5C5C5C;
             border-width:2px;
         }
         </style>
@@ -70,7 +64,7 @@
         
         
         <observe on="#go-back" for="click">
-            <load from 'atd_main.hvml' onto 'self:' />
+            <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
         
         <observe on=".item" for="click">
