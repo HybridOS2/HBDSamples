@@ -60,14 +60,6 @@
             
         </div>
         
-        <observe on="#go-back" for="click">
-            <load from 'atd_setting.hvml' onto 'self:' />
-        </observe>
-        
-        <observe on="#home" for="click">
-            <load from 'atd_setting.hvml' onto 'self:' />
-        </observe>
-        
         <observe on="#setting" for="click">
             <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
