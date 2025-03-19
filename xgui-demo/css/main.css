@@ -54,6 +54,22 @@ img.top{
     float:left;
 }
 
+.left_img{
+    margin-left:5px;
+    margin-top:5px;
+    width:40px;
+    height:40px;
+    float:left;
+}
+
+.right_img{
+    margin-left:5px;
+    margin-top:5px;
+    width:40px;
+    height:40px;
+    float:right;
+}
+
 #dpart-add{
     margin-right:5px;
     margin-top:5px;
@@ -66,4 +82,28 @@ img.top{
     background-repeat:repeat-y;
     width:224;
     height:70px;
+}
+
+.dialog_title{
+    width:300px;
+    padding-top:0px;
+    margin-top:0px;
+    text-align:center;
+}
+
+.sep_hori{
+    display:inline-block;
+    width:30px;
+}
+
+dialog{
+    width:450px;
+    position:absolute;
+    top:50px;
+    left:80px;
+    right:auto;
+    background-color:#EBEBEB;
+    color:#5C5C5C;
+    padding-top: 2px;
+    padding-bottom:2px;
 }

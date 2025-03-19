@@ -69,7 +69,15 @@
                 </div>
                 <div id="item-1" class="item" >
                 <img id="item-$?-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
-                
+                <select name="pets" id="pet-select" size="1">
+                    <option value="">30</option>
+                    <option value="dog">45</option>
+                    <option value="cat">60</option>
+                    <option value="hamster">90</option>
+                    <option value="parrot">120</option>
+                    <option value="spider">150</option>
+                    <option value="goldfish">15</option>
+                </select>
                 <p>超时时间设置</p>
                 </div>
                 <div id="item-1" class="item" hvml-events="click" >

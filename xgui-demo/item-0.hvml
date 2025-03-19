@@ -1,6 +1,6 @@
 #!/usr/bin/purc
 
-<!DOCTYPE hvml>
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
@@ -41,41 +41,90 @@
             border-style: solid;
             border-color:#5C5C5C;
             border-width:2px;
-        }
+        }        
         </style>
     </head>
     
     <body>
+               
+        <init as sqliteConn with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor with $sqliteConn.execute("select * from dpartment") />
+        <init as dparts with $sqliteCursor.fetchall('object') />
         
-        <init as 'items' with [ "部门一", "部门二", "部门三", "部门四", "部门五"] />
         <div id="main_pane">
-            <img id="go-back" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <img id="dpart-add" src="icon/add.png" width="40" height="40" hvml-events="click" />
+            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
+            <img id="dpart-add" class="right_img" src="icon/add.png" hvml-events="click" />
             <div id="title_h1">部门管理</div>
             <div id="list_content">
-                <iterate on [ 0, 1, 2, 3, 4] >
-                    <div id="item-$?" class="item" hvml-events="click" >
-                        <img id="item-$?-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
-                        <p>$items[$?]</p>
+                <iterate on $dparts >
+                    <div id="dpart-$?.partnum" class="item" value=$?.id hvml-events="click" >
+                        <img id="item-$?.partnum-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
+                        <p>$?.partname</p>
                     </div>
                 </iterate>
             </div>
         </div>
         
-        
+        <dialog id="id_dlg" >
+            <form method="dialog">
+                <p class="dialog_title">添加部门</p>
+                <p>
+                                        部门编号 <input type="text" name="dpart_num" value="1234" />
+                </p>
+                <p>
+                                        部门编号 <input type="text" name="dpart_name" value="部门" />
+                </p>
+                <p>
+                <button value=1>保存</button>&nbsp;&nbsp;&nbsp;&nbsp;<button value=2 >取消</button>
+                </p>
+            </form>
+        </dialog>
+                  
         <observe on="#go-back" for="click">
             <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
         
+        <observe on '#id_btn_close' for "click">
+            <request on '#id_dlg' to 'call:close' with 0 />
+        </observe>
+        
+        <observe on="#dpart-add" for="click">
+            <request on '#id_dlg' to 'call:show' />
+        </observe>
+        
+        <observe on '#id_dlg' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <inherit>
+                        $sqliteConn.execute("insert into dpartment (partname,partnum) values ('$ret.dpart_name',$ret.dpart_num)");
+                        $sqliteConn.commit();
+                        $sqliteCursor.close();
+                        $sqliteConn.close();
+                        
+                        <load from 'item-0.hvml' onto 'self:' />
+                    </inherit>
+                </match>
+            </test>
+        </observe>
+                
         <observe on=".item" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("item click $?")
+            </inherit>
             <load from 'dpart-detail.hvml' onto 'self:' >
             {
-                name: "$?.targetId",
+                dpart_id: "$?.targetValue",
             }
             </load>
         </observe>
         
         <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
             <exit with "closed" />
         </observe>
 
