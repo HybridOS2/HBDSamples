@@ -54,9 +54,9 @@
     </head>
     
     <body>
-        <init as sqliteConn with $SQLITE.connect("./database/atd.db") />
-        <init as sqliteCursor with $sqliteConn.execute("select * from dpartment where id='$dpartid'") />
-        <init as dparts with $sqliteCursor.fetchall('object') />
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from dpartment where id='$dpartid'") />
+        <init as dparts at '_root' with $sqliteCursor.fetchall('object') />
         <init as dpart_name at '_root' with "test" />
         <init as dpart_num at '_root' with 1234 /> 
         
@@ -139,8 +139,7 @@
         <observe on="#save" for="click">
             <inherit>
                 $STREAM.stderr.writelines("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid;");
-                $sqliteConn.execute('update dpartment set partnum=33 where id=1')
-                $sqliteConn.execute("update dpartment set partname=\"$dpart_name\" where id=1")
+                $sqliteConn.execute("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid")
             </inherit>
             <update on "#bottom_pane" at "content" with $delete_t /> 
         </observe>

@@ -54,8 +54,8 @@
     </head>
     
     <body>
-        <init as sqliteConn with $SQLITE.connect("./database/atd.db") />
-        <init as sqliteCursor with $sqliteConn.execute("select * from members where id='$mb_id'") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from members where id='$mb_id'") />
         <init as members with $sqliteCursor.fetchall('object') />
         <init as mb_name at '_root' with "test" />
         <init as mb_num at '_root' with 1234 />

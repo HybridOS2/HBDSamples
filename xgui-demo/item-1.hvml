@@ -140,6 +140,9 @@
         <observe on=".item" for="click">
             <inherit>
                 $STREAM.stderr.writelines("item click $?")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
             </inherit>
             <load from 'mb-detail.hvml' onto 'self:' >
             {

@@ -47,9 +47,9 @@
     
     <body>
                
-        <init as sqliteConn with $SQLITE.connect("./database/atd.db") />
-        <init as sqliteCursor with $sqliteConn.execute("select * from dpartment") />
-        <init as dparts with $sqliteCursor.fetchall('object') />
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from dpartment") />
+        <init as dparts at '_root' with $sqliteCursor.fetchall('object') />
         
         <div id="main_pane">
             <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
@@ -81,6 +81,11 @@
         </dialog>
                   
         <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
             <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
         
@@ -111,6 +116,9 @@
         <observe on=".item" for="click">
             <inherit>
                 $STREAM.stderr.writelines("item click $?")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
             </inherit>
             <load from 'dpart-detail.hvml' onto 'self:' >
             {
