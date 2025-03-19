@@ -1,0 +1,187 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        #title_h1{
+            margin-left:220px;
+            margin-top:5px;
+            font-size:2em;
+            width:200px;
+            height:50px;
+            float:left;
+        }
+        
+        #list_content{
+            margin-left:5px;
+            margin-top:0px;
+            width:630px;
+            height:200px;
+            position:relative;
+            top: 50px;
+        }
+        
+        .item > img{
+            float:right;
+        }
+        .item{
+            margin-left:12px;
+            width:600px;
+            height:40px;
+            font-size:24px;
+            text-align:left;
+            border-style: solid;
+            border-color:#808080;
+            border-width:2px;
+        }
+        </style>
+        <init as 'mb_id' at '_root' with $REQ.mb_id >
+            <catch>
+                <!-- set the default case -->
+                <init as 'mb_id' at '_root' with "1" />
+            </catch>
+        </init>
+        
+    </head>
+    
+    <body>
+        <init as sqliteConn with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor with $sqliteConn.execute("select * from members where id='$mb_id'") />
+        <init as members with $sqliteCursor.fetchall('object') />
+        <init as mb_name at '_root' with "test" />
+        <init as mb_num at '_root' with 1234 />
+        <init as mb_pwd at '_root' with "1234" />
+        <init as mb_partid at '_root' with 1 />
+        <init as partname at '_root' with "test" />
+        
+        <archetype name="modify_t">
+            <img id="save" class="left_img" src="icon/save.png" width="40" height="40" hvml-events="click" />
+            <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <archetype name="delete_t">
+            <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div id="title_h1">人员详情</div>
+            <div id="list_content">
+                <test with $L.ge($DATA.count($members), 1) >
+                    <init as mb_name at '_root' with $members[0].mbname />
+                    <init as mb_num at '_root' with $members[0].mbid />
+                    <init as mb_pwd at '_root' with $members[0].passwd />
+                    <init as mb_partid at '_root' with $members[0].partid />
+                    
+                    <init as cursor with $sqliteConn.execute("select * from dpartment where id=$mb_partid") temp />
+                    <init as mbb with $cursor.fetchall('object') temp />
+                    <test with $L.ge($DATA.count($mbb), 1) >
+                        <init as partname at '_root' with "$mbb[0].partname" />  
+                    </test>
+                    
+                     <inherit>
+                        $STREAM.stderr.writelines("$mb_name,$mb_num,$mb_pwd,$partname");
+                    </inherit>
+                    
+                    <div id="partname" class="item" hvml-events="click" >
+                        <img src="icon/play.png" width="40" height="40" />
+                        <p id="part_edit">部门名称:$partname</p>
+                    </div>
+                    <div id="mbname" class="item" hvml-events="click" >
+                        <img src="icon/play.png" width="40" height="40" />
+                        <p id="name_edit">姓名:$mb_name</p>
+                    </div>
+                     <div id="mbnum" class="item" hvml-events="click" >
+                        <img src="icon/play.png" width="40" height="40" />
+                        <p id="num_edit">工号:$mb_num</p>
+                    </div>
+                     <div id="mbpwd" class="item" hvml-events="click" >
+                        <img src="icon/play.png" width="40" height="40" />
+                        <p id="pwd_edit">密码:$mb_pwd</p>
+                    </div>
+                </test>
+            </div>
+            
+            <p id="bottom_pane">
+                <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+            </p>
+        </div>
+                        
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'item-1.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#partnum" for="click">
+            <request on '#id_dlg_num' to 'call:show' />
+        </observe>
+                
+        <observe on="#partname" for="click">
+            <request on '#id_dlg_name' to 'call:show' />
+        </observe>
+        
+        <observe on="#save" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid;");
+                $sqliteConn.execute('update dpartment set partnum=33 where id=1')
+                $sqliteConn.execute("update dpartment set partname=\"$dpart_name\" where id=1")
+            </inherit>
+            <update on "#bottom_pane" at "content" with $delete_t /> 
+        </observe>
+        
+        <observe on="#delete" for="click">
+            <inherit>
+                $sqliteConn.execute("delete from dpartment where id=$dpartid;")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close(); 
+            </inherit>
+            <load from 'atd_setting.hvml' onto 'self:' />
+        </observe>
+ 
+        <observe on '#id_dlg_num' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <init as dpart_num at '_root' with $ret.dpart_num />
+                    <update on "#num_edit" at 'textContent' with "部门编号:$ret.dpart_num" />
+                    <update on "#bottom_pane" at "content" with $modify_t /> 
+                </match>
+            </test>
+        </observe>
+        
+        <observe on '#id_dlg_name' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <init as dpart_name at '_root' with $ret.dpart_name />
+                    <update on "#name_edit" at 'textContent' with "部门名称:$ret.dpart_name" />
+                    <update on "#bottom_pane" at "content" with $modify_t />
+                </match>
+            </test>
+        </observe>
+               
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

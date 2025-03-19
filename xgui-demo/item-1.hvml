@@ -76,7 +76,7 @@
             <div id="list_pane">
                 <div class="item">
                     <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
-                    <div style="float:right;width:300px;border-style:solid;border-color:red;" id="search" hvml-events="click" >
+                    <div style="float:right;width:300px;" id="search" hvml-events="click" >
                         <img style="float:right" src="icon/play.png" width="30" height="30" />
                     </div>
                 </div>
