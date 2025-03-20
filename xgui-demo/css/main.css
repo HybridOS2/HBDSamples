@@ -85,25 +85,42 @@ img.top{
 }
 
 .dialog_title{
-    width:300px;
+    font-size:1.5em;
+    width:100%;
     padding-top:0px;
     margin-top:0px;
     text-align:center;
 }
 
-.sep_hori{
+.dialog_content{
+    margin-left:3%;
+}
+
+.dialog_bottom{
+    margin-left:3%;
+    margin-top:2em;
+    margin-right:7.8%;
+    margin-bottom:5px;
+}
+
+.next_col{
     display:inline-block;
-    width:30px;
+    width:5em;
+    text-align:right;
 }
 
 dialog{
-    width:450px;
+    width:46%;
     position:absolute;
-    top:50px;
-    left:80px;
+    top:10%;
+    left:25%;
     right:auto;
     background-color:#EBEBEB;
     color:#5C5C5C;
     padding-top: 2px;
     padding-bottom:2px;
+    border-top-left-radius:5px; 
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px; 
+    border-bottom-right-radius:5px;
 }

@@ -30,7 +30,7 @@
         }
         #list_content{
             height:170px;
-            overflow: hidden;
+            overflow: auto;
         }
         
         .item > img{
@@ -92,21 +92,17 @@
             </div>
         </div>
         
-        <dialog id="id_dlg" >
+        <dialog style="width:70%;left:15%;" id="id_dlg" >
             <form method="dialog">
                 <p class="dialog_title">添加人员</p>
                 <p>
-                                        工号 <input type="text" name="mb_num" value="1234" /><div class="sep_hori" />密码<input type="password" name="mb_pwd" value="1234" />
+                                        工号 <input type="text" name="mb_num" value="1234" /><div class="next_col">密码</div><input type="password" name="mb_pwd" value="1234" />
                 </p>
                 <p>
-                                        姓名 <input type="text" name="mb_name" value="姓名" />
+                                        姓名 <input type="text" name="mb_name" value="姓名" /><div class="next_col">部门 </div><input type="text" name="dpart_name" value="部门" />
                 </p>
-                <p>
-                                        部门 <input type="text" name="dpart_name" value="部门" />
-                </p>
-                <div style="text-align:center;">
-                <button value=1>保存</button> <div class="sep_hori"></div><button value=2 >取消</button>
-                </div>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
             </form>
         </dialog>
         

@@ -85,7 +85,7 @@
                     <init as cursor with $sqliteConn.execute("select * from dpartment where id=$mb_partid") temp />
                     <init as mbb with $cursor.fetchall('object') temp />
                     <test with $L.ge($DATA.count($mbb), 1) >
-                        <init as partname at '_root' with "$mbb[0].partname" />  
+                        <init as partname at '_root' with "$mbb[0].partname" />
                     </test>
                     
                      <inherit>
@@ -106,7 +106,7 @@
                     </div>
                      <div id="mbpwd" class="item" hvml-events="click" >
                         <img src="icon/play.png" width="40" height="40" />
-                        <p id="pwd_edit">密码:$mb_pwd</p>
+                        <p id="pwd_edit">密码:******</p>
                     </div>
                 </test>
             </div>
@@ -115,6 +115,59 @@
                 <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
             </p>
         </div>
+        
+        <dialog id="dlg_partname" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改部门名称</p>
+                <p class="dialog_content"><span>部门名称:&nbsp;</span>
+                    <select name="part_select" size="1">
+                        <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <iterate on $mbb >
+                            <option value="$?.partname">$?.partname</option>
+                        </iterate>
+                    </select>
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbname" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改姓名</p>
+                <p class="dialog_content"><span>姓名:&nbsp;</span>
+                    <input type="text" name="mb_name" value="$mb_name" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbnum" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改工号</p>
+                <p class="dialog_content"><span>工号:&nbsp;</span>
+                    <input type="text" name="mb_num" value="$mb_num" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbpwd" class="dlg">
+            <form method="dialog">
+                <p class="dialog_title">修改密码</p>
+                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >密码:</div>
+                    <input type="password" name="mb_pwd" value="123456" />
+                </p>
+                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >确认密码:</div>
+                    <input type="password" name="mb_pwd1" value="123456" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
+            </form>
+        </dialog>
                         
         <observe on="#go-back" for="click">
             <inherit>
@@ -125,19 +178,26 @@
             <load from 'item-1.hvml' onto 'self:' />
         </observe>
         
-        <observe on="#partnum" for="click">
-            <request on '#id_dlg_num' to 'call:show' />
+        <observe on="#mbname" for="click">
+            <request on '#dlg_mbname' to 'call:show' />
+        </observe>
+        
+        <observe on="#mbnum" for="click">
+            <request on '#dlg_mbnum' to 'call:show' />
+        </observe>
+        
+        <observe on="#mbpwd" for="click">
+            <request on '#dlg_mbpwd' to 'call:show' />
         </observe>
                 
         <observe on="#partname" for="click">
-            <request on '#id_dlg_name' to 'call:show' />
+            <request on '#dlg_partname' to 'call:show' />
         </observe>
         
         <observe on="#save" for="click">
             <inherit>
-                $STREAM.stderr.writelines("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid;");
-                $sqliteConn.execute('update dpartment set partnum=33 where id=1')
-                $sqliteConn.execute("update dpartment set partname=\"$dpart_name\" where id=1")
+                $STREAM.stderr.writelines("update members set mbid=$mb_num,mbname=\"$mb_name\",partid=$mb_partid,passwd=\"$mb_pwd\", where id=$mb_id;");
+                $sqliteConn.execute("update members set mbid=$mb_num,mbname=\"$mb_name\",partid=$mb_partid,passwd=\"$mb_pwd\" where id=$mb_id;")
             </inherit>
             <update on "#bottom_pane" at "content" with $delete_t /> 
         </observe>
@@ -151,29 +211,46 @@
             </inherit>
             <load from 'atd_setting.hvml' onto 'self:' />
         </observe>
- 
-        <observe on '#id_dlg_num' for "close">
-            <init as ret with $?.details.data temp />
-            <test on $ret.returnValue >
-                <match for="AS '1'" exclusively>           
-                    <init as dpart_num at '_root' with $ret.dpart_num />
-                    <update on "#num_edit" at 'textContent' with "部门编号:$ret.dpart_num" />
-                    <update on "#bottom_pane" at "content" with $modify_t /> 
-                </match>
+                
+        <observe on '.dlg' for "close">
+            <inherit>
+                $STREAM.stderr.writelines("dlg_partname $?");
+            </inherit>
+            <test with $L.eq($?.details.data.returnValue, 1) >
+                <init as ret with $?.details.data temp />
+                <init as tid with $?.targetId temp />
+                
+                <test on $tid >
+                    <match for="AS 'dlg_partname'" exclusively>
+                        <init as partname at '_root' with "$ret.part_select" />   
+                        <update on "#part_edit" at 'textContent' with "部门名称:$partname" />
+                        <update on "#bottom_pane" at "content" with $modify_t />
+                        <init as cursor with $sqliteConn.execute("select * from dpartment where partname=\"$partname\"") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <test with $L.ge($DATA.count($mbb), 1) >
+                            <init as mb_partid at '_root' with "$mbb[0].id" />
+                        </test>
+                    </match>
+                    <match for="AS 'dlg_mbname'" exclusively>
+                        <init as mb_name at '_root' with "$ret.mb_name" />       
+                        <update on "#name_edit" at 'textContent' with "姓名:$mb_name" />
+                        <update on "#bottom_pane" at "content" with $modify_t /> 
+                    </match>
+                    <match for="AS 'dlg_mbnum'" exclusively>
+                        <init as mb_num at '_root' with "$ret.mb_num" />       
+                        <update on "#num_edit" at 'textContent' with "工号:$mb_num" />
+                        <update on "#bottom_pane" at "content" with $modify_t /> 
+                    </match>
+                    <match for="AS 'dlg_mbpwd'" exclusively>
+                        <test with $L.streq("case",$ret.mb_pwd,$ret.mb_pwd1) >
+                            <init as mb_pwd at '_root' with "$ret.mb_pwd" />
+                            <update on "#bottom_pane" at "content" with $modify_t />
+                        </test>
+                    </match>
+                </test>
             </test>
         </observe>
-        
-        <observe on '#id_dlg_name' for "close">
-            <init as ret with $?.details.data temp />
-            <test on $ret.returnValue >
-                <match for="AS '1'" exclusively>           
-                    <init as dpart_name at '_root' with $ret.dpart_name />
-                    <update on "#name_edit" at 'textContent' with "部门名称:$ret.dpart_name" />
-                    <update on "#bottom_pane" at "content" with $modify_t />
-                </match>
-            </test>
-        </observe>
-               
+                       
         <observe on $CRTN for "rdrState:closed">
             <inherit>
                 $sqliteConn.commit();

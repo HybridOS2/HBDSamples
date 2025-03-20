@@ -74,9 +74,8 @@
                 <p>
                                         部门编号 <input type="text" name="dpart_name" value="部门" />
                 </p>
-                <p>
-                <button value=1>保存</button>&nbsp;&nbsp;&nbsp;&nbsp;<button value=2 >取消</button>
-                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <include with $dlg_bottom />
             </form>
         </dialog>
                   
@@ -99,6 +98,9 @@
         
         <observe on '#id_dlg' for "close">
             <init as ret with $?.details.data temp />
+            <inherit>
+                $STREAM.stderr.writelines("id_dlg $?")
+            </inherit>
             <test on $ret.returnValue >
                 <match for="AS '1'" exclusively>           
                     <inherit>
