@@ -13,13 +13,14 @@
         </update>
         <style hvml:raw>
         #title_h1{
-            margin-left:220px;
+            margin-left:50px;
             margin-top:5px;
             font-size:2em;
-            width:200px;
+            width:400px;
             height:50px;
-            float:left;
+            float:right;
         }
+        
         #list_content{
             margin-left:5px;
             margin-top:0px;
@@ -47,28 +48,43 @@
     
     <body>
         
-        <init as 'items' with [ "认证时间段" ] />
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from cert_data") />
+        <init as certs at '_root' with $sqliteCursor.fetchall('object') />
+        
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div id="title_h1">认证设置</div>
+            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
+            <img id="cert-add" class="right_img" src="icon/add.png" hvml-events="click" />
+            <div id="title_h1">认证时间段设置</div>
             <div id="list_content">
-                <div id="cert_set" class="item" hvml-events="click" >
-                    <img id="time-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
-                    <p>"认证时间段"</p>
-                </div>
+                <iterate on $certs >
+                    <div id="crt-$?.id" class="item" value="$?.id" hvml-events="click" >
+                        <img src="icon/play.png" width="40" height="40" />
+                        <p>$?.certname</p>
+                    </div>
+                </iterate>
             </div>
         </div>
-        
-        
+                
         <observe on="#go-back" for="click">
-            <load from 'atd_setting.hvml' onto 'self:' />
+            <load from 'item-2.hvml' onto 'self:' />
         </observe>
         
-        <observe on="#cert_set" for="click">
-            <load from "cert_time.hvml" onto 'self:' />
+        <observe on="#cert-add" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'cert_add.hvml' onto 'self:' />
         </observe>
-        
+                
         <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
             <exit with "closed" />
         </observe>
 

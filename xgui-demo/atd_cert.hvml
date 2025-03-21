@@ -59,7 +59,7 @@
         <init as input_idx at '_root' with 0L />
         <init as innum_ids at '_root' with [ "in_n1", "in_n2","in_n3","in_n4","in_n5","in_n6"] />
         <div id="main_pane">
-            <img id="go-back" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
             <div id="in_stat">
                 <iterate on $innum_ids >
                     <div id="$?" class="in_num">○</div>
