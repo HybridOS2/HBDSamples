@@ -1,0 +1,143 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        #title_h1{
+            margin-left:50px;
+            margin-top:5px;
+            font-size:2em;
+            width:400px;
+            height:50px;
+            float:right;
+        }
+        
+        #list_content{
+            margin-left:5px;
+            margin-top:0px;
+            width:630px;
+            height:200px;
+            position:relative;
+            top: 60px;
+        }
+        
+        .item > img{
+            float:right;
+        }
+        
+        .item > input{
+            float:right;
+            border-style:none;
+            background-color:#EBEBEB;
+            width:120px;
+        }
+        .item{
+            margin-left:12px;
+            width:600px;
+            height:45px;
+            font-size:24px;
+            text-align:left;
+            border-style: solid;
+            border-color:#5C5C5C;
+            border-width:2px;
+            margin-bottom:10px;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+        <init as net_switch at '_root' with 0 />
+        
+        <test with $L.ge($DATA.count($dbsets), 1) >
+            <init as net_switch at '_root' with $dbsets[0].net_switch />
+        </test>
+        
+        <archetype name="net_off">
+            <img src="icon/on_off.png" width="40" height="40" value="1"/>
+            <p>开启<span style="font-style:italic;">WIFI</span></p>
+        </archetype>
+        
+        <archetype name="net_open">
+            <img src="icon/off_on.png" width="40" height="40" value="1"/>
+            <p>关闭<span style="font-style:italic;">WIFI</span></p>
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
+            <div id="title_h1">网络设置</div>
+            <div id="list_content">
+                <div id="net_open" class="item" hvml-events="click">
+                    <test with $net_switch >
+                        <update on $@ to 'append' with $net_open/>
+                        
+                        <differ>
+                            <update on $@ to 'append' with $net_off/>
+                        </differ>
+                    </test>
+                </div>
+                <div class="item">
+                    <img src="icon/wifi.png" width="40" height="40" value="1" hvml-events="click" />
+                    <p>信源<span style="font-style:oblique;">001</span></p>
+                </div>
+                <div class="item">
+                    <img src="icon/wifi.png" width="40" height="40" value="1" hvml-events="click" />
+                    <p>信源<span style="font-style:oblique;">002</span></p>
+                </div>
+            </div>
+            <div class="dialog_bottom">
+                <button type="button" id="net_save" style="float:left" hvml-events="click">保存</button>
+                <div class="next_col"></div><button type="button" id="net_cancel" style="float:right" hvml-events="click">取消</button>
+            </div>
+        </div>
+                     
+        <observe on="#net_open" for="click">
+            <test with $net_switch >
+                <update on #net_open at "content" with $net_off />
+                <init as net_switch at '_root' with 0 />
+                
+                <differ>
+                    <update on #net_open at "content" with $net_open />
+                    <init as net_switch at '_root' with 1 />
+                </differ>
+            </test>
+        </observe>
+        
+        <observe on="#net_save" for="click">
+            <inherit>
+               $sqliteConn.execute("update setting set net_switch=$net_switch");
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+                        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

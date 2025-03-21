@@ -1,0 +1,113 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        #title_h1{
+            margin-left:50px;
+            margin-top:5px;
+            font-size:2em;
+            width:400px;
+            height:50px;
+            float:right;
+        }
+        
+        #list_content{
+            margin-left:5px;
+            margin-top:0px;
+            width:630px;
+            height:200px;
+            position:relative;
+            top: 30px;
+            overflow:auto;
+        }
+        
+        .item > img{
+            float:right;
+        }
+        
+        .item > input{
+            float:right;
+            border-style:none;
+            background-color:#EBEBEB;
+            width:120px;
+        }
+        .item{
+            margin-left:12px;
+            width:600px;
+            height:45px;
+            font-size:24px;
+            text-align:left;
+            border-style: solid;
+            border-color:#5C5C5C;
+            border-width:2px;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
+            <div id="title_h1">设置选项样式</div>
+            <div id="list_content">
+                <div class="item" hvml-events="click">
+                    <img src="icon/play.png" width="40" height="40" value="1" hvml-events="click" />
+                    <p>下一级设置</p>
+                </div>
+                
+                <div class="item" hvml-events="click">
+                    <img src="icon/on_off.png" width="50" height="40" value="2" hvml-events="click" />
+                    <p>开关打开</p>
+                </div>
+                
+                <div class="item" hvml-events="click">
+                    <img src="icon/off_on.png" width="50" height="40" value="3" hvml-events="click" />
+                    <p>开关关闭</p>
+                </div>
+                
+                <div class="item" hvml-events="click">
+                    <img src="icon/play.png" width="40" height="40" value="4" hvml-events="click" />
+                    <span style="float:right;">未设置值</span>
+                    <p>未设置值</p>
+                </div>
+                
+                <div class="item" hvml-events="click">
+                    <img src="icon/play.png" width="40" height="40" value="5" hvml-events="click" />
+                    <span style="float:right;">已设置值</span>
+                    <p>已设置值</p>
+                </div>
+            </div>
+            <div class="dialog_bottom">
+                <button type="button" id="cert_save" style="float:left" hvml-events="click">保存</button>
+                <div class="next_col"></div><button type="button" id="cert_cancel" style="float:right" hvml-events="click">取消</button>
+            </div>
+        </div>
+                     
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+                        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

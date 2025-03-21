@@ -1,0 +1,160 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="css/main.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+        #title_h1{
+            margin-left:50px;
+            margin-top:5px;
+            font-size:2em;
+            width:400px;
+            height:50px;
+            float:right;
+        }
+        
+        #list_content{
+            margin-left:5px;
+            margin-top:0px;
+            width:630px;
+            height:200px;
+            position:relative;
+            top: 50px;
+        }
+        
+        .item > img{
+            float:right;
+        }
+        
+        .item > input{
+            float:right;
+            border-style:none;
+            background-color:#EBEBEB;
+            width:120px;
+        }
+        .item{
+            margin-left:12px;
+            width:600px;
+            height:45px;
+            font-size:24px;
+            text-align:left;
+            border-style: solid;
+            border-color:#5C5C5C;
+            border-width:2px;
+            margin-bottom:15px;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <init as 'idgroups' at '_root'>
+            [ 
+                {item_id: "item_oldpwd", pwd:"123456", img_id: "hidden_old", input_id: "old_pwd", strtext: "原密码", type:"password", value: 0},
+                {item_id: "item_newpwd", pwd:"123456", img_id: "hidden_new", input_id: "new_pwd", strtext: "新密码", type:"text", value: 1},
+                {item_id: "item_renewpwd", pwd:"123456", img_id: "hidden_renew", input_id: "renew_pwd", strtext: "重复新密码", type:"password", value: 2},
+            ] 
+        </init>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+        <init as old_pwd at '_root' with "12345678" />
+        
+        <test with $L.ge($DATA.count($dbsets), 1) >
+            <init as old_pwd at '_root' with $dbsets[0].devpwd />
+        </test>
+             
+        <archetype name="item_piece">
+            <div id="$?.item_id" class="item">
+                <img id="$?.img_id" class="pwd_click" value=$?.value src="icon/hidden.png" width="40" height="40" hvml-events="click"/>
+                <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
+                <p>$?.strtext</p>
+            </div>
+        </archetype>
+        
+        <archetype name="item_piece2">
+            <img id="$?.img_id" class="pwd_click" value=$?.value src="icon/hidden.png" width="40" height="40" hvml-events="click"/>
+            <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
+            <p>$?.strtext</p>
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
+            <img id="save_pwd" class="right_img" src="icon/save.png" hvml-events="click" />
+            <div id="title_h1">设备密码设置</div>
+            <div id="list_content">
+                <iterate on $idgroups >
+                    <update on $@ to 'append' with $item_piece />
+                </iterate>
+            </div>
+        </div>
+                     
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on '.pwd_click' for "click">
+            <init as pwd_idx with $?.targetValue />
+            <request on="#$idgroups[$pwd_idx].input_id" to="get:value" >
+                <update on "$idgroups[$pwd_idx]" at ".pwd" with "$?" />
+            </request>
+            
+            <test with $L.streq("case", $idgroups[$pwd_idx].type,"text") >
+                <update on "$idgroups[$pwd_idx]" at ".type" with "password" />
+                <differ>
+                    <update on "$idgroups[$pwd_idx]" at ".type" with "text" />
+                </differ>
+            </test>
+            <choose on $idgroups[$pwd_idx] >
+                <update on #$?.item_id at="content" with $item_piece2 />
+            </choose>
+            
+        </observe>
+        
+        <observe on '#save_pwd' for "click">
+            <inherit>
+                $STREAM.stderr.writelines("pwd set old_pwd=$old_pwd,old=$idgroups[0].pwd,new1=$idgroups[1].pwd,new2=$idgroups[2].pwd")
+            </inherit>
+            <request on="#$idgroups[0].input_id" to="get:value" >
+                <update on "$idgroups[0]" at ".pwd" with "$?" />
+            </request>
+            <request on="#$idgroups[1].input_id" to="get:value" >
+                <update on "$idgroups[1]" at ".pwd" with "$?" />
+            </request>
+            <request on="#$idgroups[2].input_id" to="get:value" >
+                <update on "$idgroups[2]" at ".pwd" with "$?" />
+            </request>
+            <test with $L.streq("case", $idgroups[0].pwd,$old_pwd) >
+                <test with $L.streq("case", $idgroups[1].pwd,$idgroups[2].pwd) >
+                    <inherit>
+                       $sqliteConn.execute("update setting set devpwd=\"$idgroups[1].pwd\"");
+                       $sqliteConn.commit();
+                       $sqliteConn.close();
+                    </inherit>
+                    <load from 'item-3.hvml' onto 'self:' />
+                </test>
+            </test>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

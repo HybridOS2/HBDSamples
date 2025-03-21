@@ -17,6 +17,6 @@
 sqlite> create table dpartment( id INTEGER PRIMARY KEY AUTOINCREMENT, partname TEXT NOT NULL, partnum INTEGER);
 create table members( id INTEGER PRIMARY KEY AUTOINCREMENT,mbid INTEGER, mbname TEXT NOT NULL, partid INTEGER,passwd TEXT);
 sqlite> create table cert_data(id INTEGER PRIMARY KEY AUTOINCREMENT, certname TEXT NOT NULL, starttime INTEGER, endtime INTEGER, repeat TEXT);
-sqlite> create table setting(id INTEGER PRIMARY KEY AUTOINCREMENT, sname TEXT, devpwd TEXT, switch INTEGER, value INTEGER)
+sqlite> create table setting(id INTEGER PRIMARY KEY AUTOINCREMENT, sname TEXT, devpwd TEXT, power_on INTEGER, value INTEGER, timeout INTEGER, net_switch INTEGER)
 
 

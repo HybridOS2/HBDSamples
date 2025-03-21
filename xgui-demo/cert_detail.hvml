@@ -37,7 +37,6 @@
         .item > input{
             float:right;
             border-style:none;
-            background-color:#EBEBEB;
             width:120px;
         }
         .item{
@@ -51,40 +50,95 @@
             border-width:2px;
         }
         </style>
+        
+        <init as 'cert_id' at '_root' with $REQ.cert_id >
+            <catch>
+                <!-- set the default case -->
+                <init as 'cert_id' at '_root' with "1" />
+            </catch>
+        </init>
+        
     </head>
     <body>
         
         <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from cert_data where id=$cert_id") />
+        <init as certs with $sqliteCursor.fetchall('object') />
+        
+        <init as certname at '_root' with "" />
+        <init as starttime at '_root' with "" />
+        <init as endtime at '_root' with "" />
         <init as repeatstr at '_root' with "" />
         <init as repeatfix at '_root' with "" />
+        
+        <archetype name="modify_t">
+            <button type="button" id="cert_save" style="float:left" hvml-events="click">保存</button>
+            <div class="next_col"></div><button type="button" id="cert_del" style="float:right" hvml-events="click">删除</button>
+        </archetype>
+        
+        <archetype name="delete_t">
+            <button type="button" id="cert_del" style="float:right" hvml-events="click">删除</button>
+        </archetype>
+        
         <div id="main_pane">
             <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
-            <div id="title_h1">添加认证时间段</div>
+            <div id="title_h1">认证时间段详情</div>
             <div id="list_content">
-                <div class="item">
-                    <input id="chg_name" type="text" value="名称" tabindex="1" />
-                    <p>名称</p>
-                </div>
-                
-                <div class="item">
-                    <input id="start_time" type="text" value="00:00" tabindex="2" />
-                    <p>开始时间</p>
-                </div>
-                
-                <div class="item">
-                    <input id="end_time" type="text" value="24:00" tabindex="3" />
-                    <p>结束时间</p>
-                </div>
-                
-                <div id="repeat" class="item" value="4" hvml-events="click">
-                    <img src="icon/play.png" width="40" height="40" value="4" hvml-events="click" />
-                    <span style="float:right" id="repeat_txt">周一</span>
-                    <p>重复</p>
-                </div>
+                <test with $L.ge($DATA.count($certs), 1) >
+                    <init as certname at '_root' with $certs[0].certname />
+                    <init as starttime at '_root' with $certs[0].starttime />
+                    <init as endtime at '_root' with $certs[0].endtime />
+                    <init as repeatfix at '_root' with $certs[0].repeat />
+                    <init as repeatstr at '_root' with "" />
+                    <inherit>
+                        $STREAM.stderr.writelines("repeatfix=$repeatfix")
+                    </inherit>
+                    <test with $STR.contains($repeatfix,"0") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周日 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"1") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周一 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"2") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周二 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"3") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周三 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"4") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周四 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"5") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周五 ") />
+                    </test>
+                    <test with $STR.contains($repeatfix,"6") >
+                        <init as repeatstr at '_root' with $STR.join($repeatstr,"周六 ") />
+                    </test>
+                    
+                    <div class="item">
+                        <input id="chg_name" type="text" value="$certname" tabindex="1" />
+                        <p>名称</p>
+                    </div>
+                    
+                    <div class="item">
+                        <input id="start_time" type="text" value="$starttime" tabindex="2" />
+                        <p>开始时间</p>
+                    </div>
+                    
+                    <div class="item">
+                        <input id="end_time" type="text" value="$endtime" tabindex="3" />
+                        <p>结束时间</p>
+                    </div>
+                    
+                    <div id="repeat" class="item" value="4" hvml-events="click">
+                        <img src="icon/play.png" width="40" height="40" value="4" hvml-events="click" />
+                        <span style="float:right" id="repeat_txt">$repeatstr</span>
+                        <p>重复</p>
+                    </div>
+                </test>
             </div>
-            <div class="dialog_bottom">
-                <button type="button" id="cert_save" style="float:left" hvml-events="click">保存</button>
-                <div class="next_col"></div><button type="button" id="cert_cancel" style="float:right" hvml-events="click">取消</button>
+            <div id="bottom_pane" class="dialog_bottom">
+                <button type="button" id="cert_del" style="float:right" hvml-events="click">删除</button>
             </div>
         </div>
         
@@ -112,19 +166,23 @@
         <observe on="#go-back" for="click">
             <inherit>
                $sqliteConn.commit();
+               $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
             <load from 'cert_time.hvml' onto 'self:' />
         </observe>
         
-        <observe on="#cert_cancel" for="click">
+        <observe on="#cert_del" for="click">
             <inherit>
+               $STREAM.stderr.writelines("delete from cert_data where id=$cert_id;");
+               $sqliteConn.execute("delete from cert_data where id=$cert_id;");
                $sqliteConn.commit();
+               $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
             <load from 'cert_time.hvml' onto 'self:' />
         </observe>
-             
+          
         <observe on="#repeat" for="click">
             <request on '#dlg_repeat' to 'call:show' />
         </observe>
@@ -167,15 +225,12 @@
                     <init as repeatfix at '_root' with $STR.join($repeatfix,"6") /> 
                 </test>
                 <update on "#repeat_txt" at 'textContent' with "$repeatstr" />
+                <update on "#bottom_pane" at "content" with $modify_t />
                 </match>
             </test>
         </observe>
         
         <observe on '#cert_save' for "click">
-            <init as certname at '_root' with "" />
-            <init as starttime at '_root' with "" />
-            <init as endtime at '_root' with "" />
-            
             <request on="#chg_name" to="get:value" >
                 <init as certname at '_root' with $? />  
             </request>
@@ -189,9 +244,10 @@
             </request>
             
             <inherit>
-               $STREAM.stderr.writelines("save cert_data=insert into cert_data (certname,starttime,endtime,repeat) values ('$certname','$starttime','$endtime','$repeatfix');")
-               $sqliteConn.execute("insert into cert_data (certname,starttime,endtime,repeat) values ('$certname','$starttime','$endtime','$repeatfix');");
+               $STREAM.stderr.writelines("update cert_data set certname='$certname',starttime='$starttime',endtime='$endtime',repeat='$repeatfix' where id=$cert_id;")
+               $sqliteConn.execute("update cert_data set certname='$certname',starttime='$starttime',endtime='$endtime',repeat='$repeatfix' where id=$cert_id;");
                $sqliteConn.commit();
+               $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
             <load from 'cert_time.hvml' onto 'self:' />
@@ -200,6 +256,7 @@
         <observe on $CRTN for "rdrState:closed">
              <inherit>
                $sqliteConn.commit();
+               $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
             <exit with "closed" />
