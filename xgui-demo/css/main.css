@@ -27,8 +27,8 @@ img.top{
 }
 
 #right-btn >p{
-    margin-top:40px;
-    margin-bottom:40px;
+    margin-top:30px;
+    margin-bottom:30;
 }
 #right-btn{
     width:60px;
@@ -36,7 +36,7 @@ img.top{
     line-height:100px;
     position:absolute;
     right:40px;
-    bottom:80px;
+    bottom:100px;
 }
 #center_pane{
     width:300px;

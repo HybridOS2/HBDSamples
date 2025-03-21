@@ -48,7 +48,7 @@
                 </p>
             </div>
             <div id="right-btn">
-                <iterate on [ "setting"] >
+                <iterate on [ "setting", "user"] >
                     <p>
                     <img id="$?" class="top" src="icon/$?.png" width="60" height="60" hvml-events="click" />
                     </p>
@@ -61,7 +61,19 @@
         </div>
         
         <observe on="#setting" for="click">
-            <load from 'atd_setting.hvml' onto 'self:' />
+            <load from 'atd_cert.hvml' onto 'self:' >
+            {
+                is_user: 0,
+            }
+            </load>
+        </observe>
+        
+        <observe on="#user" for="click">
+            <load from 'atd_cert.hvml' onto 'self:' >
+            {
+                is_user: 1,
+            }
+            </load>
         </observe>
         
         <observe on="#lock" for="click">
