@@ -99,7 +99,15 @@
                                         工号 <input type="text" name="mb_num" value="1234" /><div class="next_col">密码</div><input type="password" name="mb_pwd" value="1234" />
                 </p>
                 <p>
-                                        姓名 <input type="text" name="mb_name" value="姓名" /><div class="next_col">部门 </div><input type="text" name="dpart_name" value="部门" />
+                                        姓名 <input type="text" name="mb_name" value="姓名" />
+                    <div class="next_col">部门</div>
+                    <select name="part_select" size="1">
+                        <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <iterate on $mbb >
+                            <option value="$?.id">$?.partname</option>
+                        </iterate>
+                    </select>
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
@@ -153,15 +161,9 @@
                 <match for="AS '1'" exclusively>
                     <inherit>
                        $STREAM.stderr.writelines("dialog_value=$ret")
-                    </inherit>
-                    <init as cursor with $sqliteConn.execute("select * from dpartment where partname=\"$ret.dpart_name\"") temp />
-                    <init as mbb with $cursor.fetchall('object') temp />
-                    <iterate on $mbb >
-                        <init as partid at '_root' with $?.id />
-                    </iterate>
-                    
+                    </inherit>                   
                     <inherit>
-                       $sqliteConn.execute("insert into members (mbid,mbname,partid,passwd) values ($ret.mb_num,'$ret.mb_name',$partid,$ret.mb_pwd)");
+                       $sqliteConn.execute("insert into members (mbid,mbname,partid,passwd) values ($ret.mb_num,'$ret.mb_name',$ret.part_select,$ret.mb_pwd)");
                     </inherit>
                 </match>
             </test>
