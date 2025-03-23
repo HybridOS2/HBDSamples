@@ -9,30 +9,41 @@
         <link rel="stylesheet" href="exported/assets/css/titlebar.css" />
         <link rel="stylesheet" href="exported/assets/css/network.css" />
 
-        <style hvml:raw>
-            #list_content{
-                margin-left:5px;
-                margin-top:0px;
-                width:630px;
-                height:200px;
-                position:relative;
-                top: 40px;
-            }
+        <define as 'logMsg' at '_root' >
+            <test with $DATA.is_container($?) >
+                <inherit on $RUNNER.logmsg($DATA.serialize($?)) />
+                <inherit>
+                    $STREAM.stdout.writelines($DATA.serialize($?))
+                </inherit>
 
-            .item{
-                margin-left:12px;
-                width:600px;
-                height:40px;
-                font-size:24px;
-                text-align:left;
-                border-style: solid;
-                border-color:#5C5C5C;
-                border-width:2px;
-            }
-        </style>
+                <differ>
+                    <inherit>
+                        $STREAM.stdout.writelines($DATA.stringify($?))
+                    </inherit>
+                </differ>
+            </test>
+        </define>
     </head>
 
     <body class="page page-dark">
+        <init as 'globalState' with { wifi: null, ssid: null } />
+        <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
+
+        <define as 'showResult'>
+            <test with $L.eq($?.result.retCode, 200) >
+                <include with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <include with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+
+                <return with $DATA.parse($2?.result.retValue) />
+
+                <differ>
+                    <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <return with false />
+                </differ>
+            </test>
+        </define>
+
+        <!-- page framework begin  -->
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
         <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:true, titlebarBackButtonDefaultHandleeEnable:true } />
@@ -73,7 +84,238 @@
             </div>
 
         </div>
+        <!-- page framework end  -->
 
+        <define as 'getInetdResult'>
+            <test with $L.eq($?.result.retCode, 200) >
+                <include with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <include with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+
+                <init as 'retValue' with $DATA.parse($2?.result.retValue) temp />
+
+                <test with $L.eq($retValue.errCode, 0) >
+                    <return with {{ $retValue.data || null }} silently />
+                    <differ>
+                        <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $retValue.errMsg" />
+                        <return with undefined />
+                    </differ>
+                </test>
+
+                <differ>
+                    <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <return with false />
+                </differ>
+
+            </test>
+        </define>
+
+        <define as 'showBubbleData'>
+            <init as 'bubbleData' with $DATA.parse($?.bubbleData) temp />
+
+            <include with $logMsg on "Got an event from $?.fromEndpoint/bubble/$?.fromBubble: $?.bubbleData" />
+            <include with $logMsg on $DATA.serialize($bubbleData, 'pretty') />
+
+            <return with $bubbleData />
+        </define>
+
+        <define as 'showWiFiStatus'>
+            <test with $databus.call($hbdinetdMain, 'getDeviceStatus', "{device: '$globalState.wifi'}") >
+                <include with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+
+                <forget on $databus for 'result:getDeviceStatus' />
+                <observe on $databus for 'result:getDeviceStatus'>
+                    <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } />
+
+                    <exit with 'Success' />
+                </observe>
+
+                <differ>
+                    <include with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                </differ>
+            </test>
+        </define>
+
+        <init as 'scanTimes' at '_root' with 1 />
+        <observe on $globalState for 'scanHotspots' >
+            <test with $databus.call($hbdinetdMain, 'wifiStartScan', "{device: '$globalState.wifi', waitSeconds: 2}") >
+                <observe on $databus for 'result:wifiStartScan'>
+
+                    <iterate on ['DeviceConfigured', 'DeviceConfigFailed', 'WiFiScanFinished', 'WiFiHotspotLost', 'WiFiHotspotFound',
+                                'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+                        <forget on $databus for "event:$?" />
+                    </iterate>
+
+                    <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'wifiStartScan', result: $? } >
+                        <test with $L.strne('case', $DATA.type($?), 'undefined') >
+
+                            <iterate on ['WiFiHotspotLost', 'WiFiHotspotFound',
+                                        'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+                                <observe on $databus for "event:$?" with $showBubbleData />
+                            </iterate>
+
+                            <observe on $databus for 'event:WiFiScanFinished'>
+
+                                <test with $L.lt($scanTimes, 10) >
+                                    <include with $logMsg on "Current scan times: $scanTimes" />
+
+                                    <init as 'scanTimes' at '_root' with $DATA.arith('+', $scanTimes, 1) />
+                                    <fire on $globalState for 'scanHotspots' />
+
+                                    <differ>
+                                        <exit with 'reach max scan times' />
+                                    </differ>
+                                </test>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiConnected'>
+                                <call on $showBubbleData with $? >
+
+                                    <update on $globalState at '.ssid' with $?.ssid />
+                                    <init as 'scanTimes' at '_root' with 10 >
+                                        <include with $logMsg on "Connected to `$?.ssid`" />
+                                    </init>
+
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceConfigured'>
+                                <call on $showBubbleData with $? >
+                                    <include with $logMsg on "Configuration for the device $?.device: " />
+                                    <include with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+
+                                    <call on $showWiFiStatus />
+                                    <!-- exit with "Connected to $globalState.ssid and it is configured by using $?.method" / -->
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceConfigFailed'>
+                                <call on $showBubbleData with $? >
+                                    <exit with "Connected to $globalState.ssid but failed to configure the device using $?.method" />
+                                </call>
+                            </observe>
+
+                        </test>
+
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <observe on $globalState for 'GotWiFiDevice' >
+            <include with $logMsg on "Found the WiFi Device: $globalState.wifi ($?)" />
+
+            <test with $databus.call($hbdinetdMain, 'openDevice', "{device: '$globalState.wifi'}") >
+                <include with $logMsg on "Calling $hbdinetdMain/method/openDevice..." />
+
+                <observe on $databus for 'result:openDevice'>
+                    <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'openDevice', result: $? } >
+                        <test with $L.strne('case', $DATA.type($?), 'undefined') >
+
+                            <iterate on ['DeviceConfigured', 'DeviceConfigFailed', 'WiFiScanFinished', 'WiFiHotspotLost', 'WiFiHotspotFound',
+                                        'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+
+                                <test with $databus.subscribe($hbdinetdMain, $?) silently >
+                                    <include with $logMsg on "Subscribing $hbdinetdMain/bubble/$?..." />
+
+                                    <differ>
+                                        <include with $logMsg on "Failed to subscribe $hbdinetdMain/bubble/$2?..." />
+                                    </differ>
+                                </test>
+                            </iterate>
+                            <fire on $globalState for 'scanHotspots' />
+                        </test>
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <define as 'onHBDBusReady'>
+            <test with $databus.call($hbdinetdMain, 'getDeviceStatus', '{device: "*"}') >
+                <include with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+
+                <observe on $databus for 'result:getDeviceStatus'>
+                    <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } >
+                        <test with $?>
+                            <iterate on $2?.data >
+                                <test with $L.streq('caseless', $?.type, 'wifi') >
+                                    <include with $logMsg on "Testing device type: $?.type" />
+
+                                    <update on $globalState at '.wifi' with $2?.device />
+                                    <fire on $globalState for 'GotWiFiDevice' with $2?.device />
+                                    <back to '_nexttolast' />
+                                </test>
+                            </iterate>
+                        </test>
+                    </call>
+                </observe>
+
+                <differ>
+                    <include with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                </differ>
+            </test>
+
+            <test with $databus.register_proc('terminate') >
+                <observe on $databus for 'call:terminate'>
+
+                    <include with $logMsg on "Got a call to `terminate` from $?.fromEndpoint" />
+
+                    <test with $databus.send_result($?.resultId, 'Ok') >
+                        <exit with "Terminated by $2?.fromEndpoint">
+                            $databus.revoke_proc('terminate')
+                        </exit>
+                    </test>
+
+                </observe>
+
+                <differ>
+                    <include with $logMsg on "Failed to register `terminate` method" />
+                </differ>
+            </test>
+
+        </define>
+
+
+        <include with $logMsg on "begin Connection to HBDBus ..." />
+        <init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock', 'default', 'hbdbus') >
+            <include with $logMsg on "register state observe ..." />
+
+            <observe on $databus for 'state:ready' >
+                <include with $logMsg on "Connection to HBDBus is now ready." />
+                <call on $onHBDBusReady />
+            </observe>
+
+            <include with $logMsg on "after register state observe ..." />
+
+            <observe on $databus for 'state:LostEventGenerator' >
+
+                <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
+                    <include with $logMsg on "HBDInetd disconnected from HBDBus" />
+                    <!-- TODO: pop dialog -->
+                    <exit with 'HBDInetd disconnected from HBDBus' />
+                </test>
+
+            </observe>
+
+            <observe on $databus for 'close' >
+                <include with $logMsg on "HBDBus is closed" />
+                <inherit>
+                    <!-- TODO: pop dialog -->
+                    <exit with 'closed' />
+                </inherit>
+            </observe>
+
+            <observe on $databus for 'error:hbdbus' >
+                <include with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
+                <!-- TODO: pop dialog -->
+                <exit with 'error:hbdbus' />
+            </observe>
+
+            <catch for `ANY`>
+                <include with $logMsg on "Failed to connected to HBDBus" />
+                <!-- TODO: pop dialog -->
+                <exit with 'failed' />
+            </catch>
+        </init>
 
 
         <observe on $CRTN for "rdrState:closed">
