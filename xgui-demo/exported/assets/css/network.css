@@ -1,0 +1,91 @@
+.network__wifi {
+    position:relative;
+    height: 12vh;
+    margin-top: 4vh;
+}
+
+.network__wifi__title {
+    position: absolute;
+    top: 1vh;
+    left: 3vw;
+    text-align: left;
+}
+
+.network__wifi__toggle {
+    position: absolute;
+    top: 1vh;
+    right: 3vw;
+    width: 10vh;
+    height: 10vh;
+}
+
+.network__saved__wlan {
+    margin-top: 3vh;
+    margin-left: 3vh;
+    margin-right: 3vh;
+
+    padding-left: 1vw;
+
+    border-style:solid;
+    border-color: #CCCCCC;
+    border-width: 1px 0 0 0;
+}
+
+.network__saved__wlan_title {
+    margin-top: 2vh;
+}
+
+.network__other__wlan {
+    margin-top: 3vh;
+    margin-left: 3vh;
+    margin-right: 3vh;
+
+    padding-left: 1vw;
+
+    border-style: solid;
+    border-color: #CCCCCC;
+    border-width: 1px 0 0 0;
+
+}
+
+.network__other__wlan_title {
+    margin-top: 2vh;
+}
+
+.network_other__wlan_list {
+}
+
+.network__wlan__item {
+    position:relative;
+    height: 10vh;
+}
+
+.network__wlan__item__rssi {
+    position: absolute;
+    top: 1vh;
+    width: 8vh;
+    height: 8vh;
+}
+
+.network__wlan__item__title {
+    position: absolute;
+    top: 1vh;
+    left: 10vh;
+}
+
+.network__wlan__item__lock {
+    position: absolute;
+    right: 8vh;
+    top: 3vh;
+    width: 4vh;
+    height: 4vh;
+}
+
+.network__wlan__item__arrow {
+    position: absolute;
+    right: 0vh;
+    top: 1vh;
+    width: 8vh;
+    height: 8vh;
+}
+

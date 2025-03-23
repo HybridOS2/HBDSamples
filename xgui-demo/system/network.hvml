@@ -1,0 +1,84 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+
+        <link rel="stylesheet" href="exported/assets/css/common.css" />
+        <link rel="stylesheet" href="exported/assets/css/titlebar.css" />
+        <link rel="stylesheet" href="exported/assets/css/network.css" />
+
+        <style hvml:raw>
+            #list_content{
+                margin-left:5px;
+                margin-top:0px;
+                width:630px;
+                height:200px;
+                position:relative;
+                top: 40px;
+            }
+
+            .item{
+                margin-left:12px;
+                width:600px;
+                height:40px;
+                font-size:24px;
+                text-align:left;
+                border-style: solid;
+                border-color:#5C5C5C;
+                border-width:2px;
+            }
+        </style>
+    </head>
+
+    <body class="page page-dark">
+        <!-- title bar -->
+        <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
+        <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:true, titlebarBackButtonDefaultHandleeEnable:true } />
+
+        <div class="content">
+
+            <div id="id__network__wifi__cntr">
+                <div id="id__network__wifi" class="network__wifi" hvml-events="click" >
+                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
+                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
+                        src="exported/assets/images/toggle-on.png" alt="&nbsp;"
+                        hvml-events="click" />
+                </div>
+            </div>
+
+            <div id="id__network__saved__wlan" class="network__saved__wlan">
+                <div class="network__saved__wlan_title text-light fs-0">我的网络</div>
+                <div id="id__network_other__wlan_list" class="network_other__wlan_list">
+                    <div class="network__wlan__item">
+                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__title fs-2">AAA</div>
+                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+                </div>
+            </div>
+
+            <div id="id__network__other__wlan" class="network__other__wlan">
+                <div class="network__other__wlan_title text-light fs-0">其它网络</div>
+                <div id="id__network_other__wlan_list" class="network_other__wlan_list">
+                    <div class="network__wlan__item">
+                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__title fs-2">666</div>
+                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit />
+        </observe>
+
+    </body>
+</hvml>

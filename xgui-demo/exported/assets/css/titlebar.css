@@ -1,0 +1,29 @@
+.titlebar {
+    position:relative;
+    height: 12vh;
+    padding-top:1vh;
+}
+
+.titlebar__title {
+     text-align: center;
+     margin: 0 auto;
+     margin-left: 15vw;
+     margin-right: 15vw;
+}
+
+.titlebar__back {
+    position: absolute;
+    top: 1vh;
+    left: 2vh;
+    width: 10vh;
+    height: 10vh;
+}
+
+.titlebar__add {
+    position: absolute;
+    top: 1vh;
+    right: 2vh;
+    width: 10vh;
+    height: 10vh;
+}
+
