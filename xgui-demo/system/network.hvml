@@ -89,15 +89,17 @@
 
         <dialog id="id__dlg__pwd" class="dlg__pwd">
             <form>
-            <div class="dlg__title">
-                <div id="id__dlg__title__title" class="dlg__title__title fs-3"></div>
+                <div class="dlg__title">
+                    <div id="id__dlg__title__title" class="dlg__title__title fs-3"></div>
 
-                <img id="id__dlg__title__close" class="dlg__title__close"
-                    src="exported/assets/images/x.png"
-                    alt="&nbsp;"
-                    hvml-events="click" />
-            </div>
-            <input class="dlg__title__pw fs-2" type="password" name="dlg_pwd" value="" hvml-events="click" />
+                    <img id="id__dlg__title__close" class="dlg__title__close"
+                        src="exported/assets/images/x.png"
+                        alt="&nbsp;"
+                        hvml-events="click" />
+                </div>
+
+                <div id="id__dlg__err__msg" class="dlg__err__msg fs-2 invisible"> 连接失败，请重试！</div>
+                <input id="id__dlg__title__pw" class="dlg__title__pw fs-2" type="password" name="dlg_pwd" value="" hvml-events="click" />
             </form>
 
             <div id="id__dlg__btn__connect" class="dlg__btn fs-2" hvml-events="click"> 连接 </div>
@@ -252,7 +254,8 @@
         <define as 'connWifiFailed'>
             <include with $logMsg on "connWifiFailed is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <!-- TODO -->
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
         <define as 'wifiSignalLevelChanged'>
@@ -298,11 +301,14 @@
 
         <define as 'wifiDialog'>
             <include with $logMsg on "popup dialog with errmsg: $?" />
-            <!-- TODO -->
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
         <define as 'showPwdDlg'>
             <update on '#id__dlg__title__title' at "content" with $?.ssid />
+            <!-- update set:value sometimes crash -->
+            <request on '#id__dlg__title__pw' to "set:value" with "" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 

@@ -116,11 +116,11 @@
     position: absolute;
     background: white;
     color: black;
-    top:15%;
+    top:10%;
     left: 0;
     right:0;
     width: 60%;
-    height: 30%;
+    height: 40%;
     max-width: 100%;
     margin: auto;
     padding: 1em;
@@ -161,7 +161,7 @@
 
 .dlg__btn {
     position: absolute;
-    top: 43vh;
+    top: 58vh;
     right: 2vh;
     width: 25vh;
     height: 10vh;
@@ -173,13 +173,21 @@
 }
 
 .dlg__title__pw {
-    margin-top: 6vh;
+    margin-top: 4vh;
     width: 58vw;
     height: 15vh;
     color:#5C5C5C;
     border-style:solid;
     border-color: #CCCCCC;
     border-width: 1px;
+}
+
+.dlg__err__msg {
+    margin-top: 5vh;
+    width: 58vw;
+    height: 10vh;
+    text-align:center;
+    color:red;
 }
 
 
