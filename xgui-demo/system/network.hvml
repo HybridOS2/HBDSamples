@@ -161,6 +161,45 @@
             </iterate>
 
         </define>
+
+
+        <define as 'connectedWifi'>
+            <include with $logMsg on "disconnectedWifi is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'disconnectedWifi'>
+            <include with $logMsg on "disconnectedWifi is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'connWifiFailed'>
+            <include with $logMsg on "connWifiFailed is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'wifiSignalLevelChanged'>
+            <include with $logMsg on "wifiSignalLevelChanged is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <!-- wifiHotspotLost and wiFiHotspotFound fired before WiFiScanFinished -->
+        <define as 'wifiHotspotLost'>
+            <include with $logMsg on "wifiHotspotLost is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'wiFiHotspotFound'>
+            <include with $logMsg on "wiFiHotspotFound is called: " />
+            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
         <!-- page operation group -->
 
         <define as 'getInetdResult'>
@@ -218,6 +257,7 @@
         <observe on $globalState for 'scanHotspots' >
             <test with $databus.call($hbdinetdMain, 'wifiStartScan', "{device: '$globalState.wifi', waitSeconds: 2}") >
                 <observe on $databus for 'result:wifiStartScan'>
+                    <forget on $databus for "result:wifiStartScan" />
 
                     <iterate on ['DeviceConfigured', 'DeviceConfigFailed', 'WiFiScanFinished', 'WiFiHotspotLost', 'WiFiHotspotFound',
                                 'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
@@ -227,8 +267,7 @@
                     <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'wifiStartScan', result: $? } >
                         <test with $L.strne('case', $DATA.type($?), 'undefined') >
 
-                            <iterate on ['WiFiHotspotLost', 'WiFiHotspotFound',
-                                        'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+                            <iterate on ['WiFiHotspotFound'] >
                                 <observe on $databus for "event:$?" with $showBubbleData />
                             </iterate>
 
@@ -238,19 +277,6 @@
                                         <call on $loadWifiList with $2?.hotspots />
                                     </test>
                                 </call>
-
-                                <!--
-                                <test with $L.lt($scanTimes, 10) >
-                                    <include with $logMsg on "Current scan times: $scanTimes" />
-
-                                    <init as 'scanTimes' at '_root' with $DATA.arith('+', $scanTimes, 1) />
-                                    <fire on $globalState for 'scanHotspots' />
-
-                                    <differ>
-                                        <exit with 'reach max scan times' />
-                                    </differ>
-                                </test>
-                                -->
                             </observe>
 
                             <observe on $databus for 'event:WiFiConnected'>
@@ -259,8 +285,49 @@
                                     <update on $globalState at '.ssid' with $?.ssid />
                                     <init as 'scanTimes' at '_root' with 10 >
                                         <include with $logMsg on "Connected to `$?.ssid`" />
+                                        <call on $connectedWifi with $? />
                                     </init>
 
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiDisconnected'>
+                                <call on $showBubbleData with $? >
+                                    <call on $disconnectedWifi with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiFailedConnAttempt'>
+                                <call on $showBubbleData with $?>
+                                    <call on $connWifiFailed with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiSignalLevelChanged'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wifiSignalLevelChanged with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiHotspotLost'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wifiHotspotLost with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiHotspotFound'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wiFiHotspotFound with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceChanged'>
+                                <call on $showBubbleData with $? >
+                                    <include with $logMsg on "DeviceChanged for the device $?.device: " />
+                                    <include with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+
+                                    <call on $showWiFiStatus />
+                                    <!-- TODO: update UI -->
                                 </call>
                             </observe>
 
@@ -270,13 +337,16 @@
                                     <include with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
 
                                     <call on $showWiFiStatus />
-                                    <!-- exit with "Connected to $globalState.ssid and it is configured by using $?.method" / -->
+                                    <!-- "Connected to $globalState.ssid and it is configured by using $?.method" / -->
+                                    <!-- TODO: update UI -->
+                                    <!-- hide loading icon -->
                                 </call>
                             </observe>
 
                             <observe on $databus for 'event:DeviceConfigFailed'>
                                 <call on $showBubbleData with $? >
-                                    <exit with "Connected to $globalState.ssid but failed to configure the device using $?.method" />
+                                    <include with $logMsg on "Connected to $globalState.ssid but failed to configure the device using $?.method " />
+                                    <!-- TODO: update UI -->
                                 </call>
                             </observe>
 
