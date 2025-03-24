@@ -25,9 +25,11 @@
     </head>
 
     <body class="page page-dark">
+        <init as 'wifiList' with {} />
         <init as 'wifiSavedList' with {} />
         <init as 'wifiOtherList' with {} />
-        <init as 'globalState' with { wifi: null, ssid: null, bssid:null } />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null } />
+        <init as 'currWifiInfo' with {} />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
         <define as 'showResult'>
@@ -47,7 +49,7 @@
         <!-- page framework begin  -->
 
         <archetype name='wifiItemTmpl'>
-                    <div class="network__wlan__item" id="$?.id">
+                    <div class="network__wlan__item" id="$?.id" hvml-events="click">
                         <img id="network__wlan__item__rssi__$?.id" class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
                         <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
                         <div class="network__wlan__item__title fs-2">$?.ssid</div>
@@ -95,6 +97,7 @@
 
         <define as 'loadWifiList'>
             <test with "$L.gt($DATA.count($?),0)">
+                <update on "$wifiList" to "displace" with {} />
                 <update on "$wifiSavedList" to "displace" with {} />
                 <update on "$wifiOtherList" to "displace" with {} />
                 <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
@@ -154,6 +157,8 @@
                 </test>
 
 
+                <update on "$wifiList" at ".$?.id" with $item_data />
+
                 <test with $item_data.isSaved on $item_data>
                     <update on "$wifiSavedList" at ".$?.id" with $? />
                     <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
@@ -171,9 +176,11 @@
             <include with $logMsg on "connectedWifi is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
 
+            <include with $logMsg on "##########################################connectedWifi is called: " />
             <init as 'event_data' with "$?" temp />
             <call on $buildWifiItemId with $? >
                 <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
+                <include with $logMsg on "##########################################connectedWifi is called:  update $elem_id visible" />
                 <update on "$elem_id" at "attr.class" with "network__wlan__item__link visible" />
             </call>
             <update on $globalState at '.ssid' with $?.ssid />
@@ -187,7 +194,7 @@
             <test with $L.strne('case', $DATA.type($globalState.bssid), 'null')>
                 <call on $buildWifiItemId with $globalState >
                     <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
-                    <update on "$elem_id" at "attr.class" with "network__wlan__item__link invisible" />
+                    <update on "$elem_id" at "attr.class" with "network__wlan__item__link invisible" silently />
                 </call>
             </test>
 
@@ -240,6 +247,11 @@
         <define as 'wiFiHotspotFound'>
             <include with $logMsg on "wiFiHotspotFound is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'wifiDialog'>
+            <include with $logMsg on "popup dialog with errmsg: $?" />
             <!-- TODO -->
         </define>
 
@@ -466,6 +478,77 @@
             </test>
 
         </define>
+
+        <observe on $globalState for 'wifiConnect'>
+            <update on $globalState at '.connectingSsid' with $?.ssid />
+            <test with $databus.call(
+                    $hbdinetdMain,'wifiConnect',
+                    "{device:'$globalState.wifi', ssid:'$?.ssid', bssid:'$?.bssid', keymgmt:'$?.keymgmt', passphrase:'$?.passphrase'}"
+                ) >
+                <observe on $databus for 'result:wifiConnect'>
+                    <call on $showResult with {edpt:$hbdinetdMain, method:'wifiConnect', result:$?} >
+                        <forget on $databus for "result:wifiConnect" />
+
+                        <test with="$L.or($L.eq($?.errCode,'0'), $L.eq($?.errCode,'-4'))">
+                            <differ>
+                                <call on $wifiDialog with "$3?.errMsg" />
+                            </differ>
+                        </test>
+
+                        <test on $?.errCode >
+                            <match with $L.eq($?, -4) exclusively>
+                                <include with $logMsg on "Waiting for result event..." />
+                            </match>
+
+                            <match with $L.eq($?, 0) exclusively>
+                                <include with $logMsg on "Correctly connected to $globalState.connectingSsid..." />
+                            </match>
+
+                            <match>
+                                <include with $logMsg on "Failed $hbdinetdMain/method/wifiConnect $2?.errCode ($2?.errMsg) ..." />
+                            </match>
+                        </test>
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <observe on ".network__wlan__item" for "click">
+            <init as 'item_data' with $wifiList[$?.targetId] temp />
+
+            <test with $item_data.isConnected>
+                <back to '_nexttolast' />
+            </test>
+
+            <update on "$currWifiInfo" to "merge">
+                {
+                    ssid: $item_data.ssid,
+                    bssid: $item_data.bssid
+                }
+            </update>
+
+            <test with $item_data.is_lock>
+                <!-- TODO: popup dialog to input password -->
+                <update on "$currWifiInfo" at '.passphrase' with 'HybridOS 2.0' />
+                <test with $STR.contains($item_data.capabilities, 'WEP')>
+                    <update on "$currWifiInfo" at ".keymgmt" with "WEP" />
+                </test>
+                <test with $STR.contains($item_data.capabilities,'WPA2')>
+                    <update on "$currWifiInfo" at ".keymgmt" with "WPA2-PSK" />
+                    <differ>
+                        <update on "$currWifiInfo" at ".keymgmt" with "WPA-PSK" />
+                    </differ>
+                </test>
+
+                <fire on $globalState for 'wifiConnect' with $currWifiInfo/>
+
+                <differ>
+                    <update on "$currWifiInfo" at '.keymgmt' to null />
+                    <fire on $globalState for 'wifiConnect' with $currWifiInfo />
+                </differ>
+            </test>
+
+        </observe>
 
 
         <include with $logMsg on "begin Connection to HBDBus ..." />
