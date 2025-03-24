@@ -31,8 +31,11 @@
     border-width: 1px 0 0 0;
 }
 
-.network__saved__wlan_title {
+.network__saved__wlan__title {
     margin-top: 2vh;
+}
+
+.network_saved__wlan__list {
 }
 
 .network__other__wlan {
@@ -48,11 +51,11 @@
 
 }
 
-.network__other__wlan_title {
+.network__other__wlan__title {
     margin-top: 2vh;
 }
 
-.network_other__wlan_list {
+.network_other__wlan__list {
 }
 
 .network__wlan__item {

@@ -26,6 +26,8 @@
     </head>
 
     <body class="page page-dark">
+        <init as 'wifiSavedList' with {} />
+        <init as 'wifiOtherList' with {} />
         <init as 'globalState' with { wifi: null, ssid: null } />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
@@ -44,6 +46,17 @@
         </define>
 
         <!-- page framework begin  -->
+
+        <archetype name='wifiItemTmpl'>
+                    <div class="network__wlan__item" id="$?.bssid">
+                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
+                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+        </archetype>
+
+
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
         <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:true, titlebarBackButtonDefaultHandleeEnable:true } />
@@ -60,11 +73,11 @@
             </div>
 
             <div id="id__network__saved__wlan" class="network__saved__wlan">
-                <div class="network__saved__wlan_title text-light fs-0">我的网络</div>
-                <div id="id__network_other__wlan_list" class="network_other__wlan_list">
+                <div class="network__saved__wlan__title text-light fs-0">我的网络</div>
+                <div id="id__network__saved__wlan__list" class="network__saved__wlan__list">
                     <div class="network__wlan__item">
                         <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">AAA</div>
+                        <div class="network__wlan__item__title fs-2">Always Saved</div>
                         <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
                     </div>
@@ -72,11 +85,17 @@
             </div>
 
             <div id="id__network__other__wlan" class="network__other__wlan">
-                <div class="network__other__wlan_title text-light fs-0">其它网络</div>
-                <div id="id__network_other__wlan_list" class="network_other__wlan_list">
+                <div class="network__other__wlan__title text-light fs-0">其它网络</div>
+                <div id="id__network__other__wlan__list" class="network__other__wlan__list">
                     <div class="network__wlan__item">
                         <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">666</div>
+                        <div class="network__wlan__item__title fs-2">HybridOS</div>
+                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+                    <div class="network__wlan__item">
+                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__title fs-2">HybridOS 2</div>
                         <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
                     </div>
@@ -85,6 +104,30 @@
 
         </div>
         <!-- page framework end  -->
+
+        <!-- page operation group -->
+        <define as 'loadWifiList'>
+            <test with "$L.gt($DATA.count($?),0)">
+                <update on "$wifiSavedList" to "displace" with {} />
+                <update on "$wifiOtherList" to "displace" with {} />
+                <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
+                <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />
+            </test>
+
+            <iterate on $?>
+                <test with $?.isSaved>
+                    <update on "$wifiSavedList" at ".$?.bssid" with $? />
+                    <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    <differ>
+                        <update on "$wifiOtherList" at ".$?.bssid" with $? />
+                        <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    </differ>
+                </test>
+            </iterate>
+
+
+        </define>
+        <!-- page operation group -->
 
         <define as 'getInetdResult'>
             <test with $L.eq($?.result.retCode, 200) >
@@ -126,7 +169,9 @@
                 <observe on $databus for 'result:getDeviceStatus'>
                     <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } />
 
-                    <exit with 'Success' />
+                    <!--
+                        <exit with 'Success' />
+                    -->
                 </observe>
 
                 <differ>
@@ -154,7 +199,13 @@
                             </iterate>
 
                             <observe on $databus for 'event:WiFiScanFinished'>
+                                <call on $showBubbleData with $?>
+                                    <test with $?.success>
+                                        <call on $loadWifiList with $2?.hotspots />
+                                    </test>
+                                </call>
 
+                                <!--
                                 <test with $L.lt($scanTimes, 10) >
                                     <include with $logMsg on "Current scan times: $scanTimes" />
 
@@ -165,6 +216,7 @@
                                         <exit with 'reach max scan times' />
                                     </differ>
                                 </test>
+                                -->
                             </observe>
 
                             <observe on $databus for 'event:WiFiConnected'>
