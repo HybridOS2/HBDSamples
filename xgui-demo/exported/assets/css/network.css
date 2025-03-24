@@ -112,3 +112,75 @@
     height: 8vh;
 }
 
+.dlg__pwd {
+    position: absolute;
+    background: white;
+    color: black;
+    top:15%;
+    left: 0;
+    right:0;
+    width: 60%;
+    height: 30%;
+    max-width: 100%;
+    margin: auto;
+    padding: 1em;
+    border-style:solid;
+    border-color: #999999;
+    border-width: 1px;
+}
+
+
+.dlg__title {
+    position:relative;
+    height: 12vh;
+    padding-top:1vh;
+    color:#5C5C5C
+}
+
+.dlg__title__title {
+     text-align: left;
+     margin-left: 2vw;
+     margin-right: 15vw;
+}
+
+.dlg__title__back {
+    position: absolute;
+    top: 1vh;
+    left: 2vh;
+    width: 10vh;
+    height: 10vh;
+}
+
+.dlg__title__close {
+    position: absolute;
+    top: 1vh;
+    right: 2vh;
+    width: 10vh;
+    height: 10vh;
+}
+
+.dlg__btn {
+    position: absolute;
+    top: 43vh;
+    right: 2vh;
+    width: 25vh;
+    height: 10vh;
+    text-align:center;
+    color:#5C5C5C;
+    border-style:solid;
+    border-color: #CCCCCC;
+    border-width: 1px;
+}
+
+.dlg__title__pw {
+    margin-top: 6vh;
+    width: 58vw;
+    height: 15vh;
+    color:#5C5C5C;
+    border-style:solid;
+    border-color: #CCCCCC;
+    border-width: 1px;
+}
+
+
+
