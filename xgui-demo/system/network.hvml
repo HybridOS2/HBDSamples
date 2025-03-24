@@ -26,9 +26,7 @@
 
     <body class="page page-dark">
         <init as 'wifiList' with {} />
-        <init as 'wifiSavedList' with {} />
-        <init as 'wifiOtherList' with {} />
-        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null } />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false } />
         <init as 'currWifiInfo' with {} />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
@@ -96,14 +94,14 @@
         </define>
 
         <define as 'loadWifiList'>
+            <update on $globalState at '.refreshList' with true />
             <test with "$L.gt($DATA.count($?),0)">
                 <update on "$wifiList" to "displace" with {} />
-                <update on "$wifiSavedList" to "displace" with {} />
-                <update on "$wifiOtherList" to "displace" with {} />
                 <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
                 <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />
             </test>
 
+            <init as 'wifiArr' with [] temp />
             <iterate on $?>
                 <init as 'item_data' with $? temp />
 
@@ -158,16 +156,25 @@
 
 
                 <update on "$wifiList" at ".$?.id" with $item_data />
-
-                <test with $item_data.isSaved on $item_data>
-                    <update on "$wifiSavedList" at ".$?.id" with $? />
+                <update on "$wifiArr" to 'append' with $item_data />
+                <test with $item_data.isConnected>
                     <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                </test>
+            </iterate>
+
+            <iterate on $wifiArr>
+                <test with $?.isConnected>
                     <differ>
-                        <update on "$wifiOtherList" at ".$?.id" with $? />
-                        <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                        <test with $?.isSaved>
+                            <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                            <differ>
+                                <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                            </differ>
+                        </test>
                     </differ>
                 </test>
             </iterate>
+            <update on $globalState at '.refreshList' with false />
 
         </define>
 
@@ -176,13 +183,17 @@
             <include with $logMsg on "connectedWifi is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
 
-            <include with $logMsg on "##########################################connectedWifi is called: " />
-            <init as 'event_data' with "$?" temp />
             <call on $buildWifiItemId with $? >
-                <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
-                <include with $logMsg on "##########################################connectedWifi is called:  update $elem_id visible" />
-                <update on "$elem_id" at "attr.class" with "network__wlan__item__link visible" />
+                <update on "$wifiList[$?]" at ".isConnected" with true />
+                <update on "$wifiList[$?]" at ".iSaved" with true />
             </call>
+
+            <init as "wifiListTmp" with [] temp />
+            <iterate on $wifiList by 'KEY: ALL FOR KV' >
+                <update on $wifiListTmp to 'append' with $?.v />
+            </iterate>
+            <call on $loadWifiList with $wifiListTmp />
+
             <update on $globalState at '.ssid' with $?.ssid />
             <update on $globalState at '.bssid' with $?.bssid />
         </define>
@@ -193,12 +204,14 @@
 
             <test with $L.strne('case', $DATA.type($globalState.bssid), 'null')>
                 <call on $buildWifiItemId with $globalState >
+                    <update on "$wifiList[$?]" at ".isConnected" with false />
                     <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
                     <update on "$elem_id" at "attr.class" with "network__wlan__item__link invisible" silently />
                 </call>
             </test>
 
             <init as 'event_data' with "$?" temp />
+
             <update on $globalState at '.ssid' with null />
             <update on $globalState at '.bssid' with null />
         </define>
@@ -539,11 +552,11 @@
                         <update on "$currWifiInfo" at ".keymgmt" with "WPA-PSK" />
                     </differ>
                 </test>
-
                 <fire on $globalState for 'wifiConnect' with $currWifiInfo/>
 
                 <differ>
-                    <update on "$currWifiInfo" at '.keymgmt' to null />
+                    <update on "$currWifiInfo" at '.passphrase' with null />
+                    <update on "$currWifiInfo" at '.keymgmt' with 'NONE' />
                     <fire on $globalState for 'wifiConnect' with $currWifiInfo />
                 </differ>
             </test>
