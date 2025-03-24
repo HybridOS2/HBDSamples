@@ -27,7 +27,7 @@
     <body class="page page-dark">
         <init as 'wifiSavedList' with {} />
         <init as 'wifiOtherList' with {} />
-        <init as 'globalState' with { wifi: null, ssid: null } />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null } />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
         <define as 'showResult'>
@@ -48,10 +48,10 @@
 
         <archetype name='wifiItemTmpl'>
                     <div class="network__wlan__item" id="$?.id">
-                        <img class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
+                        <img id="network__wlan__item__rssi__$?.id" class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
                         <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
-                        <img class="network__wlan__item__link $?.link_visible" src="exported/assets/images/check.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">$?.data.ssid</div>
+                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
+                        <img id="network__wlan__item__link__$?.id" class="network__wlan__item__link $?.link_visible" src="exported/assets/images/check.png" alt="&nbsp;" />
                         <img class="network__wlan__item__lock $?.lock_visble" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
                     </div>
@@ -89,6 +89,10 @@
         <!-- page framework end  -->
 
         <!-- page operation group -->
+        <define as 'buildWifiItemId'>
+            <return with $STR.replace($?.bssid, ':', '_') />
+        </define>
+
         <define as 'loadWifiList'>
             <test with "$L.gt($DATA.count($?),0)">
                 <update on "$wifiSavedList" to "displace" with {} />
@@ -98,17 +102,17 @@
             </test>
 
             <iterate on $?>
-                <!--
-                        id: $STR.join("$?.bssid", "_", "$?.frequency"),
-                -->
-                <init as 'item_data' temp >
-                    {
-                        id: $?.bssid,
-                        is_5g: $L.ge($?.frequency, 5000),
-                        is_lock: $STR.contains($?.capabilities, 'PSK'),
-                        data: $?
-                    }
-                </init>
+                <init as 'item_data' with $? temp />
+
+                <call on $buildWifiItemId with $? >
+                    <update on "$item_data" to "merge">
+                        {
+                            id: $?,
+                            is_5g: $L.ge($item_data.frequency, 5000),
+                            is_lock: $STR.contains($item_data.capabilities, 'PSK')
+                        }
+                    </update>
+                </call>
 
                 <test with $item_data.is_5g>
                     <update on "$item_data" at ".five_g_visble" with "visible" />
@@ -124,14 +128,14 @@
                     </differ>
                 </test>
 
-                <test with $?.isConnected>
+                <test with $item_data.isConnected>
                     <update on "$item_data" at ".link_visible" with "visible" />
                     <differ>
                         <update on "$item_data" at ".link_visible" with "invisible" />
                     </differ>
                 </test>
 
-                <test on $?.signalLevel>
+                <test on $item_data.signalLevel>
                     <match with "$L.ge($?.signalLevel, -33)" exclusively>
                         <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi.png" />
                     </match>
@@ -150,7 +154,7 @@
                 </test>
 
 
-                <test with $?.isSaved on $item_data>
+                <test with $item_data.isSaved on $item_data>
                     <update on "$wifiSavedList" at ".$?.id" with $? />
                     <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
                     <differ>
@@ -164,15 +168,32 @@
 
 
         <define as 'connectedWifi'>
-            <include with $logMsg on "disconnectedWifi is called: " />
+            <include with $logMsg on "connectedWifi is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <!-- TODO -->
+
+            <init as 'event_data' with "$?" temp />
+            <call on $buildWifiItemId with $? >
+                <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
+                <update on "$elem_id" at "attr.class" with "network__wlan__item__link visible" />
+            </call>
+            <update on $globalState at '.ssid' with $?.ssid />
+            <update on $globalState at '.bssid' with $?.bssid />
         </define>
 
         <define as 'disconnectedWifi'>
             <include with $logMsg on "disconnectedWifi is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <!-- TODO -->
+
+            <test with $L.strne('case', $DATA.type($globalState.bssid), 'null')>
+                <call on $buildWifiItemId with $globalState >
+                    <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
+                    <update on "$elem_id" at "attr.class" with "network__wlan__item__link invisible" />
+                </call>
+            </test>
+
+            <init as 'event_data' with "$?" temp />
+            <update on $globalState at '.ssid' with null />
+            <update on $globalState at '.bssid' with null />
         </define>
 
         <define as 'connWifiFailed'>
@@ -184,7 +205,29 @@
         <define as 'wifiSignalLevelChanged'>
             <include with $logMsg on "wifiSignalLevelChanged is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <!-- TODO -->
+
+            <init as 'signal_data' with "$?" temp />
+            <call on $buildWifiItemId with $? >
+                <init as 'elem_id' with "#network__wlan__item__rssi__$?" temp />
+                <test on $signal_data.signalLevel>
+                    <match with "$L.ge($?.signalLevel, -33)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -66)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-2.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -90)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-1.png" />
+                    </match>
+
+                    <match exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-0.png" />
+                    </match>
+                </test>
+            </call>
+
         </define>
 
         <!-- wifiHotspotLost and wiFiHotspotFound fired before WiFiScanFinished -->
@@ -281,13 +324,7 @@
 
                             <observe on $databus for 'event:WiFiConnected'>
                                 <call on $showBubbleData with $? >
-
-                                    <update on $globalState at '.ssid' with $?.ssid />
-                                    <init as 'scanTimes' at '_root' with 10 >
-                                        <include with $logMsg on "Connected to `$?.ssid`" />
-                                        <call on $connectedWifi with $? />
-                                    </init>
-
+                                    <call on $connectedWifi with $? />
                                 </call>
                             </observe>
 
