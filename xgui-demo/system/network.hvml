@@ -26,7 +26,7 @@
 
     <body class="page page-dark">
         <init as 'wifiList' with {} />
-        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false } />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false, wifiSwitch:false } />
         <init as 'currWifiInfo' with {} />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 
@@ -57,6 +57,17 @@
                     </div>
         </archetype>
 
+        <archetype name='wifiOnTmpl'>
+                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
+                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
+                        src="exported/assets/images/toggle-on.png" alt="&nbsp;" />
+        </archetype>
+
+        <archetype name='wifiOffTmpl'>
+                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
+                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
+                        src="exported/assets/images/toggle-off.png" alt="&nbsp;" />
+        </archetype>
 
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
@@ -66,10 +77,12 @@
 
             <div id="id__network__wifi__cntr">
                 <div id="id__network__wifi" class="network__wifi" hvml-events="click" >
-                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
-                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
-                        src="exported/assets/images/toggle-on.png" alt="&nbsp;"
-                        hvml-events="click" />
+                    <test with $globalState.wifiSwitch>
+                        <update on $@ to 'append' with $wifiOnTmpl />
+                        <differ>
+                            <update on $@ to 'append' with $wifiOffTmpl />
+                        </differ>
+                    </test>
                 </div>
             </div>
 
@@ -606,44 +619,71 @@
         </observe>
 
 
-        <include with $logMsg on "begin Connection to HBDBus ..." />
-        <init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock', 'default', 'hbdbus') >
-            <include with $logMsg on "register state observe ..." />
+        <observe on $globalState for 'wifiSwitchOn'>
+            <include with $logMsg on "begin Connection to HBDBus ..." />
+            <init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock', 'default', 'hbdbus') at '_topmost'>
+                <include with $logMsg on "register state observe ..." />
 
-            <observe on $databus for 'state:ready' >
-                <include with $logMsg on "Connection to HBDBus is now ready." />
-                <call on $onHBDBusReady />
-            </observe>
+                <observe on $databus for 'state:ready' >
+                    <include with $logMsg on "Connection to HBDBus is now ready." />
+                    <call on $onHBDBusReady />
+                </observe>
 
-            <include with $logMsg on "after register state observe ..." />
+                <include with $logMsg on "after register state observe ..." />
 
-            <observe on $databus for 'state:LostEventGenerator' >
+                <observe on $databus for 'state:LostEventGenerator' >
 
-                <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
-                    <include with $logMsg on "HBDInetd disconnected from HBDBus" />
+                    <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
+                        <include with $logMsg on "HBDInetd disconnected from HBDBus" />
+                        <!-- TODO: pop dialog -->
+                    </test>
+
+                </observe>
+
+                <observe on $databus for 'close' >
+                    <include with $logMsg on "HBDBus is closed" />
+                    <inherit>
+                        <!-- TODO: pop dialog -->
+                    </inherit>
+                </observe>
+
+                <observe on $databus for 'error:hbdbus' >
+                    <include with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
                     <!-- TODO: pop dialog -->
-                </test>
+                </observe>
 
-            </observe>
-
-            <observe on $databus for 'close' >
-                <include with $logMsg on "HBDBus is closed" />
-                <inherit>
+                <catch for `ANY`>
+                    <include with $logMsg on "Failed to connected to HBDBus" />
                     <!-- TODO: pop dialog -->
-                </inherit>
-            </observe>
+                </catch>
+            </init>
+        </observe>
 
-            <observe on $databus for 'error:hbdbus' >
-                <include with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
-                <!-- TODO: pop dialog -->
-            </observe>
+        <observe on $globalState for 'wifiSwitchOff'>
+            <forget on $databus for '*' />
+            <include with $logMsg on "Close databus ret : $databus.close() " />
+            <update on "$wifiList" to "displace" with {} />
+            <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
+            <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />
+        </observe>
 
-            <catch for `ANY`>
-                <include with $logMsg on "Failed to connected to HBDBus" />
-                <!-- TODO: pop dialog -->
-            </catch>
-        </init>
+        <observe on '#id__network__wifi' for 'click'>
+            <test with $globalState.wifiSwitch>
+                <update on $globalState at '.wifiSwitch' with false />
+                <update on '#id__network__wifi' at 'content' with $wifiOffTmpl />
+                <fire on $globalState for 'wifiSwitchOff' />
 
+                <differ>
+                    <update on $globalState at '.wifiSwitch' with true />
+                    <update on '#id__network__wifi' at 'content' with $wifiOnTmpl />
+                    <fire on $globalState for 'wifiSwitchOn' />
+                </differ>
+            </test>
+        </observe>
+
+        <test with $globalState.wifiSwitch>
+            <fire on $globalState for 'wifiSwitchOn' />
+        </test>
 
         <observe on $CRTN for "rdrState:closed">
             <exit />
