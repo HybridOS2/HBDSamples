@@ -76,6 +76,18 @@
     left: 10vh;
 }
 
+.network__wlan__item__rssi__5g {
+    width: 3vh;
+    height: 3vh;
+    position: absolute;
+    top: 6vh;
+    left: 6vh;
+    font-size: 2vh;
+    border-style:solid;
+    border-color: #CCCCCC;
+    border-width: 1px;
+}
+
 .network__wlan__item__lock {
     position: absolute;
     right: 8vh;

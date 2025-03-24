@@ -11,7 +11,6 @@
 
         <define as 'logMsg' at '_root' >
             <test with $DATA.is_container($?) >
-                <inherit on $RUNNER.logmsg($DATA.serialize($?)) />
                 <inherit>
                     $STREAM.stdout.writelines($DATA.serialize($?))
                 </inherit>
@@ -56,6 +55,16 @@
                     </div>
         </archetype>
 
+        <archetype name='wifiItemTmpl5G'>
+                    <div class="network__wlan__item" id="$?.bssid">
+                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__rssi__5g fs-0 text-light">5G</div>
+                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
+                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+        </archetype>
+
 
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
@@ -77,6 +86,7 @@
                 <div id="id__network__saved__wlan__list" class="network__saved__wlan__list">
                     <div class="network__wlan__item">
                         <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
+                        <div class="network__wlan__item__rssi__5g fs-0 text-light">5G</div>
                         <div class="network__wlan__item__title fs-2">Always Saved</div>
                         <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
@@ -87,18 +97,6 @@
             <div id="id__network__other__wlan" class="network__other__wlan">
                 <div class="network__other__wlan__title text-light fs-0">其它网络</div>
                 <div id="id__network__other__wlan__list" class="network__other__wlan__list">
-                    <div class="network__wlan__item">
-                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">HybridOS</div>
-                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
-                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
-                    </div>
-                    <div class="network__wlan__item">
-                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">HybridOS 2</div>
-                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
-                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
-                    </div>
                 </div>
             </div>
 
@@ -117,14 +115,23 @@
             <iterate on $?>
                 <test with $?.isSaved>
                     <update on "$wifiSavedList" at ".$?.bssid" with $? />
-                    <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    <test with "$L.ge($?.frequency, 5000)">
+                        <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl5G />
+                        <differ>
+                            <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                        </differ>
+                    </test>
                     <differ>
                         <update on "$wifiOtherList" at ".$?.bssid" with $? />
-                        <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                        <test with "$L.ge($?.frequency, 5000)">
+                            <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl5G />
+                            <differ>
+                                <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                            </differ>
+                        </test>
                     </differ>
                 </test>
             </iterate>
-
 
         </define>
         <!-- page operation group -->
