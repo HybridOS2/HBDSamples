@@ -50,6 +50,7 @@
                     <div class="network__wlan__item" id="$?.id">
                         <img class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
                         <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
+                        <img class="network__wlan__item__link $?.link_visible" src="exported/assets/images/check.png" alt="&nbsp;" />
                         <div class="network__wlan__item__title fs-2">$?.data.ssid</div>
                         <img class="network__wlan__item__lock $?.lock_visble" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
@@ -59,7 +60,7 @@
 
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
-        <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:true, titlebarBackButtonDefaultHandleeEnable:true } />
+        <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:false, titlebarBackButtonDefaultHandleeEnable:true } />
 
         <div class="content">
 
@@ -75,13 +76,6 @@
             <div id="id__network__saved__wlan" class="network__saved__wlan">
                 <div class="network__saved__wlan__title text-light fs-0">我的网络</div>
                 <div id="id__network__saved__wlan__list" class="network__saved__wlan__list">
-                    <div class="network__wlan__item">
-                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__rssi__5g fs-0 text-light">5G</div>
-                        <div class="network__wlan__item__title fs-2">Always Saved</div>
-                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
-                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
-                    </div>
                 </div>
             </div>
 
@@ -104,9 +98,12 @@
             </test>
 
             <iterate on $?>
+                <!--
+                        id: $STR.join("$?.bssid", "_", "$?.frequency"),
+                -->
                 <init as 'item_data' temp >
                     {
-                        id: $STR.join("$?.bssid", "_", "$?.frequency"),
+                        id: $?.bssid,
                         is_5g: $L.ge($?.frequency, 5000),
                         is_lock: $STR.contains($?.capabilities, 'PSK'),
                         data: $?
@@ -120,10 +117,17 @@
                     </differ>
                 </test>
 
-                <test with is_lock>
+                <test with $item_data.is_lock>
                     <update on "$item_data" at ".lock_visble" with "visible" />
                     <differ>
                         <update on "$item_data" at ".lock_visble" with "invisible" />
+                    </differ>
+                </test>
+
+                <test with $?.isConnected>
+                    <update on "$item_data" at ".link_visible" with "visible" />
+                    <differ>
+                        <update on "$item_data" at ".link_visible" with "invisible" />
                     </differ>
                 </test>
 

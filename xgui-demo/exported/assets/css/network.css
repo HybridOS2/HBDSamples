@@ -88,6 +88,14 @@
     border-width: 1px;
 }
 
+.network__wlan__item__link {
+    position: absolute;
+    right: 14vh;
+    top: 2vh;
+    width: 6vh;
+    height: 6vh;
+}
+
 .network__wlan__item__lock {
     position: absolute;
     right: 8vh;
