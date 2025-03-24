@@ -47,20 +47,11 @@
         <!-- page framework begin  -->
 
         <archetype name='wifiItemTmpl'>
-                    <div class="network__wlan__item" id="$?.bssid">
-                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
-                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
-                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
-                    </div>
-        </archetype>
-
-        <archetype name='wifiItemTmpl5G'>
-                    <div class="network__wlan__item" id="$?.bssid">
-                        <img class="network__wlan__item__rssi" src="exported/assets/images/wifi.png" alt="&nbsp;" />
-                        <div class="network__wlan__item__rssi__5g fs-0 text-light">5G</div>
-                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
-                        <img class="network__wlan__item__lock" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                    <div class="network__wlan__item" id="$?.id">
+                        <img class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
+                        <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
+                        <div class="network__wlan__item__title fs-2">$?.data.ssid</div>
+                        <img class="network__wlan__item__lock $?.lock_visble" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
                     </div>
         </archetype>
@@ -113,22 +104,54 @@
             </test>
 
             <iterate on $?>
-                <test with $?.isSaved>
-                    <update on "$wifiSavedList" at ".$?.bssid" with $? />
-                    <test with "$L.ge($?.frequency, 5000)">
-                        <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl5G />
-                        <differ>
-                            <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
-                        </differ>
-                    </test>
+                <init as 'item_data' temp >
+                    {
+                        id: $STR.join("$?.bssid", "_", "$?.frequency"),
+                        is_5g: $L.ge($?.frequency, 5000),
+                        is_lock: $STR.contains($?.capabilities, 'PSK'),
+                        data: $?
+                    }
+                </init>
+
+                <test with $item_data.is_5g>
+                    <update on "$item_data" at ".five_g_visble" with "visible" />
                     <differ>
-                        <update on "$wifiOtherList" at ".$?.bssid" with $? />
-                        <test with "$L.ge($?.frequency, 5000)">
-                            <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl5G />
-                            <differ>
-                                <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
-                            </differ>
-                        </test>
+                        <update on "$item_data" at ".five_g_visble" with "invisible" />
+                    </differ>
+                </test>
+
+                <test with is_lock>
+                    <update on "$item_data" at ".lock_visble" with "visible" />
+                    <differ>
+                        <update on "$item_data" at ".lock_visble" with "invisible" />
+                    </differ>
+                </test>
+
+                <test on $?.signalLevel>
+                    <match with "$L.ge($?.signalLevel, -33)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -66)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-2.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -90)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-1.png" />
+                    </match>
+
+                    <match exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-0.png" />
+                    </match>
+                </test>
+
+
+                <test with $?.isSaved on $item_data>
+                    <update on "$wifiSavedList" at ".$?.id" with $? />
+                    <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    <differ>
+                        <update on "$wifiOtherList" at ".$?.id" with $? />
+                        <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
                     </differ>
                 </test>
             </iterate>

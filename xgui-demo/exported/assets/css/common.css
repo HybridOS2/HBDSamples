@@ -47,5 +47,16 @@
     overflow-y:auto;
 }
 
+.hidden {
+    display:none;
+}
+
+.visible {
+  visibility: visible !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
 
 
