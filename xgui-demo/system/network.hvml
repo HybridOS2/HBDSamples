@@ -1,6 +1,6 @@
 #!/usr/bin/purc
 
-<!DOCTYPE hvml>
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
@@ -25,10 +25,15 @@
     </head>
 
     <body class="page page-dark">
+        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+
         <init as 'wifiList' with {} />
-        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false, wifiSwitch:false } />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false, wifiSwitch:$dbsets[0].net_switch } />
         <init as 'currWifiInfo' with {} />
         <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
+
 
         <define as 'showResult'>
             <test with $L.eq($?.result.retCode, 200) >
@@ -679,6 +684,13 @@
                     <fire on $globalState for 'wifiSwitchOn' />
                 </differ>
             </test>
+            <inherit>
+            {{
+               $sqliteConn.execute("update setting set net_switch=$globalState.wifiSwitch");
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            }}
+            </inherit>
         </observe>
 
         <test with $globalState.wifiSwitch>
