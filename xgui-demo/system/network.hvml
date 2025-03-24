@@ -622,7 +622,6 @@
                 <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
                     <include with $logMsg on "HBDInetd disconnected from HBDBus" />
                     <!-- TODO: pop dialog -->
-                    <exit with 'HBDInetd disconnected from HBDBus' />
                 </test>
 
             </observe>
@@ -631,20 +630,17 @@
                 <include with $logMsg on "HBDBus is closed" />
                 <inherit>
                     <!-- TODO: pop dialog -->
-                    <exit with 'closed' />
                 </inherit>
             </observe>
 
             <observe on $databus for 'error:hbdbus' >
                 <include with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
                 <!-- TODO: pop dialog -->
-                <exit with 'error:hbdbus' />
             </observe>
 
             <catch for `ANY`>
                 <include with $logMsg on "Failed to connected to HBDBus" />
                 <!-- TODO: pop dialog -->
-                <exit with 'failed' />
             </catch>
         </init>
 
