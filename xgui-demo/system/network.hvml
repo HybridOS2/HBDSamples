@@ -688,7 +688,6 @@
             {{
                $sqliteConn.execute("update setting set net_switch=$globalState.wifiSwitch");
                $sqliteConn.commit();
-               $sqliteConn.close();
             }}
             </inherit>
         </observe>
