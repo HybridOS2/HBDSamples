@@ -1,0 +1,158 @@
+.title_h1{
+    margin-left:50px;
+    margin-top:5px;
+    font-size:2em;
+    width:400px;
+    height:50px;
+    float:right;
+}
+
+.title_200{
+    margin-left:220px;
+    margin-top:5px;
+    font-size:2em;
+    width:200px;
+    height:50px;
+    float:left;
+}
+        
+.list_content{
+    margin-left:5px;
+    margin-top:0px;
+    width:630px;
+    height:200px;
+    position:relative;
+    top: 30px;
+}
+
+.list_second{
+    height:170px;
+    overflow: auto;
+}
+        
+.list_pane{
+    margin-left:5px;
+    width:630px;
+    height:300px;
+    position:relative;
+    top: 40px;
+}
+           
+.item > img{
+    float:right;
+}
+
+.item > input{
+    float:right;
+    border-style:none;
+    background-color:#FFFFFF;
+    width:120px;
+    font-size:20px;
+}
+        
+.item{
+    border-style: solid;
+    border-color:#5C5C5C;
+    border-width:0 2px 2px 2px;
+    margin-left:12px;
+    width:600px;
+    height:45px;
+    font-size:24px;
+    text-align:left;
+}        
+        
+.item:first-child {
+    border-top-width:2px;
+}
+
+.list_60{
+    margin-left:5px;
+    margin-top:0px;
+    width:630px;
+    height:200px;
+    position:relative;
+    top: 60px;
+}
+
+.list_50{
+    margin-left:5px;
+    margin-top:0px;
+    width:630px;
+    height:200px;
+    position:relative;
+    top: 50px;
+}
+
+.item_40 > img{
+    float:right;
+}
+
+.item_40 > select{
+    float:right;
+    font-size:20px;
+}
+
+.item_40{
+    margin-left:12px;
+    width:600px;
+    height:40px;
+    font-size:24px;
+    text-align:left;
+    border-style: solid;
+    border-color:#5C5C5C;
+    border-width:0 2px 2px 2px;
+}
+
+.item_40:first-child {
+    border-top-width:2px;
+}
+
+.item_30 > input{
+    float:left;
+    font-size:14px;
+    border-style:none;
+    background-color:#FFFFFF;
+}
+
+.item_30{
+    margin-left:12px;
+    width:600px;
+    height:30px;
+    font-size:18px;
+    text-align:left;
+    border-style: solid;
+    border-color:#5C5C5C;
+    border-width:0 2px 2px 2px;
+}
+
+.item_30 > img{
+    float:right;
+}
+
+.item_30:first-child {
+    border-top-width:2px;
+}
+
+.item_alone{
+    margin-left:12px;
+    width:600px;
+    height:45px;
+    font-size:24px;
+    text-align:left;
+    border-style: solid;
+    border-color:#5C5C5C;
+    border-width:2px;
+    margin-bottom:10px;
+}
+
+.item_alone > img{
+    float:right;
+}
+
+.item_alone > input{
+    float:right;
+    border-style:none;
+    background-color:#EBEBEB;
+    width:120px;
+}
+
