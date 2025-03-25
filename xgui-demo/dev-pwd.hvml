@@ -4,54 +4,14 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
         
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
             ]
         </update>
-        <style hvml:raw>
-        #title_h1{
-            margin-left:50px;
-            margin-top:5px;
-            font-size:2em;
-            width:400px;
-            height:50px;
-            float:right;
-        }
-        
-        #list_content{
-            margin-left:5px;
-            margin-top:0px;
-            width:630px;
-            height:200px;
-            position:relative;
-            top: 50px;
-        }
-        
-        .item > img{
-            float:right;
-        }
-        
-        .item > input{
-            float:right;
-            border-style:none;
-            background-color:#EBEBEB;
-            width:120px;
-        }
-        .item{
-            margin-left:12px;
-            width:600px;
-            height:45px;
-            font-size:24px;
-            text-align:left;
-            border-style: solid;
-            border-color:#5C5C5C;
-            border-width:2px;
-            margin-bottom:15px;
-        }
-        </style>
     </head>
     <body>
         
@@ -63,7 +23,7 @@
             ] 
         </init>
         
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
         <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
         <init as old_pwd at '_root' with "12345678" />
@@ -74,23 +34,23 @@
              
         <archetype name="item_piece">
             <div id="$?.item_id" class="item">
-                <img id="$?.img_id" class="pwd_click" value=$?.value src="icon/hidden.png" width="40" height="40" hvml-events="click"/>
+                <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
                 <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
                 <p>$?.strtext</p>
             </div>
         </archetype>
         
         <archetype name="item_piece2">
-            <img id="$?.img_id" class="pwd_click" value=$?.value src="icon/hidden.png" width="40" height="40" hvml-events="click"/>
+            <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
             <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
             <p>$?.strtext</p>
         </archetype>
         
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
-            <img id="save_pwd" class="right_img" src="icon/save.png" hvml-events="click" />
-            <div id="title_h1">设备密码设置</div>
-            <div id="list_content">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <img id="save_pwd" class="right_img" src="exported/assets/icon/save.png" hvml-events="click" />
+            <div class="title_h1">设备密码设置</div>
+            <div class="list_50">
                 <iterate on $idgroups >
                     <update on $@ to 'append' with $item_piece />
                 </iterate>

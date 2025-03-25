@@ -4,56 +4,25 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
         
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
             ]
         </update>
-        <style hvml:raw>
-        #title_h1{
-            margin-left:220px;
-            margin-top:5px;
-            font-size:2em;
-            width:200px;
-            height:50px;
-            float:left;
-        }
-        #list_content{
-            margin-left:5px;
-            margin-top:0px;
-            width:630px;
-            height:200px;
-            position:relative;
-            top: 60px;
-        }
-        
-        .item > img{
-            float:right;
-        }
-        .item{
-            margin-left:12px;
-            width:600px;
-            height:40px;
-            font-size:24px;
-            text-align:left;
-            border-style: solid;
-            border-color:#5C5C5C;
-            border-width:2px;
-        }
-        </style>
     </head>
     
     <body>
         
         <init as 'items' with [ "认证时间段" ] />
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div id="title_h1">认证设置</div>
-            <div id="list_content">
-                <div id="cert_set" class="item" hvml-events="click" >
-                    <img id="time-add" src="icon/play.png" width="40" height="40" hvml-events="click" />
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_200">认证设置</div>
+            <div class="list_60">
+                <div id="cert_set" class="item_40" hvml-events="click" >
+                    <img id="time-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
                     <p>"认证时间段"</p>
                 </div>
             </div>

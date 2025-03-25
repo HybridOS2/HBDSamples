@@ -4,52 +4,14 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
         
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
             ]
         </update>
-        <style hvml:raw>
-        #title_h1{
-            margin-left:50px;
-            margin-top:5px;
-            font-size:2em;
-            width:400px;
-            height:50px;
-            float:right;
-        }
-        
-        #list_content{
-            margin-left:5px;
-            margin-top:0px;
-            width:630px;
-            height:200px;
-            position:relative;
-            top: 30px;
-        }
-        
-        .item > img{
-            float:right;
-        }
-        
-        .item > input{
-            float:right;
-            border-style:none;
-            width:120px;
-        }
-        .item{
-            margin-left:12px;
-            width:600px;
-            height:45px;
-            font-size:24px;
-            text-align:left;
-            border-style: solid;
-            border-color:#5C5C5C;
-            border-width:2px;
-        }
-        </style>
         
         <init as 'cert_id' at '_root' with $REQ.cert_id >
             <catch>
@@ -61,7 +23,7 @@
     </head>
     <body>
         
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from cert_data where id=$cert_id") />
         <init as certs with $sqliteCursor.fetchall('object') />
         
@@ -81,9 +43,9 @@
         </archetype>
         
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" hvml-events="click" />
-            <div id="title_h1">认证时间段详情</div>
-            <div id="list_content">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <div class="title_h1">认证时间段详情</div>
+            <div class="list_content">
                 <test with $L.ge($DATA.count($certs), 1) >
                     <init as certname at '_root' with $certs[0].certname />
                     <init as starttime at '_root' with $certs[0].starttime />
@@ -131,7 +93,7 @@
                     </div>
                     
                     <div id="repeat" class="item" value="4" hvml-events="click">
-                        <img src="icon/play.png" width="40" height="40" value="4" hvml-events="click" />
+                        <img src="exported/assets/icon/play.png" width="40" height="40" value="4" hvml-events="click" />
                         <span style="float:right" id="repeat_txt">$repeatstr</span>
                         <p>重复</p>
                     </div>

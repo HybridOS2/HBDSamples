@@ -4,7 +4,8 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
         
         <update on="$TIMERS" to="unite">
             [
@@ -12,37 +13,8 @@
             ]
         </update>
         <style hvml:raw>
-        #title_h1{
-            margin-left:220px;
-            margin-top:5px;
-            font-size:2em;
-            width:200px;
-            height:50px;
-            float:left;
-        }
+                
         
-        #list_content{
-            margin-left:5px;
-            margin-top:0px;
-            width:630px;
-            height:200px;
-            position:relative;
-            top: 50px;
-        }
-        
-        .item > img{
-            float:right;
-        }
-        .item{
-            margin-left:12px;
-            width:600px;
-            height:40px;
-            font-size:24px;
-            text-align:left;
-            border-style: solid;
-            border-color:#808080;
-            border-width:2px;
-        }
         </style>
         <init as 'mb_id' at '_root' with $REQ.mb_id >
             <catch>
@@ -54,7 +26,7 @@
     </head>
     
     <body>
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from members where id='$mb_id'") />
         <init as members with $sqliteCursor.fetchall('object') />
         <init as mb_name at '_root' with "test" />
@@ -64,18 +36,18 @@
         <init as partname at '_root' with "test" />
         
         <archetype name="modify_t">
-            <img id="save" class="left_img" src="icon/save.png" width="40" height="40" hvml-events="click" />
-            <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+            <img id="save" class="left_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
         </archetype>
         
         <archetype name="delete_t">
-            <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
         </archetype>
         
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div id="title_h1">人员详情</div>
-            <div id="list_content">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_200">人员详情</div>
+            <div class="list_50">
                 <test with $L.ge($DATA.count($members), 1) >
                     <init as mb_name at '_root' with $members[0].mbname />
                     <init as mb_num at '_root' with $members[0].mbid />
@@ -92,27 +64,27 @@
                         $STREAM.stderr.writelines("$mb_name,$mb_num,$mb_pwd,$partname");
                     </inherit>
                     
-                    <div id="partname" class="item" hvml-events="click" >
-                        <img src="icon/play.png" width="40" height="40" />
+                    <div id="partname" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="part_edit">部门名称:$partname</p>
                     </div>
-                    <div id="mbname" class="item" hvml-events="click" >
-                        <img src="icon/play.png" width="40" height="40" />
+                    <div id="mbname" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="name_edit">姓名:$mb_name</p>
                     </div>
-                     <div id="mbnum" class="item" hvml-events="click" >
-                        <img src="icon/play.png" width="40" height="40" />
+                     <div id="mbnum" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="num_edit">工号:$mb_num</p>
                     </div>
-                     <div id="mbpwd" class="item" hvml-events="click" >
-                        <img src="icon/play.png" width="40" height="40" />
+                     <div id="mbpwd" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="pwd_edit">密码:******</p>
                     </div>
                 </test>
             </div>
             
             <p id="bottom_pane">
-                <img id="delete" class="right_img" src="icon/delete.png" width="40" height="40" hvml-events="click" />
+                <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
             </p>
         </div>
         

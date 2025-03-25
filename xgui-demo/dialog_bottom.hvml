@@ -1,4 +1,4 @@
 <div class="dialog_bottom">
 <button style="float:left" value=1>保存</button><div class="next_col"></div><button style="float:right" value=2 >取消</button>
-<button style="position:absolute;top:-5px;right:-25px;border-style:none;background-color:transparent;" value=2 hvml-events="click"><img src="icon/close.png" width="30" height="30"/></button>
+<button style="position:absolute;top:-5px;right:-25px;border-style:none;background-color:transparent;" value=2 hvml-events="click"><img src="exported/assets/icon/close.png" width="30" height="30"/></button>
 </div>

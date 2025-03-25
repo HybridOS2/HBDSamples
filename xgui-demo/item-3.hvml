@@ -4,56 +4,19 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
         
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
             ]
         </update>
-        <style hvml:raw>
-        
-        #title_h1{
-            margin-left:220px;
-            margin-top:5px;
-            font-size:2em;
-            width:200px;
-            height:50px;
-            float:left;
-        }
-        
-        #list_content{
-            margin-left:5px;
-            margin-top:0px;
-            width:630px;
-            height:200px;
-            position:relative;
-            top: 40px;
-        }
-        
-        .item > img{
-            float:right;
-        }
-        .item > select{
-            float:right;
-            font-size:20px;
-        }
-        .item{
-            margin-left:12px;
-            width:600px;
-            height:40px;
-            font-size:24px;
-            text-align:left;
-            border-style: solid;
-            border-color:#5C5C5C;
-            border-width:2px;
-        }
-        </style>
     </head>
     
     <body>
         
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
         <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
         <init as vtimeout at '_root' with 30 />
@@ -62,24 +25,24 @@
         </test>
         
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div id="title_h1">系统设置</div>
-            <div id="list_content">
-                <div id="net_setting" class="item" hvml-events="click" >
-                <img src="icon/play.png" width="40" height="40" />
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_200">系统设置</div>
+            <div class="list_content">
+                <div id="net_setting" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
                 <p>网络设置</p>
                 </div>
-                <div id="tmout" class="item" hvml-events="click">
-                <img src="icon/play.png" width="40" height="40" />
-                <span id="tm_value" style="float:right;background-color:#EBEBEB;">$vtimeout</span>
+                <div id="tmout" class="item_40" hvml-events="click">
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
+                <span id="tm_value" style="float:right;background-color:#FFFFFF;">$vtimeout</span>
                 <p>超时时间设置</p>
                 </div>
-                <div id="dev_pwd" class="item" hvml-events="click" >
-                <img src="icon/play.png" width="40" height="40" />
+                <div id="dev_pwd" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
                 <p>设备密码设置</p>
                 </div>
-                <div id="dev_style" class="item" hvml-events="click" >
-                <img src="icon/play.png" width="40" height="40" />
+                <div id="dev_style" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
                 <p>设置选项样式</p>
                 </div>
             </div>

@@ -4,55 +4,15 @@
 <hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
     <head>
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/key.css" />
         
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
             ]
         </update>
-        <style hvml:raw>
-        #in_stat{
-            margin-left:235px;
-            margin-top:5px;
-            width:320px;
-            height:20px;
-            position:relative;
-            top: 40px;
-        }
-        .in_num{
-            width:20px;
-            height:15px;
-            margin-left: 5px;
-            font-size: 8px;
-            float:left;
-        }
-        
-        #key_bd{
-            margin-left:210px;
-            margin-top:50px;
-            width:200px;
-            height:320px;
-        }
-        .key_v{
-            border-style: solid;
-            width:50px;
-            height:47px;
-            border-color:#5C5C5C;
-            border-width:2px;
-            border-top-left-radius:25px; 
-            border-top-right-radius:25px;
-            border-bottom-left-radius:25px; 
-            border-bottom-right-radius:25px;
-            margin-left:8px;
-            margin-top:8px;
-            font-size:2em;
-            float:left;
-            text-align:center;
-            padding-top:3px;
-        }
-        </style>
-        
+                
         <init as 'is_user' at '_root' with $REQ.is_user >
             <catch>
                 <!-- set the default case -->
@@ -63,12 +23,20 @@
     
     <body>
         
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <test with $FS.file_exists("exported/assets/database/atd.db") >
+            <differ>
+                <inherit>
+                    $FS.copy("exported/assets/database/atd_template.db","exported/assets/database/atd.db");
+                </inherit>
+            </differ>
+        </test>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as input_idx at '_root' with 0L />
         <init as strpwd at '_root' with "" />
         <init as innum_ids at '_root' with [ "in_n1", "in_n2","in_n3","in_n4","in_n5","in_n6"] />
         <div id="main_pane">
-            <img id="go-back" class="left_img" src="icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
             <div id="in_stat">
                 <iterate on $innum_ids >
                     <div id="$?" class="in_num">○</div>
