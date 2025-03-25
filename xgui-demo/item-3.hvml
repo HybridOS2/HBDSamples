@@ -105,7 +105,7 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'netsetting.hvml' onto 'self:' />
+            <load from 'system/network.hvml' onto 'self:' />
         </observe>
         
         <observe on '#dlg_timeout' for "close">
