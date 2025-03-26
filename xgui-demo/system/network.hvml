@@ -25,7 +25,7 @@
     </head>
 
     <body class="page page-dark">
-        <init as sqliteConn at '_root' with $SQLITE.connect("./database/atd.db") />
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
         <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
         <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
 
