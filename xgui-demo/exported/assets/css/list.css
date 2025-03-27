@@ -8,7 +8,7 @@
 }
 
 .title_200{
-    margin-left:220px;
+    margin-left:200px;
     margin-top:5px;
     font-size:2em;
     width:200px;
@@ -45,7 +45,7 @@
 .item > input{
     float:right;
     border-style:none;
-    background-color:#FFFFFF;
+    background-color:#D3D9DB;
     width:120px;
     font-size:20px;
 }
@@ -111,7 +111,7 @@
     float:left;
     font-size:14px;
     border-style:none;
-    background-color:#FFFFFF;
+    background-color:#D3D9DB;
 }
 
 .item_30{
@@ -152,7 +152,7 @@
 .item_alone > input{
     float:right;
     border-style:none;
-    background-color:#EBEBEB;
+    background-color:#D3D9DB;
     width:120px;
 }
 

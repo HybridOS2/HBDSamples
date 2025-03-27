@@ -16,10 +16,11 @@
 #main_pane{
     width:640px;
     height:360px;
+    font-family:sans-serif;
     position:absolute;
     top:0px;
     left:2px;
-    background-color:#EBEBEB;
+    background-color:#D3D9DB;
     background-image:url('exported/assets/icon/background.png');
     background-size:cover;
     color:#5C5C5C;
@@ -106,10 +107,11 @@ dialog{
     top:10%;
     left:25%;
     right:auto;
-    
+    font-family:sans-serif;
     color:black;
-    border-color:#CCCDCE;
-    border-width:2px;
+    background-color:#FFFFFF;
+    border-color:#80FFFF;
+    border-width:1px;
     border-style: solid;
     padding-top: 2px;
     padding-bottom:2px;
