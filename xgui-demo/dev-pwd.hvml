@@ -18,7 +18,7 @@
         <init as 'idgroups' at '_root'>
             [ 
                 {item_id: "item_oldpwd", pwd:"123456", img_id: "hidden_old", input_id: "old_pwd", strtext: "原密码", type:"password", value: 0},
-                {item_id: "item_newpwd", pwd:"123456", img_id: "hidden_new", input_id: "new_pwd", strtext: "新密码", type:"text", value: 1},
+                {item_id: "item_newpwd", pwd:"123456", img_id: "hidden_new", input_id: "new_pwd", strtext: "新密码", type:"password", value: 1},
                 {item_id: "item_renewpwd", pwd:"123456", img_id: "hidden_renew", input_id: "renew_pwd", strtext: "重复新密码", type:"password", value: 2},
             ] 
         </init>
@@ -33,8 +33,8 @@
         </test>
              
         <archetype name="item_piece">
-            <div id="$?.item_id" class="item">
-                <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
+            <div id="$?.item_id" class="item_40">
+                <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
                 <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
                 <p>$?.strtext</p>
             </div>
@@ -42,15 +42,20 @@
         
         <archetype name="item_piece2">
             <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
-            <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
+            <input id="$?.input_id" type="text" value="$?.pwd" tabindex="1" />
+            <p>$?.strtext</p>
+        </archetype>
+        <archetype name="item_piece3">
+            <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
+            <input id="$?.input_id" type="password" value="$?.pwd" tabindex="1" />
             <p>$?.strtext</p>
         </archetype>
         
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="save_pwd" class="right_img" src="exported/assets/icon/save.png" hvml-events="click" />
-            <div class="title_h1">设备密码设置</div>
-            <div class="list_50">
+            <div class="title_h1 ml6">设备密码设置</div>
+            <div class="list_content rel50">
                 <iterate on $idgroups >
                     <update on $@ to 'append' with $item_piece />
                 </iterate>
@@ -72,15 +77,17 @@
             </request>
             
             <test with $L.streq("case", $idgroups[$pwd_idx].type,"text") >
+                <choose on $idgroups[$pwd_idx] >
+                    <update on #$?.item_id at="content" with $item_piece3 />
+                </choose>
                 <update on "$idgroups[$pwd_idx]" at ".type" with "password" />
                 <differ>
                     <update on "$idgroups[$pwd_idx]" at ".type" with "text" />
+                    <choose on $idgroups[$pwd_idx] >
+                        <update on #$?.item_id at="content" with $item_piece2 />
+                    </choose>
                 </differ>
-            </test>
-            <choose on $idgroups[$pwd_idx] >
-                <update on #$?.item_id at="content" with $item_piece2 />
-            </choose>
-            
+            </test>            
         </observe>
         
         <observe on '#save_pwd' for "click">

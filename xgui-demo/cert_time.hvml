@@ -23,8 +23,8 @@
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="cert-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
-            <div class="title_h1">认证时间段设置</div>
-            <div class="list_60">
+            <div class="title_h1 ml7">认证时间段设置</div>
+            <div class="list_content rel30">
                 <iterate on $certs >
                     <div id="crt-$?.id" class="item_40" value="$?.id" hvml-events="click" >
                         <img src="exported/assets/icon/play.png" width="40" height="40" />

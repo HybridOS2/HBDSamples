@@ -20,33 +20,33 @@
         <init as repeatfix at '_root' with "" />
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
-            <div class="title_h1">添加认证时间段</div>
-            <div class="list_content">
-                <div class="item">
+            <div class="title_h1 ml7">添加认证时间段</div>
+            <div class="list_content rel30">
+                <div class="item_40">
                     <input id="chg_name" type="text" value="名称" tabindex="1" />
                     <p>名称</p>
                 </div>
                 
-                <div class="item">
+                <div class="item_40">
                     <input id="start_time" type="text" value="00:00" tabindex="2" />
                     <p>开始时间</p>
                 </div>
                 
-                <div class="item">
+                <div class="item_40">
                     <input id="end_time" type="text" value="24:00" tabindex="3" />
                     <p>结束时间</p>
                 </div>
                 
-                <div id="repeat" class="item" value="4" hvml-events="click">
+                <div id="repeat" class="item_40" value="4" hvml-events="click">
                     <img src="exported/assets/icon/play.png" width="40" height="40" value="4" hvml-events="click" />
                     <span style="float:right" id="repeat_txt">周一</span>
                     <p>重复</p>
                 </div>
             </div>
-            <div class="dialog_bottom">
-                <button type="button" id="cert_save" style="float:left" hvml-events="click">保存</button>
-                <div class="next_col"></div><button type="button" id="cert_cancel" style="float:right" hvml-events="click">取消</button>
-            </div>
+            
+            <p class="rel30" id="bottom_pane">
+                <img id="cert_save" class="right_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
+            </p>
         </div>
         
         <dialog style="width:70%;left:15%;" id="dlg_repeat" >

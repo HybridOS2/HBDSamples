@@ -19,8 +19,8 @@
         <init as 'items' with [ "认证时间段" ] />
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div class="title_200">认证设置</div>
-            <div class="list_60">
+            <div class="title_h1 ml4">认证设置</div>
+            <div class="list_content rel50 lsth1">
                 <div id="cert_set" class="item_40" hvml-events="click" >
                     <img id="time-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
                     <p>"认证时间段"</p>

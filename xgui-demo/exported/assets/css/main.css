@@ -50,14 +50,14 @@ img.top{
     top:200px;
 }
 .left_img{
-    margin-left:50px;
+    margin-left:10px;
     margin-top:5px;
     width:40px;
     height:40px;
     float:left;
 }
 .right_img{
-    margin-right:50px;
+    margin-right:10px;
     margin-top:5px;
     width:40px;
     height:40px;
@@ -74,19 +74,35 @@ img.top{
 .dialog_title{
     font-size:1.5em;
     width:100%;
+    border-style: solid;
+    border-color:#DCDCDC;
+    border-width:0px 0px 1px 0px;
+    
     padding-top:0px;
     margin-top:0px;
-    text-align:center;
+    text-align:left;
 }
 
 .dialog_content{
     margin-left:3%;
 }
 
+.dialog_bottom > button{
+    border-style:solid;
+    border-width:2px;
+    border-top-left-radius:5px; 
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px; 
+    border-bottom-right-radius:5px;
+}
+
 .dialog_bottom{
-    margin-left:3%;
-    margin-top:2em;
-    margin-right:7.8%;
+    padding-left:3%;
+    margin-top:5px;
+    border-style: solid;
+    border-color:#DCDCDC;
+    border-width:1px 0px 0px 0px;
+    padding-right:7.8%;
     margin-bottom:5px;
 }
 
