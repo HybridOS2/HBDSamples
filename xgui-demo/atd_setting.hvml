@@ -33,11 +33,26 @@
         
         
         <observe on="#go-back" for="click">
-            <load from 'atd_main.hvml' onto 'self:' />
+            <exit />
         </observe>
         
         <observe on=".blockitem" for="click">
-            <load from "$?.targetId.hvml" onto 'self:' />
+            <load from "$?.targetId.hvml" onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
         </observe>
         
         <observe on $CRTN for "rdrState:closed">

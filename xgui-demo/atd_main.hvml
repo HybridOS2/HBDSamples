@@ -60,26 +60,83 @@
             
         </div>
         
-        <observe on="#setting" for="click">
-            <load from 'atd_cert.hvml' onto 'self:' >
+        <observe on="#setting" for="click" >
+            <load from 'atd_cert.hvml' onto 'self:' as 'managerCert' async>
             {
                 is_user: 0,
             }
             </load>
+             <observe on $managerCert for="corState:exited">
+                <forget on $managerCert for "corState:exited" />
+                <test on $?>
+                    <match with "$L.eq($?, 0)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth  exited with auth failed")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 1)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth exited with auth success goto atd_setting.hvml")
+                        </inherit>
+                        <load from 'atd_setting.hvml' onto 'self:' with {
+                            _renderer:{
+                                keepContents:{
+                                    forSuppressing:{
+                                        outTransitionStyle:"window-transition-move:  linear 300",
+                                        outTransitionDirection:"right",
+                                        inTransitionStyle:"window-transition-move: none",
+                                    },
+                                    forExposing:{
+                                        outTransitionStyle:"window-transition-move: none",
+                                        inTransitionStyle:"window-transition-move: linear 300",
+                                        inTransitionDirection:"right",
+                                    }
+                                }
+                            }
+                        } async />
+                    </match>
+                    <match with "$L.eq($?, 2)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth exited without auth")
+                        </inherit>
+                    </match>
+                </test>
+             </observe>
         </observe>
-        
+
         <observe on="#user" for="click">
-            <load from 'atd_cert.hvml' onto 'self:' >
+            <load from 'atd_cert.hvml' onto 'self:' as 'userCert' async>
             {
                 is_user: 1,
             }
             </load>
+             <observe on $userCert for="corState:exited">
+                <forget on $userCert for "corState:exited" />
+                <test on $?>
+                    <match with "$L.eq($?, 0)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth  exited with auth failed")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 1)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth exited with auth success pop message")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 2)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth exited without auth")
+                        </inherit>
+                    </match>
+                </test>
+             </observe>
         </observe>
-        
+
+
         <observe on="#lock" for="click">
             <update on "#center_pane" at "content" with $cert_piece /> 
         </observe>
-                             
+
         <observe on $TIMERS for "expired:clock">
             <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
             <update on "#week" at "textContent" to "displace" with "$weeks[$DATETIME.localtime().wday]" />

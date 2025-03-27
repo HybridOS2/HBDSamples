@@ -51,7 +51,8 @@
         </div>
         
         <observe on="#go-back" for="click">
-            <load from 'atd_main.hvml' onto 'self:' />
+            <!-- 0 failed, 1 success, 2 return  -->
+            <exit with 2L />
         </observe>
         
         <observe on=".key_v" for="click">
@@ -91,7 +92,8 @@
                                     $devcursor.close();
                                     $sqliteConn.close(); 
                                 </inherit>
-                                <load from 'atd_setting.hvml' onto 'self:' />  
+                                <!-- 0 failed, 1 success, 2 return  -->
+                                <exit with 1L/>
                             </test>
                             
                             <inherit>
