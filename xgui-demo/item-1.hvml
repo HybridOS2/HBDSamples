@@ -31,23 +31,24 @@
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="mb-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
-            <div class="title_200">人员管理</div>
-            <div class="list_pane">
+            <div class="title_h1 ml4">人员管理</div>
+            
+            <div class="list_content rel30"> 
                 <div class="item_30">
-                    <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
-                    <div style="float:right;width:300px;" id="search" hvml-events="click" >
-                        <img style="float:right" src="exported/assets/icon/play.png" width="30" height="30" />
-                    </div>
+                        <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
+                        <div style="float:right;width:200px;margin-right:20px;" id="search" hvml-events="click" >
+                            <img style="float:right" src="exported/assets/icon/play.png" width="30" height="30" />
+                        </div>
                 </div>
-                <div> </div>
-                <div id="list_content" class="list_second"> 
-                    <iterate on $members >
-                    <div id="mb-$?.id" class="item_30" value="$?.id" hvml-events="click" >
-                        <img src="exported/assets/icon/play.png" width="30" height="30"/>
-                        <p>$?.mbname</p>
-                    </div>
-                    </iterate>
+            </div>
+            
+            <div id="mb_list" class="list_content lstof4 rel50"> 
+                <iterate on $members >
+                <div id="mb-$?.id" class="item_30" value="$?.id" hvml-events="click" >
+                    <img src="exported/assets/icon/play.png" width="31" height="31"/>
+                    <span>$?.mbname</span>
                 </div>
+                </iterate>
             </div>
         </div>
         
@@ -82,7 +83,7 @@
                 <init as cursor with $sqliteConn.execute("select * from members where mbname=\"$?\"") temp />
                 <init as mbb with $cursor.fetchall('object') temp />
                 <iterate on $mbb >
-                    <update on "#list_content" at "content" with $list_v />
+                    <update on "#mb_list" at "content" with $list_v />
                 </iterate>   
             </request>
         </observe>

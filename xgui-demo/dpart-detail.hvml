@@ -39,8 +39,8 @@
         
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
-            <div class="title_200">部门详情</div>
-            <div class="list_50">
+            <div class="title_h1 ml4">部门详情</div>
+            <div class="list_content rel50 lsth2">
                 <iterate on $dparts >
                     <init as dpart_name at '_root' with $?.partname />
                     <init as dpart_num at '_root' with $?.partnum />
@@ -48,17 +48,14 @@
                         <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="num_edit">部门编号:$dpart_num</p>
                     </div>
-                    <div> </div>
-                    
-                    <div id="partname" style="border-top-width:2px;" class="item_40" hvml-events="click" >
+                    <div id="partname" class="item_40" hvml-events="click" >
                         <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p id="name_edit">部门名称:$dpart_name</p>
                     </div>
-                    <div> </div>
                 </iterate>
             </div>
             
-            <p id="bottom_pane">
+            <p class="rel50" id="bottom_pane">
                 <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
             </p>
         </div>
