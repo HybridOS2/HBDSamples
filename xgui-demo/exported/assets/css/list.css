@@ -45,7 +45,7 @@
 .item > input{
     float:right;
     border-style:none;
-    background-color:#D3D9DB;
+    background-color:#EBEBEB;
     width:120px;
     font-size:20px;
 }
@@ -111,7 +111,7 @@
     float:left;
     font-size:14px;
     border-style:none;
-    background-color:#D3D9DB;
+    background-color:#EBEBEB;
 }
 
 .item_30{
@@ -152,7 +152,7 @@
 .item_alone > input{
     float:right;
     border-style:none;
-    background-color:#D3D9DB;
+    background-color:#EBEBEB;
     width:120px;
 }
 
