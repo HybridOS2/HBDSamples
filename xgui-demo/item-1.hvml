@@ -37,7 +37,7 @@
                 <div class="item_30">
                         <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
                         <div style="float:right;width:200px;" id="search" hvml-events="click" >
-                            <img style="float:right" src="exported/assets/icon/play.png" width="30" height="30" />
+                            <img style="float:right" id="search_img" src="exported/assets/icon/play.png" width="30" height="30" />
                         </div>
                 </div>
             </div>
