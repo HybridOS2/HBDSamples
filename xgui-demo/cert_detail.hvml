@@ -34,12 +34,12 @@
         <init as repeatfix at '_root' with "" />
         
         <archetype name="modify_t">
-            <button type="button" id="cert_save" style="float:left" hvml-events="click">保存</button>
-            <div class="next_col"></div><button type="button" id="cert_del" style="float:right" hvml-events="click">删除</button>
+            <button type="button" id="cert_save" style="float:left" class="bottom_button" hvml-events="click">保存</button>
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
         </archetype>
         
         <archetype name="delete_t">
-            <button type="button" id="cert_del" style="float:right" hvml-events="click">删除</button>
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
         </archetype>
         
         <div id="main_pane">
@@ -99,7 +99,7 @@
                     </div>
                 </test>
             </div>
-            <div id="bottom_pane" class="dialog_bottom0 rel30">
+            <div id="bottom_pane" class="absbottom">
                 <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
             </div>
         </div>
