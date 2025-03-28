@@ -48,11 +48,12 @@
                 </p>
             </div>
             <div id="right-btn">
-                <iterate on [ "user", "setting"] >
-                    <p>
-                    <img id="$?" class="top" src="exported/assets/icon/$?.png" width="60" height="60" hvml-events="click" />
-                    </p>
-                </iterate>
+                <p>
+                    <img id="user" src="exported/assets/icon/user.png" width="60" height="60" hvml-events="click" />
+                </p>
+                <p>
+                    <img id="setting" src="exported/assets/icon/setting.png" width="60" height="60" hvml-events="click" />
+                </p>
             </div>
             
             <div id="center_pane">

@@ -100,6 +100,8 @@
 
 .item_40 > img{
     float:right;
+    width:40px;
+    height:40px;
 }
 
 .item_40 > select{
@@ -131,6 +133,8 @@
 
 .item_30 > img{
     float:right;
+    width:30px;
+    height:30px;
 }
 
 .item_30 > input{
@@ -181,5 +185,10 @@
     border-style:none;
     background-color:#EBEBEB;
     width:120px;
+}
+
+#search_img {
+    width: 30px;
+    height: 30px;
 }
 

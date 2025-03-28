@@ -26,21 +26,26 @@
     color:#5C5C5C;
 }
 
-img.top{
-    float:right;
+#user {
+    position:absolute;
+    top:0px;
+    width:60px;
+    height:60px;
 }
 
-#right-btn >p{
-    margin-top:30px;
-    margin-bottom:30;
+#setting {
+    position:absolute;
+    top:100px;
+    width:60px;
+    height:60px;
 }
+
 #right-btn{
     width:60px;
-    height:180px;
-    line-height:100px;
+    height:160px;
     position:absolute;
     right:40px;
-    bottom:120px;
+    bottom:100px;
 }
 #center_pane{
     width:300px;
