@@ -131,7 +131,7 @@
                $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on="#cert_del" for="click">

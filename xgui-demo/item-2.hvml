@@ -30,7 +30,7 @@
         
         
         <observe on="#go-back" for="click">
-            <load from 'atd_setting.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on="#cert_set" for="click">

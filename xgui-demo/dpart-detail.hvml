@@ -88,7 +88,7 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'item-0.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on="#partnum" for="click">

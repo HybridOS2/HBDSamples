@@ -67,7 +67,7 @@
                $sqliteConn.commit();
                $sqliteConn.close();
             </inherit>
-            <load from 'item-3.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on '.pwd_click' for "click">

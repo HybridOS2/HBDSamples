@@ -75,7 +75,7 @@
                $sqliteConn.commit();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on="#cert_cancel" for="click">
