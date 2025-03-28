@@ -1,10 +1,10 @@
             <div class="titlebar">
                 <img id="id__titlebar__back" class="titlebar__back"
-                    src="exported/assets/images/arrow-left.png"
+                    src="exported/assets/icon/go-back.png"
                     alt="&nbsp;"
                     hvml-events="click" />
 
-                <div class="titlebar__title fs-3">$titlebarLabel</div>
+                <div class="titlebar__title">$titlebarLabel</div>
 
                 <test with $titlebarAddButtonEnable>
                     <img id="id__titlebar__add" class="titlebar__add"
