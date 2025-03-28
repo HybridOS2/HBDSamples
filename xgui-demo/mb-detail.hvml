@@ -83,7 +83,7 @@
                 </test>
             </div>
             
-            <p id="bottom_pane" class="rel30">
+            <p id="bottom_pane" class="absbottom">
                 <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
             </p>
         </div>

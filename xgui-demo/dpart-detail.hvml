@@ -55,7 +55,7 @@
                 </iterate>
             </div>
             
-            <p class="rel50" id="bottom_pane">
+            <p class="absbottom" id="bottom_pane">
                 <img id="delete" class="right_img" src="exported/assets/icon/delete.png" alt="*" width="40" height="40" hvml-events="click" />
             </p>
         </div>

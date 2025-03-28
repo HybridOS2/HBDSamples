@@ -39,9 +39,21 @@
    top: 50px;
 }
 
+.absbottom{
+   margin:0px 20px;
+   width:600px;
+   position:absolute;
+   bottom: 30px;
+}
+
 .lsth4{
    height:200px; 
 }
+
+.lsth3{
+   height:160px; 
+}
+
 
 .lsth2{
    height:110px; 
@@ -90,6 +102,41 @@
     top: 50px;
 }
 
+.item:first-child {
+    margin-top:10px;
+}
+
+.item:last-child {
+    border-width:0px;
+}
+
+.item > input{
+    float:right;
+    border-style:none;
+    background-color:#EEF2F6;
+    width:120px;
+    font-size:20px;
+}
+
+.item > img{
+    float:right;
+    width:40px;
+    height:25px;
+    margin-top:10px;
+}
+.item{
+    margin:0px;
+    width:495px;
+    height:45px;
+    padding-left:20px;
+    padding-right:20px;
+    font-size:24px;
+    text-align:left;
+    border-style: solid;
+    border-color:#ADB5BD;
+    border-width:0px 0px 1px 0px;
+}
+
 .item_40 > input{
     float:right;
     border-style:none;
@@ -103,7 +150,6 @@
     width:40px;
     height:40px;
 }
-
 .item_40 > select{
     float:right;
     font-size:20px;
@@ -116,7 +162,6 @@
 .item_40:last-child {
     border-width:0px;
 }
-
 
 .item_40{
     margin:0px;
