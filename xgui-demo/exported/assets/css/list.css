@@ -44,7 +44,7 @@
 }
 
 .lsth2{
-   height:100px; 
+   height:110px; 
 }
 
 .lsth1{
@@ -127,7 +127,7 @@
     font-size:24px;
     text-align:left;
     border-style: solid;
-    border-color:#795DA3;
+    border-color:#ADB5BD;
     border-width:0px 0px 1px 0px;
 }
 
@@ -161,7 +161,7 @@
     font-size:18px;
     text-align:left;
     border-style: solid;
-    border-color:#DCDCDC;
+    border-color:#ADB5BD;
     border-width:0 0px 1px 0px;
 }
 
@@ -172,7 +172,7 @@
     font-size:24px;
     text-align:left;
     border-style: solid;
-    border-color:#DCDCDC;
+    border-color:#ADB5BD;
     border-width:2px;
 }
 
