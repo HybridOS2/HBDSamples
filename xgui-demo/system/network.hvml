@@ -106,34 +106,27 @@
         </div>
 
         <dialog id="id__dlg__pwd" class="dlg__pwd">
-            <form>
-                <div class="dlg__title">
-                    <div id="id__dlg__title__title" class="dlg__title__title fs-3"></div>
+            <form method="dialog">
+                <p id="id__dlg__title__title" class="dialog_title">SSID</p>
 
-                    <img id="id__dlg__title__close" class="dlg__title__close"
-                        src="exported/assets/images/x.png"
-                        alt="&nbsp;"
-                        hvml-events="click" />
+                <p class="dialog_content"><span>密码&nbsp;</span>
+                    <input id="id__dlg__title__pw" class="dialog_input" type="password" name="dlg_pwd" value="" />
+                    <div id="id__dlg__err__msg" class="dlg__err__msg invisible"> 连接失败，请重试！</div>
+                </p>
+                <div class="dialog_bottom">
+                    <button id="id__dlg__btn__connect" style="float:right;" value=1>连接</button>
+                    <button style="position:absolute;top:10px;right:8px;border-style:none;background-color:transparent;color:black;font-size:32px;text-align:right;" value=0L hvml-events="click">×</button>
                 </div>
-
-                <div id="id__dlg__err__msg" class="dlg__err__msg fs-2 invisible"> 连接失败，请重试！</div>
-                <input id="id__dlg__title__pw" class="dlg__title__pw fs-2" type="password" name="dlg_pwd" value="" hvml-events="click" />
             </form>
-
-            <div id="id__dlg__btn__connect" class="dlg__btn fs-2" hvml-events="click"> 连接 </div>
         </dialog>
 
-        <observe on '#id__dlg__title__close' for 'click'>
-            <request on '#id__dlg__pwd' to 'call:close' with false />
-        </observe>
-
         <observe on '#id__dlg__btn__connect' for 'click'>
-            <request on '#id__dlg__pwd' to 'call:close' with true />
+            <request on '#id__dlg__pwd' to 'call:close' with 1L />
         </observe>
 
         <observe on '#id__dlg__pwd' for 'close'>
             <init as ret with $?.details.data temp />
-            <test with $ret.returnValue >
+            <test with $L.eq($ret.returnValue, 1)>
                 <update on "$currWifiInfo" at '.passphrase' with $ret.dlg_pwd />
                 <fire on $globalState for 'wifiConnect' with $currWifiInfo/>
             </test>
@@ -272,7 +265,7 @@
         <define as 'connWifiFailed'>
             <include with $logMsg on "connWifiFailed is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg invisible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
@@ -319,7 +312,7 @@
 
         <define as 'wifiDialog'>
             <include with $logMsg on "popup dialog with errmsg: $?" />
-            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg visible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 

@@ -121,28 +121,43 @@
 }
 
 .dlg__pwd {
+    width:46%;
     position: absolute;
-    background: white;
-    color: black;
     top:10%;
-    left: 0;
-    right:0;
-    width: 60%;
-    height: 40%;
-    max-width: 100%;
-    margin: auto;
-    padding: 1em;
-    border-style:solid;
-    border-color: #999999;
-    border-width: 1px;
+    left:25%;
+    right:auto;
+    font-family:sans-serif;
+    color:black;
+    background-color:#FFFFFF;
+    border-color:#795DA3;
+    border-width:1px;
+    border-style: solid;
+    padding-top: 2px;
+    padding-bottom:2px;
+    padding-left:0px;
+    padding-right:0px;
+    border-top-left-radius:10px; 
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px; 
+    border-bottom-right-radius:10px;
 }
 
 
 .dlg__title {
-    position:relative;
-    height: 12vh;
-    padding-top:1vh;
-    color:#5C5C5C
+
+    font-size:1.5em;
+    width:100%;
+    border-style: solid;
+    border-color:#ADB5BD;
+    border-width:0px 0px 1px 0px;
+
+    padding-top:0px;
+    padding-bottom:10px;
+    margin-top:0px;
+    padding-left:20px;
+    padding-right:20px;
+    margin-bottom:25px;
+    text-align:left;
 }
 
 .dlg__title__title {
@@ -191,12 +206,54 @@
 }
 
 .dlg__err__msg {
-    margin-top: 5vh;
-    width: 58vw;
-    height: 10vh;
-    text-align:center;
+    height: 20px;
     color:red;
+    font-size:10px;
+    text-align:center;
+    margin:0;
+    padding:0;
 }
 
 
+.dialog_title{
+    font-size:1.5em;
+    width:100%;
+    border-style: solid;
+    border-color:#ADB5BD;
+    border-width:0px 0px 1px 0px;
+
+    padding-top:0px;
+    padding-bottom:10px;
+    margin-top:0px;
+    padding-left:20px;
+    padding-right:20px;
+    margin-bottom:25px;
+    text-align:left;
+}
+
+#id__dlg__btn__connect {
+    border-style:solid;
+    border-width:2px;
+    border-top-left-radius:5px; 
+    border-top-right-radius:5px;
+    border-bottom-left-radius:5px; 
+    border-bottom-right-radius:5px;
+    text-align:center;
+    border-color:#0D6EFD;
+    background-color:#0D6EFD;
+    color:#FFFFFF;
+    width:100px;
+}
+
+.dialog_bottom{
+    margin-top:20px;
+    border-style: solid;
+    border-color:#ADB5BD;
+    border-width:1px 0px 0px 0px;
+    padding-right:7.8%;
+    padding-top:20px;
+    padding-left:20px;
+    padding-right:20px;
+    margin-bottom:0px;
+}
 
