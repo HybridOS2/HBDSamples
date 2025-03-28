@@ -51,9 +51,9 @@
         <dialog style="width:45%;left:15%;" id="dlg_timeout" >
             <form method="dialog">
                 <p class="dialog_title">超时时间设置</p>
-                <p>
-                    <span class="first_col" /><span>超时时间</span>
-                    <select name="selt" value="30" size="1">
+                <p class="dialog_content">
+                    <span class="first_col" /><span>超时时间&nbsp;</span>
+                    <select class="dialog_input" name="selt" value="30" size="1">
                         <option value="15">15</option>
                         <option value="30">30</option>
                         <option value="45">45</option>

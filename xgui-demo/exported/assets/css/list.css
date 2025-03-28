@@ -7,7 +7,7 @@
 }
 
 .ml4{
-    margin-left:170px;
+    margin-left:190px;
 }
 
 .ml7{
@@ -52,7 +52,7 @@
 }
 
 .lstof4{
-    height:180px;
+    height:140px;
     overflow: auto;
     border-top-right-radius:0px;
     border-bottom-right-radius:0px;
@@ -125,7 +125,7 @@
     font-size:24px;
     text-align:left;
     border-style: solid;
-    border-color:#DCDCDC;
+    border-color:#795DA3;
     border-width:0px 0px 1px 0px;
 }
 

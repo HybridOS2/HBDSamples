@@ -91,8 +91,8 @@
         <dialog id="dlg_partname" class="dlg" >
             <form method="dialog">
                 <p class="dialog_title">修改部门名称</p>
-                <p class="dialog_content"><span>部门名称:&nbsp;</span>
-                    <select name="part_select" size="1">
+                <p class="dialog_content"><span>部门名称&nbsp;</span>
+                    <select class="dialog_input" name="part_select" size="1">
                         <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
                         <init as mbb with $cursor.fetchall('object') temp />
                         <iterate on $mbb >
@@ -108,8 +108,8 @@
         <dialog id="dlg_mbname" class="dlg" >
             <form method="dialog">
                 <p class="dialog_title">修改姓名</p>
-                <p class="dialog_content"><span>姓名:&nbsp;</span>
-                    <input type="text" name="mb_name" value="$mb_name" />
+                <p class="dialog_content"><span>姓名&nbsp;</span>
+                    <input class="dialog_input" type="text" name="mb_name" value="$mb_name" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
@@ -119,8 +119,8 @@
         <dialog id="dlg_mbnum" class="dlg" >
             <form method="dialog">
                 <p class="dialog_title">修改工号</p>
-                <p class="dialog_content"><span>工号:&nbsp;</span>
-                    <input type="text" name="mb_num" value="$mb_num" />
+                <p class="dialog_content"><span>工号&nbsp;</span>
+                    <input class="dialog_input" type="text" name="mb_num" value="$mb_num" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
@@ -130,11 +130,11 @@
         <dialog id="dlg_mbpwd" class="dlg">
             <form method="dialog">
                 <p class="dialog_title">修改密码</p>
-                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >密码:</div>
-                    <input type="password" name="mb_pwd" value="123456" />
+                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >密码</div>
+                    <input class="dialog_input" type="password" name="mb_pwd" value="123456" />
                 </p>
-                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >确认密码:</div>
-                    <input type="password" name="mb_pwd1" value="123456" />
+                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >确认密码</div>
+                    <input class="dialog_input" type="password" name="mb_pwd1" value="123456" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
@@ -176,7 +176,7 @@
         
         <observe on="#delete" for="click">
             <inherit>
-                $sqliteConn.execute("delete from dpartment where id=$dpartid;")
+                $sqliteConn.execute("delete from members where id=$mb_id;")
                 $sqliteConn.commit();
                 $sqliteCursor.close();
                 $sqliteConn.close(); 

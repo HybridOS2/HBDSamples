@@ -47,7 +47,7 @@
                     <p>已设置值</p>
                 </div>
             </div>
-            <div id="bottom_pane" class="dialog_bottom rel30">
+            <div id="bottom_pane" class="dialog_bottom0 rel30">
                 <img id="style_save" class="right_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
             </div>
         </div>

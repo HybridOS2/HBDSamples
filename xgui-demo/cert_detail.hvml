@@ -99,26 +99,26 @@
                     </div>
                 </test>
             </div>
-            <div id="bottom_pane" class="dialog_bottom rel30">
+            <div id="bottom_pane" class="dialog_bottom0 rel30">
                 <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
             </div>
         </div>
         
-        <dialog style="width:70%;left:15%;" id="dlg_repeat" >
+        <dialog style="width:70%;left:15%;top:8%;" id="dlg_repeat" >
             <form method="dialog">
                 <p class="dialog_title">重复设置</p>
-                <p>
-                    <span class="first_col" /><label id="week0" >周日</label><input type="checkbox"  name="cb1" tabindex="1" value="week0" checked/> 
-                    <span class="next_col" /><label id="week1" >周一</label><input type="checkbox"  name="cb2" tabindex="2" value="week1" checked/>
-                    <span class="next_col" /><label id="week1" >周二</label><input type="checkbox"  name="cb3" tabindex="3" value="week2" checked/>
+                <p class="dialog_content">
+                    <span class="first_col" /><label id="week0" >周日&nbsp;</label><input type="checkbox"  name="cb1" tabindex="1" value="week0" checked/> 
+                    <span class="next_col" /><label id="week1" >周一&nbsp;</label><input type="checkbox"  name="cb2" tabindex="2" value="week1" checked/>
+                    <span class="next_col" /><label id="week1" >周二&nbsp;</label><input type="checkbox"  name="cb3" tabindex="3" value="week2" checked/>
                 </p>
-                <p>
-                    <span class="first_col" /><label id="week2" >周三</label><input type="checkbox"  name="cb4" tabindex="4" value="week3" checked/> 
-                    <span class="next_col" /><label id="week3" >周四</label><input type="checkbox"  name="cb5" tabindex="5" value="week4" checked/>
-                    <span class="next_col" /><label id="week1" >周五</label><input type="checkbox"  name="cb6" tabindex="6" value="week5" checked/>
+                <p class="dialog_content">
+                    <span class="first_col" /><label id="week2" >周三&nbsp;</label><input type="checkbox"  name="cb4" tabindex="4" value="week3" checked/> 
+                    <span class="next_col" /><label id="week3" >周四&nbsp;</label><input type="checkbox"  name="cb5" tabindex="5" value="week4" checked/>
+                    <span class="next_col" /><label id="week1" >周五&nbsp;</label><input type="checkbox"  name="cb6" tabindex="6" value="week5" checked/>
                 </p>
-                <p>
-                    <span class="first_col" /><label id="week6" >周六</label><input type="checkbox"  name="cb7" tabindex="7" value="week6" />
+                <p class="dialog_content">
+                    <span class="first_col" /><label id="week6" >周六&nbsp;</label><input type="checkbox"  name="cb7" tabindex="7" value="week6" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />

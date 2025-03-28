@@ -30,13 +30,13 @@
         
         <div id="main_pane">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
-            <img id="mb-add" class="right_img" src="exported/assets/icon/person_add.png" hvml-events="click" />
+            <img id="mb-add" class="right_img1" style="width:30px;height:30px;" src="exported/assets/icon/person_add.png" hvml-events="click" />
             <div class="title_h1 ml4">人员管理</div>
             
             <div class="list_content rel30"> 
                 <div class="item_30">
                         <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
-                        <div style="float:right;width:200px;margin-right:20px;" id="search" hvml-events="click" >
+                        <div style="float:right;width:200px;" id="search" hvml-events="click" >
                             <img style="float:right" src="exported/assets/icon/play.png" width="30" height="30" />
                         </div>
                 </div>
@@ -55,13 +55,14 @@
         <dialog style="width:70%;left:15%;" id="id_dlg" >
             <form method="dialog">
                 <p class="dialog_title">添加人员</p>
-                <p>
-                                        工号 <input type="text" name="mb_num" value="1234" /><div class="next_col">密码</div><input type="password" name="mb_pwd" value="1234" />
+                <p class="dialog_content">
+                                        工号&nbsp;<input class="dialog_input" type="text" name="mb_num" value="1234" /><div class="next_col">密码&nbsp;</div>
+                  <input class="dialog_input" type="password" name="mb_pwd" value="1234" />
                 </p>
-                <p>
-                                        姓名 <input type="text" name="mb_name" value="姓名" />
-                    <div class="next_col">部门</div>
-                    <select name="part_select" size="1">
+                <p class="dialog_content">
+                                        姓名&nbsp;<input class="dialog_input" type="text" name="mb_name" value="姓名" />
+                    <div class="next_col">部门&nbsp;&nbsp;</div>
+                    <select class="dialog_input" name="part_select" size="1">
                         <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
                         <init as mbb with $cursor.fetchall('object') temp />
                         <iterate on $mbb >

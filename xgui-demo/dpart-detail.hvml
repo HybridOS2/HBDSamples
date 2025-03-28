@@ -63,8 +63,8 @@
         <dialog id="id_dlg_num" >
             <form method="dialog">
                 <p class="dialog_title">修改部门编号</p>
-                <p>
-                                        部门编号 <input type="text" name="dpart_num" value="$dpart_num" />
+                <p class="dialog_content">
+                                        部门编号 <input class="dialog_input" type="text" name="dpart_num" value="$dpart_num" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
@@ -74,8 +74,8 @@
         <dialog id="id_dlg_name" >
             <form method="dialog">
                 <p class="dialog_title">修改部门名称</p>
-                <p>
-                                        部门名称 <input type="text" name="dpart_name" value="$dpart_name" />
+                <p class="dialog_content">
+                                        部门名称 <input class="dialog_input" type="text" name="dpart_name" value="$dpart_name" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
                 <include with $dlg_bottom />
