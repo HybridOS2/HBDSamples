@@ -55,7 +55,7 @@
                     <div class="network__wlan__item" id="$?.id" hvml-events="click">
                         <img id="network__wlan__item__rssi__$?.id" class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
                         <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
-                        <div class="network__wlan__item__title fs-2">$?.ssid</div>
+                        <div class="network__wlan__item__title">$?.ssid</div>
                         <img id="network__wlan__item__link__$?.id" class="network__wlan__item__link $?.link_visible" src="exported/assets/images/check.png" alt="&nbsp;" />
                         <img class="network__wlan__item__lock $?.lock_visble" src="exported/assets/images/lock.png" alt="&nbsp;" />
                         <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
@@ -63,15 +63,15 @@
         </archetype>
 
         <archetype name='wifiOnTmpl'>
-                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
+                    <div id="id__network__wifi__title" class="network__wifi__title">Wi-Fi</div>
                     <img id="id__network__wifi_toggle" class="network__wifi__toggle"
-                        src="exported/assets/images/toggle-on.png" alt="&nbsp;" />
+                        src="exported/assets/icon/off_on.png" alt="&nbsp;" />
         </archetype>
 
         <archetype name='wifiOffTmpl'>
-                    <div id="id__network__wifi__title" class="network__wifi__title fs-2">Wi-Fi</div>
+                    <div id="id__network__wifi__title" class="network__wifi__title">Wi-Fi</div>
                     <img id="id__network__wifi_toggle" class="network__wifi__toggle"
-                        src="exported/assets/images/toggle-off.png" alt="&nbsp;" />
+                        src="exported/assets/icon/on_off.png" alt="&nbsp;" />
         </archetype>
 
         <!-- title bar -->
