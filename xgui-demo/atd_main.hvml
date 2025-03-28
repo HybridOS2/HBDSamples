@@ -9,8 +9,24 @@
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
+                { "id" : "weather", "interval" : 1800000, "active" : "yes" },
             ]
         </update>
+        
+        <init as 'wea_images' at '_runner'>
+            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/bingbao.png" , city: "北京", temp: 25 },
+              { id : 1, name : "lei",  bkg : "exported/assets/weather/lei.png" , city: "北京", temp: 25},
+              { id : 2, name : "qing",  bkg : "exported/assets/weather/qing.png" , city: "北京", temp: 25},
+              { id : 3, name : "shachen",  bkg : "exported/assets/weather/shachen.png" , city: "北京", temp: 25},
+              { id : 4, name : "wu",  bkg : "exported/assets/weather/wu.png" , city: "北京", temp: 25},
+              { id : 5, name : "xue",  bkg : "exported/assets/weather/xue.png" , city: "北京", temp: 25},
+              { id : 6, name : "yin",  bkg : "exported/assets/weather/yin.png" , city: "北京", temp: 25},
+              { id : 7, name : "yun",  bkg : "exported/assets/weather/yun.png" , city: "北京", temp: 25},
+              { id : 8, name : "yu",  bkg : "exported/assets/weather/yu.png" , city: "北京", temp: 25},
+            ]
+        </init>
+        <init as 'wth_id' at '_runner' with 0L />
+        
         <style hvml:raw>
         </style>
     </head>
@@ -18,8 +34,7 @@
     
     
     <body>
-        <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />
-        
+        <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />   
         <archetype name="pwd_piece">
             <p>请输入用户名密码:</p>
             <p>
@@ -30,6 +45,11 @@
                 <label>密&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
                 <input type="password" value="password"/>
             </p>
+        </archetype>
+        
+        <archetype name="wea_piece">
+            <p class="wea_text"><span id="city">$?.city:</span><span id="tem">&nbsp;&nbsp;$?.temp</span><span>°C</span></p>
+            <DIV class="wea_div"><img class="wea_img" src="$?.bkg" width="60" height="60" alt="."/></DIV>
         </archetype>
         
         <archetype name="cert_piece">
@@ -47,6 +67,13 @@
                     $DATETIME.fmttime("%H:%M")
                 </p>
             </div>
+            
+            <div id="wth" class="weather">
+                <choose on $wea_images[$wth_id] >
+                    <update on $@ to 'append' with $wea_piece />
+                </choose>
+            </div>
+            
             <div id="right-btn">
                 <p>
                     <img id="user" src="exported/assets/icon/user.png" width="60" height="60" hvml-events="click" />
@@ -132,12 +159,38 @@
                 </test>
              </observe>
         </observe>
-
-
+        
+        <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+        
+        <observe against "weather_info" for "change:displaced">
+            <inherit>
+                    $STREAM.stderr.writelines("update weather1 $weather_info\n")
+            </inherit>
+            <iterate on $wea_images >
+                    <test with $L.streq("case", $weather_info.wea_img,$?.name) >
+                        <init as 'wth_id' at '_runner' with $?.id />
+                        <update on $? at ".city" with $weather_info.city />
+                        <update on $? at ".temp" with $weather_info.tem />
+                        <choose on $? >
+                            <update on #wth at="content" with $wea_piece />
+                        </choose>
+                    </test>
+            </iterate>
+            
+            <catch for `NoSuchKey`>
+                <inherit>
+                    $STREAM.stderr.writelines("update weather2 failed\n\n")
+                </inherit>
+            </catch>
+        </observe>
+        
+        <observe on $TIMERS for "expired:weather">
+            <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+        </observe>
+        
         <observe on="#lock" for="click">
             <update on "#center_pane" at "content" with $cert_piece /> 
         </observe>
-
         <observe on $TIMERS for "expired:clock">
             <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
             <update on "#week" at "textContent" to "displace" with "$weeks[$DATETIME.localtime().wday]" />
