@@ -64,6 +64,8 @@
 
         <archetype name='wifiOnTmpl'>
                     <div id="id__network__wifi__title" class="network__wifi__title">Wi-Fi</div>
+                    <img id="id__network__wifi_loading" class="network__wifi__loading"
+                        src="exported/assets/images/loading.gif" alt="&nbsp;" />
                     <img id="id__network__wifi_toggle" class="network__wifi__toggle"
                         src="exported/assets/icon/off_on.png" alt="&nbsp;" />
         </archetype>
@@ -265,7 +267,7 @@
         <define as 'connWifiFailed'>
             <include with $logMsg on "connWifiFailed is called: " />
             <include with $logMsg on $DATA.serialize($?, 'pretty') />
-            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg invisible" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg visible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
@@ -320,6 +322,7 @@
             <update on '#id__dlg__title__title' at "content" with $?.ssid />
             <!-- update set:value sometimes crash -->
             <request on '#id__dlg__title__pw' to "set:value" with "" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg invisible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
@@ -397,6 +400,7 @@
                             <observe on $databus for 'event:WiFiScanFinished'>
                                 <call on $showBubbleData with $?>
                                     <test with $?.success>
+                                        <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
                                         <call on $loadWifiList with $2?.hotspots />
                                     </test>
                                 </call>
