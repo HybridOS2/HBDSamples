@@ -83,7 +83,24 @@
                $sqliteConn.commit();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' />
+            <load from 'cert_time.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
         </observe>
              
         <observe on="#repeat" for="click">
@@ -155,7 +172,24 @@
                $sqliteConn.commit();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' />
+            <load from 'cert_time.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
         </observe>
         
         <observe on $CRTN for "rdrState:closed">

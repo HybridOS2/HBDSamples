@@ -110,7 +110,7 @@
                        $sqliteConn.commit();
                        $sqliteConn.close();
                     </inherit>
-                    <load from 'item-3.hvml' onto 'self:' />
+                    <exit with 1L />
                 </test>
             </test>
         </observe>

@@ -24,9 +24,9 @@
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="cert-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
             <div class="title_h1 ml7">认证时间段设置</div>
-            <div class="list_content rel30">
+            <div class="list_content rel30 lstof5">
                 <iterate on $certs >
-                    <div id="crt-$?.id" class="item_40" value="$?.id" hvml-events="click" >
+                    <div id="crt-$?.id" class="item_s40" value="$?.id" hvml-events="click" >
                         <img src="exported/assets/icon/play.png" width="40" height="40" />
                         <p>$?.certname</p>
                     </div>
@@ -50,7 +50,24 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'cert_add.hvml' onto 'self:' />
+            <load from 'cert_add.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
         </observe>
         
         <observe on=".item_40" for="click">
@@ -63,6 +80,20 @@
             <load from 'cert_detail.hvml' onto 'self:' >
             {
                 cert_id: "$?.targetValue",
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
             }
             </load>
         </observe>

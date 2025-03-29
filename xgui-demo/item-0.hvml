@@ -24,9 +24,9 @@
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="dpart-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
             <div class="title_h1 ml4">部门管理</div>
-            <div class="list_content rel30 lsth4">
+            <div class="list_content rel30 lstof5">
                 <iterate on $dparts >
-                    <div id="dpart-$?.partnum" class="item_40" value=$?.id hvml-events="click" >
+                    <div id="dpart-$?.partnum" class="item_s40" value=$?.id hvml-events="click" >
                         <img id="item-$?.partnum-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
                         <p>$?.partname</p>
                     </div>

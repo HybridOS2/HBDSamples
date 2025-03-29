@@ -114,7 +114,7 @@
                 $sqliteCursor.close();
                 $sqliteConn.close(); 
             </inherit>
-            <load from 'atd_setting.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
  
         <observe on '#id_dlg_num' for "close">
