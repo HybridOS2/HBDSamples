@@ -34,7 +34,22 @@
         </observe>
         
         <observe on="#cert_set" for="click">
-            <load from "cert_time.hvml" onto 'self:' />
+            <load from 'cert_time.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
         </observe>
         
         <observe on $CRTN for "rdrState:closed">

@@ -77,8 +77,6 @@
                         $sqliteConn.commit();
                         $sqliteCursor.close();
                         $sqliteConn.close();
-                        
-                        <load from 'item-0.hvml' onto 'self:' />
                     </inherit>
                 </match>
             </test>
@@ -94,6 +92,20 @@
             <load from 'dpart-detail.hvml' onto 'self:' >
             {
                 dpart_id: "$?.targetValue",
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
             }
             </load>
         </observe>

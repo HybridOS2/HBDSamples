@@ -87,7 +87,22 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'dev-style.hvml' onto 'self:' />
+            <load from 'dev-style.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
         </observe>
         
         <observe on="#dev_pwd" for="click">
@@ -96,7 +111,22 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'dev-pwd.hvml' onto 'self:' />
+            <load from 'dev-pwd.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
         </observe>
         
         <observe on="#net_setting" for="click">
@@ -105,7 +135,22 @@
                 $sqliteCursor.close();
                 $sqliteConn.close();
             </inherit>
-            <load from 'system/network.hvml' onto 'self:' />
+            <load from 'system/network.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: none",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 300",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
         </observe>
         
         <observe on '#dlg_timeout' for "close">
