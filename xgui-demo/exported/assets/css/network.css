@@ -15,10 +15,11 @@
 
 .network__wifi__loading {
     position: absolute;
-    top: 1vh;
-    right: 60px;
-    width: 30px;
-    height: 30px;
+    top: 8px;
+    right: 64px;
+    width: 20px;
+    height: 20px;
+    background-color:#E9F0F0;
 }
 
 .network__wifi__toggle {
