@@ -14,15 +14,15 @@
         </update>
         
         <init as 'wea_images' at '_runner'>
-            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/bingbao.png" , city: "北京", temp: 25 },
-              { id : 1, name : "lei",  bkg : "exported/assets/weather/lei.png" , city: "北京", temp: 25},
-              { id : 2, name : "qing",  bkg : "exported/assets/weather/qing.png" , city: "北京", temp: 25},
-              { id : 3, name : "shachen",  bkg : "exported/assets/weather/shachen.png" , city: "北京", temp: 25},
-              { id : 4, name : "wu",  bkg : "exported/assets/weather/wu.png" , city: "北京", temp: 25},
-              { id : 5, name : "xue",  bkg : "exported/assets/weather/xue.png" , city: "北京", temp: 25},
-              { id : 6, name : "yin",  bkg : "exported/assets/weather/yin.png" , city: "北京", temp: 25},
-              { id : 7, name : "yun",  bkg : "exported/assets/weather/yun.png" , city: "北京", temp: 25},
-              { id : 8, name : "yu",  bkg : "exported/assets/weather/yu.png" , city: "北京", temp: 25},
+            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/background-bingbao.png" ,  icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25 },
+              { id : 1, name : "lei",  bkg : "exported/assets/weather/background-lei.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 2, name : "qing",  bkg : "exported/assets/weather/background-qing.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 3, name : "shachen",  bkg : "exported/assets/weather/background-shachen.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 4, name : "wu",  bkg : "exported/assets/weather/background-wu.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 5, name : "xue",  bkg : "exported/assets/weather/background-xue.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 6, name : "yin",  bkg : "exported/assets/weather/background-yin.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 7, name : "yun",  bkg : "exported/assets/weather/background-yun.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
             ]
         </init>
         <init as 'wth_id' at '_runner' with 0L />
@@ -48,8 +48,9 @@
         </archetype>
         
         <archetype name="wea_piece">
+            <request on="#main_pane" to="set:style.background-image" with "url('exported/assets/weather/$?.bkg')" />
             <p class="wea_text"><span id="city">$?.city:</span><span id="tem">&nbsp;&nbsp;$?.temp</span><span>°C</span></p>
-            <DIV class="wea_div"><img class="wea_img" src="$?.bkg" width="60" height="60" alt="."/></DIV>
+            <DIV class="wea_div" ><img class="wea_img" src="$?.icon" width="72" height="40" alt="."/></DIV>
         </archetype>
         
         <archetype name="cert_piece">

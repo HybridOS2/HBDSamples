@@ -82,7 +82,7 @@
             </test>
         </observe>
                 
-        <observe on=".item_40" for="click">
+        <observe on=".item_s40" for="click">
             <inherit>
                 $STREAM.stderr.writelines("item click $?")
                 $sqliteConn.commit();
