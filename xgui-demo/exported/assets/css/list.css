@@ -125,6 +125,10 @@
     font-size:20px;
 }
 
+.item > p{
+    margin:0px;
+}
+
 .item > img{
     float:right;
     width:40px;
@@ -150,6 +154,10 @@
     background-color:#EEF2F6;
     width:120px;
     font-size:20px;
+}
+
+.item_40 > p{
+    margin:0px;
 }
 
 .item_40 > img{
@@ -196,6 +204,11 @@
     width:40px;
     height:40px;
 }
+
+.item_s40 > p{
+    margin:0px;
+}
+
 .item_s40 > select{
     float:right;
     font-size:20px;
@@ -220,6 +233,10 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:0px 0px 1px 0px;
+}
+
+.item_30 > p{
+    margin:0px;
 }
 
 .item_30 > img{
@@ -265,6 +282,10 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:2px;
+}
+
+.item_alone > p{
+    margin:0px;
 }
 
 .item_alone > img{
