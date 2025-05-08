@@ -46,11 +46,11 @@
                     <init as dpart_num at '_root' with $?.partnum />
                     <div id="partnum" class="item_40" hvml-events="click" >
                         <img src="exported/assets/icon/play.png" width="40" height="40" />
-                        <p id="num_edit">部门编号:$dpart_num</p>
+                        <p class="itext" id="num_edit">部门编号:$dpart_num</p>
                     </div>
                     <div id="partname" class="item_40" hvml-events="click" >
                         <img src="exported/assets/icon/play.png" width="40" height="40" />
-                        <p id="name_edit">部门名称:$dpart_name</p>
+                        <p class="itext" id="name_edit">部门名称:$dpart_name</p>
                     </div>
                 </iterate>
             </div>
@@ -67,7 +67,7 @@
                                         部门编号 <input type="text" name="dpart_num" value="$dpart_num" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
         
@@ -78,7 +78,7 @@
                                         部门名称 <input type="text" name="dpart_name" value="$dpart_name" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
                 

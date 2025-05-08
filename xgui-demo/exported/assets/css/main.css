@@ -87,6 +87,11 @@ img.top{
     margin-left:3%;
 }
 
+.itext {
+    margin-top:0px;
+    margin-bottom:0px;
+}
+
 .dialog_bottom > button{
     border-style:solid;
     border-width:2px;

@@ -101,7 +101,7 @@
                     </select>
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
         
@@ -112,7 +112,7 @@
                     <input type="text" name="mb_name" value="$mb_name" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
         
@@ -123,7 +123,7 @@
                     <input type="text" name="mb_num" value="$mb_num" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
         
@@ -137,7 +137,7 @@
                     <input type="password" name="mb_pwd1" value="123456" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
                         

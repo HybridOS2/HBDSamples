@@ -28,7 +28,7 @@
                 <iterate on $dparts >
                     <div id="dpart-$?.partnum" class="item_40" value=$?.id hvml-events="click" >
                         <img id="item-$?.partnum-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
-                        $?.partname
+                        <p class="itext">$?.partname</p>
                     </div>
                 </iterate>
             </div>
@@ -44,7 +44,7 @@
                                         部门编号 <input type="text" name="dpart_name" value="部门" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
                   

@@ -37,13 +37,13 @@
 
         <define as 'showResult'>
             <test with $L.eq($?.result.retCode, 200) >
-                <include with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
-                <include with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+                <execute with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <execute with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
 
                 <return with $DATA.parse($2?.result.retValue) />
 
                 <differ>
-                    <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
                     <return with false />
                 </differ>
             </test>
@@ -76,7 +76,7 @@
 
         <!-- title bar -->
         <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
-        <include with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:false, titlebarBackButtonDefaultHandleeEnable:true } />
+        <execute with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:false, titlebarBackButtonDefaultHandleeEnable:true } />
 
         <div class="content">
 
@@ -233,8 +233,8 @@
 
 
         <define as 'connectedWifi'>
-            <include with $logMsg on "connectedWifi is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "connectedWifi is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
 
             <call on $buildWifiItemId with $? >
                 <update on "$wifiList[$?]" at ".isConnected" with true />
@@ -252,8 +252,8 @@
         </define>
 
         <define as 'disconnectedWifi'>
-            <include with $logMsg on "disconnectedWifi is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "disconnectedWifi is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
 
             <test with $L.strne('case', $DATA.type($globalState.bssid), 'null')>
                 <call on $buildWifiItemId with $globalState >
@@ -270,15 +270,15 @@
         </define>
 
         <define as 'connWifiFailed'>
-            <include with $logMsg on "connWifiFailed is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "connWifiFailed is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
             <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
 
         <define as 'wifiSignalLevelChanged'>
-            <include with $logMsg on "wifiSignalLevelChanged is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "wifiSignalLevelChanged is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
 
             <init as 'signal_data' with "$?" temp />
             <call on $buildWifiItemId with $? >
@@ -306,19 +306,19 @@
 
         <!-- wifiHotspotLost and wiFiHotspotFound fired before WiFiScanFinished -->
         <define as 'wifiHotspotLost'>
-            <include with $logMsg on "wifiHotspotLost is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "wifiHotspotLost is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
             <!-- TODO -->
         </define>
 
         <define as 'wiFiHotspotFound'>
-            <include with $logMsg on "wiFiHotspotFound is called: " />
-            <include with $logMsg on $DATA.serialize($?, 'pretty') />
+            <execute with $logMsg on "wiFiHotspotFound is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
             <!-- TODO -->
         </define>
 
         <define as 'wifiDialog'>
-            <include with $logMsg on "popup dialog with errmsg: $?" />
+            <execute with $logMsg on "popup dialog with errmsg: $?" />
             <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
             <request on '#id__dlg__pwd' to 'call:show' />
         </define>
@@ -334,21 +334,21 @@
 
         <define as 'getInetdResult'>
             <test with $L.eq($?.result.retCode, 200) >
-                <include with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
-                <include with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+                <execute with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <execute with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
 
                 <init as 'retValue' with $DATA.parse($2?.result.retValue) temp />
 
                 <test with $L.eq($retValue.errCode, 0) >
                     <return with {{ $retValue.data || null }} silently />
                     <differ>
-                        <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $retValue.errMsg" />
+                        <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $retValue.errMsg" />
                         <return with undefined />
                     </differ>
                 </test>
 
                 <differ>
-                    <include with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
                     <return with false />
                 </differ>
 
@@ -358,15 +358,15 @@
         <define as 'showBubbleData'>
             <init as 'bubbleData' with $DATA.parse($?.bubbleData) temp />
 
-            <include with $logMsg on "Got an event from $?.fromEndpoint/bubble/$?.fromBubble: $?.bubbleData" />
-            <include with $logMsg on $DATA.serialize($bubbleData, 'pretty') />
+            <execute with $logMsg on "Got an event from $?.fromEndpoint/bubble/$?.fromBubble: $?.bubbleData" />
+            <execute with $logMsg on $DATA.serialize($bubbleData, 'pretty') />
 
             <return with $bubbleData />
         </define>
 
         <define as 'showWiFiStatus'>
             <test with $databus.call($hbdinetdMain, 'getDeviceStatus', "{device: '$globalState.wifi'}") >
-                <include with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+                <execute with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
 
                 <forget on $databus for 'result:getDeviceStatus' />
                 <observe on $databus for 'result:getDeviceStatus'>
@@ -378,7 +378,7 @@
                 </observe>
 
                 <differ>
-                    <include with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                    <execute with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
                 </differ>
             </test>
         </define>
@@ -447,8 +447,8 @@
 
                             <observe on $databus for 'event:DeviceChanged'>
                                 <call on $showBubbleData with $? >
-                                    <include with $logMsg on "DeviceChanged for the device $?.device: " />
-                                    <include with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+                                    <execute with $logMsg on "DeviceChanged for the device $?.device: " />
+                                    <execute with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
 
                                     <call on $showWiFiStatus />
                                     <!-- TODO: update UI -->
@@ -457,8 +457,8 @@
 
                             <observe on $databus for 'event:DeviceConfigured'>
                                 <call on $showBubbleData with $? >
-                                    <include with $logMsg on "Configuration for the device $?.device: " />
-                                    <include with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+                                    <execute with $logMsg on "Configuration for the device $?.device: " />
+                                    <execute with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
 
                                     <call on $showWiFiStatus />
                                     <!-- "Connected to $globalState.ssid and it is configured by using $?.method" / -->
@@ -469,7 +469,7 @@
 
                             <observe on $databus for 'event:DeviceConfigFailed'>
                                 <call on $showBubbleData with $? >
-                                    <include with $logMsg on "Connected to $globalState.ssid but failed to configure the device using $?.method " />
+                                    <execute with $logMsg on "Connected to $globalState.ssid but failed to configure the device using $?.method " />
                                     <!-- TODO: update UI -->
                                 </call>
                             </observe>
@@ -482,10 +482,10 @@
         </observe>
 
         <observe on $globalState for 'GotWiFiDevice' >
-            <include with $logMsg on "Found the WiFi Device: $globalState.wifi ($?)" />
+            <execute with $logMsg on "Found the WiFi Device: $globalState.wifi ($?)" />
 
             <test with $databus.call($hbdinetdMain, 'openDevice', "{device: '$globalState.wifi'}") >
-                <include with $logMsg on "Calling $hbdinetdMain/method/openDevice..." />
+                <execute with $logMsg on "Calling $hbdinetdMain/method/openDevice..." />
 
                 <observe on $databus for 'result:openDevice'>
                     <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'openDevice', result: $? } >
@@ -495,10 +495,10 @@
                                         'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
 
                                 <test with $databus.subscribe($hbdinetdMain, $?) silently >
-                                    <include with $logMsg on "Subscribing $hbdinetdMain/bubble/$?..." />
+                                    <execute with $logMsg on "Subscribing $hbdinetdMain/bubble/$?..." />
 
                                     <differ>
-                                        <include with $logMsg on "Failed to subscribe $hbdinetdMain/bubble/$2?..." />
+                                        <execute with $logMsg on "Failed to subscribe $hbdinetdMain/bubble/$2?..." />
                                     </differ>
                                 </test>
                             </iterate>
@@ -511,14 +511,14 @@
 
         <define as 'onHBDBusReady'>
             <test with $databus.call($hbdinetdMain, 'getDeviceStatus', '{device: "*"}') >
-                <include with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+                <execute with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
 
                 <observe on $databus for 'result:getDeviceStatus'>
                     <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } >
                         <test with $?>
                             <iterate on $2?.data >
                                 <test with $L.streq('caseless', $?.type, 'wifi') >
-                                    <include with $logMsg on "Testing device type: $?.type" />
+                                    <execute with $logMsg on "Testing device type: $?.type" />
 
                                     <update on $globalState at '.wifi' with $2?.device />
                                     <fire on $globalState for 'GotWiFiDevice' with $2?.device />
@@ -530,14 +530,14 @@
                 </observe>
 
                 <differ>
-                    <include with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                    <execute with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
                 </differ>
             </test>
 
             <test with $databus.register_proc('terminate') >
                 <observe on $databus for 'call:terminate'>
 
-                    <include with $logMsg on "Got a call to `terminate` from $?.fromEndpoint" />
+                    <execute with $logMsg on "Got a call to `terminate` from $?.fromEndpoint" />
 
                     <test with $databus.send_result($?.resultId, 'Ok') >
                         <exit with "Terminated by $2?.fromEndpoint">
@@ -548,7 +548,7 @@
                 </observe>
 
                 <differ>
-                    <include with $logMsg on "Failed to register `terminate` method" />
+                    <execute with $logMsg on "Failed to register `terminate` method" />
                 </differ>
             </test>
 
@@ -572,15 +572,15 @@
 
                         <test on $?.errCode >
                             <match with $L.eq($?, -4) exclusively>
-                                <include with $logMsg on "Waiting for result event..." />
+                                <execute with $logMsg on "Waiting for result event..." />
                             </match>
 
                             <match with $L.eq($?, 0) exclusively>
-                                <include with $logMsg on "Correctly connected to $globalState.connectingSsid..." />
+                                <execute with $logMsg on "Correctly connected to $globalState.connectingSsid..." />
                             </match>
 
                             <match>
-                                <include with $logMsg on "Failed $hbdinetdMain/method/wifiConnect $2?.errCode ($2?.errMsg) ..." />
+                                <execute with $logMsg on "Failed $hbdinetdMain/method/wifiConnect $2?.errCode ($2?.errMsg) ..." />
                             </match>
                         </test>
                     </call>
@@ -612,7 +612,7 @@
                         <update on "$currWifiInfo" at ".keymgmt" with "WPA-PSK" />
                     </differ>
                 </test>
-                <include with $showPwdDlg  on $item_data />
+                <execute with $showPwdDlg  on $item_data />
 
                 <differ>
                     <update on "$currWifiInfo" at '.passphrase' with null />
@@ -625,40 +625,40 @@
 
 
         <observe on $globalState for 'wifiSwitchOn'>
-            <include with $logMsg on "begin Connection to HBDBus ..." />
+            <execute with $logMsg on "begin Connection to HBDBus ..." />
             <init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock', 'default', 'hbdbus') at '_topmost'>
-                <include with $logMsg on "register state observe ..." />
+                <execute with $logMsg on "register state observe ..." />
 
                 <observe on $databus for 'state:ready' >
-                    <include with $logMsg on "Connection to HBDBus is now ready." />
+                    <execute with $logMsg on "Connection to HBDBus is now ready." />
                     <call on $onHBDBusReady />
                 </observe>
 
-                <include with $logMsg on "after register state observe ..." />
+                <execute with $logMsg on "after register state observe ..." />
 
                 <observe on $databus for 'state:LostEventGenerator' >
 
                     <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
-                        <include with $logMsg on "HBDInetd disconnected from HBDBus" />
+                        <execute with $logMsg on "HBDInetd disconnected from HBDBus" />
                         <!-- TODO: pop dialog -->
                     </test>
 
                 </observe>
 
                 <observe on $databus for 'close' >
-                    <include with $logMsg on "HBDBus is closed" />
+                    <execute with $logMsg on "HBDBus is closed" />
                     <inherit>
                         <!-- TODO: pop dialog -->
                     </inherit>
                 </observe>
 
                 <observe on $databus for 'error:hbdbus' >
-                    <include with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
+                    <execute with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
                     <!-- TODO: pop dialog -->
                 </observe>
 
                 <catch for `ANY`>
-                    <include with $logMsg on "Failed to connected to HBDBus" />
+                    <execute with $logMsg on "Failed to connected to HBDBus" />
                     <!-- TODO: pop dialog -->
                 </catch>
             </init>
@@ -666,7 +666,7 @@
 
         <observe on $globalState for 'wifiSwitchOff'>
             <forget on $databus for '*' />
-            <include with $logMsg on "Close databus ret : $databus.close() " />
+            <execute with $logMsg on "Close databus ret : $databus.close() " />
             <update on "$wifiList" to "displace" with {} />
             <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
             <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />

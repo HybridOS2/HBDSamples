@@ -64,7 +64,7 @@
                     </select>
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
-                <include with $dlg_bottom />
+                <execute with $dlg_bottom />
             </form>
         </dialog>
         
