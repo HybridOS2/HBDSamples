@@ -75,6 +75,8 @@
                 $sqliteConn.commit();
                 $sqliteCursor.close();
                 $sqliteConn.close();
+                
+                $STREAM.stderr.writelines("item_40 click $?")
             </inherit>
             
             <load from 'cert_detail.hvml' onto 'self:' >
