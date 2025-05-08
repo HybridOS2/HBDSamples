@@ -86,7 +86,7 @@
                         <differ>
                             <init as devcursor with $sqliteConn.execute("select * from setting where devpwd='$strpwd'") temp/>
                             <init as devuser with $devcursor.fetchall('object') temp />
-                            <test with $devuser && $L.ge($DATA.count($devuser), 1) >
+                            <test with $L.ge($DATA.count($devuser), 1) silently>
                                 <inherit>
                                     $STREAM.stdout.writelines("enter in setting!!! $devuser\n")
                                     $devcursor.close();
