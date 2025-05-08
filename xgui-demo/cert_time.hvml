@@ -70,13 +70,11 @@
             </load>
         </observe>
         
-        <observe on=".item_40" for="click">
+        <observe on=".item_s40" for="click">
             <inherit>
                 $sqliteConn.commit();
                 $sqliteCursor.close();
                 $sqliteConn.close();
-                
-                $STREAM.stderr.writelines("item_40 click $?")
             </inherit>
             
             <load from 'cert_detail.hvml' onto 'self:' >
