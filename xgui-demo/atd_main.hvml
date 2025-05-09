@@ -25,7 +25,7 @@
               { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
             ]
         </init>
-        <init as 'wth_id' at '_runner' with 0L />
+        <init as 'wth_id' at '_runner' with 2L />
         
         <style hvml:raw>
         </style>
