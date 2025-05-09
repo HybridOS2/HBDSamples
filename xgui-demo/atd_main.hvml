@@ -25,7 +25,12 @@
               { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
             ]
         </init>
-        <init as 'wth_id' at '_runner' with 2L />
+        
+        <init as 'wth_id' at '_runner'>
+        {
+            id:0L
+        }
+        </init>
         
         <style hvml:raw>
         </style>
@@ -58,7 +63,10 @@
             </div>
         </archetype>
         
-        <div id="main_pane" style="color:#fefefe;background-image:url('$wea_images[$wth_id].bkg')">
+        <inherit>
+            $STREAM.stderr.writelines("\n\nenter wth_id $wth_id.id\n\n")
+        </inherit>
+        <div id="main_pane" style="color:#fefefe;background-image:url('$wea_images[$wth_id.id].bkg')">
             <div id="day">
                 <p><span id="clock">$DATETIME.fmttime("%m月%e日 ")</span>
                     <span id="week">$weeks[$DATETIME.localtime().wday]</span>
@@ -69,7 +77,7 @@
             </div>
             
             <div id="wth" class="weather">
-                <choose on $wea_images[$wth_id] >
+                <choose on $wea_images[$wth_id.id] >
                     <update on $@ to 'append' with $wea_piece />
                 </choose>
             </div>
@@ -167,10 +175,9 @@
             </inherit>
             <iterate on $wea_images >
                     <test with $L.streq("case", $weather_info.wea_img,$?.name) >
-                        <init as 'wth_id' at '_runner' with $?.id />
-                        
+                        <update on $wth_id at ".id" with $?.id />
                         <inherit>
-                            $STREAM.stderr.writelines("update wth_id $wth_id\n")
+                            $STREAM.stderr.writelines("update wth_id $wth_id.id\n")
                         </inherit>
                 
                         <update on $? at ".city" with $weather_info.city />
