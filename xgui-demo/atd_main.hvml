@@ -14,15 +14,15 @@
         </update>
         
         <init as 'wea_images' at '_runner'>
-            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/background-bingbao.png" ,  icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25 },
-              { id : 1, name : "lei",  bkg : "exported/assets/weather/background-lei.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 2, name : "qing",  bkg : "exported/assets/weather/background-qing.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 3, name : "shachen",  bkg : "exported/assets/weather/background-shachen.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 4, name : "wu",  bkg : "exported/assets/weather/background-wu.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 5, name : "xue",  bkg : "exported/assets/weather/background-xue.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 6, name : "yin",  bkg : "exported/assets/weather/background-yin.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 7, name : "yun",  bkg : "exported/assets/weather/background-yun.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
-              { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.png" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/background-bingbao.jpg" ,  icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25 },
+              { id : 1, name : "lei",  bkg : "exported/assets/weather/background-lei.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 2, name : "qing",  bkg : "exported/assets/weather/background-qing.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 3, name : "shachen",  bkg : "exported/assets/weather/background-shachenbao.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 4, name : "wu",  bkg : "exported/assets/weather/background-wu.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 5, name : "xue",  bkg : "exported/assets/weather/background-xue.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 6, name : "yin",  bkg : "exported/assets/weather/background-yin.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 7, name : "yun",  bkg : "exported/assets/weather/background-yun.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
+              { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.jpg" , icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25},
             ]
         </init>
         <init as 'wth_id' at '_runner' with 0L />
@@ -48,7 +48,6 @@
         </archetype>
         
         <archetype name="wea_piece">
-            <request on="#main_pane" to="set:style.background-image" with "url('exported/assets/weather/$?.bkg')" />
             <p class="wea_text"><span id="city">$?.city:</span><span id="tem">&nbsp;&nbsp;$?.temp</span><span>°C</span></p>
             <DIV class="wea_div" ><img class="wea_img" src="$?.icon" width="72" height="40" alt="."/></DIV>
         </archetype>
@@ -59,7 +58,7 @@
             </div>
         </archetype>
         
-        <div id="main_pane">
+        <div id="main_pane" style="color:#fefefe;background-image:url('$wea_images[$wth_id].bkg')">
             <div id="day">
                 <p><span id="clock">$DATETIME.fmttime("%m月%e日 ")</span>
                     <span id="week">$weeks[$DATETIME.localtime().wday]</span>
@@ -74,7 +73,6 @@
                     <update on $@ to 'append' with $wea_piece />
                 </choose>
             </div>
-            
             <div id="right-btn">
                 <p>
                     <img id="user" src="exported/assets/icon/user.png" width="60" height="60" hvml-events="click" />
@@ -170,10 +168,16 @@
             <iterate on $wea_images >
                     <test with $L.streq("case", $weather_info.wea_img,$?.name) >
                         <init as 'wth_id' at '_runner' with $?.id />
+                        
+                        <inherit>
+                            $STREAM.stderr.writelines("update wth_id $wth_id\n")
+                        </inherit>
+                
                         <update on $? at ".city" with $weather_info.city />
                         <update on $? at ".temp" with $weather_info.tem />
                         <choose on $? >
                             <update on #wth at="content" with $wea_piece />
+                            <request on="#main_pane" to="set:style.background-image" with "url('$?.bkg')" />
                         </choose>
                     </test>
             </iterate>
