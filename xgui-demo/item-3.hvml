@@ -48,7 +48,7 @@
             </div>
         </div>
         
-        <dialog style="width:45%;left:15%;" id="dlg_timeout" >
+        <dialog style="width:45%;left:27.5%;" id="dlg_timeout" >
             <form method="dialog">
                 <p class="dialog_title">超时时间设置</p>
                 <p class="dialog_content">
