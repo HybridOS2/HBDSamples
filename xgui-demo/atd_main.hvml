@@ -40,6 +40,15 @@
 
     <body>
         <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />
+        <init as 'main_date'>
+        {
+            "mon": 0,
+            "mday": 0,
+            "wday": 0,
+            "hour": 0,
+            "min": 0
+        }
+        </init>
         <archetype name="pwd_piece">
             <p>请输入用户名密码:</p>
             <p>
@@ -204,9 +213,17 @@
             <update on "#center_pane" at "content" with $cert_piece />
         </observe>
         <observe on $TIMERS for "expired:clock">
-            <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
-            <update on "#week" at "textContent" to "displace" with "$weeks[$DATETIME.localtime().wday]" />
-            <update on "#curr_time" at "textContent" to "displace" with "$DATETIME.fmttime('%H:%M')" />
+            <init as dt with $DATETIME.localtime() temp />
+            <test with $L.or($L.ne($dt.hour, $main_date.hour), $L.ne($dt.min, $main_date.min)) >
+                <update on "#curr_time" at "textContent" to "displace" with $DATETIME.fmttime('%H:%M') />
+                <update on $main_date at ".hour .min" with [$dt.hour, $dt.min] />
+            </test>
+
+            <test with $L.or($L.ne($dt.mon, $main_date.mon), $L.ne($dt.mday, $main_date.mday), $L.ne($dt.wday, $main_date.wday)) >
+                <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
+                <update on "#week" at "textContent" to "displace" with "$weeks[$dt.wday]" />
+                <update on $main_date at ".mon .mday .wday" with [$dt.mon, $dt.mday, $dt.wday] />
+            </test>
         </observe>
 
         <observe on $CRTN for "rdrState:closed">
