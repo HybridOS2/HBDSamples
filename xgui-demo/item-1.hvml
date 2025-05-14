@@ -35,7 +35,7 @@
             
             <div class="list_content rel30"> 
                 <div class="item_30">
-                        <input id="search_value" type="text" value="asdfsdf" tabindex="1" />
+                        <input id="search_value" type="text" value="输入姓名查找" tabindex="1" />
                         <div style="float:right;width:200px;" id="search" hvml-events="click" >
                             <img style="float:right" id="search_img" src="exported/assets/icon/play.png" width="30" height="30" />
                         </div>
@@ -56,7 +56,7 @@
             <form method="dialog">
                 <p class="dialog_title">添加人员</p>
                 <p class="dialog_content">
-                                        工号&nbsp;<input class="dialog_input" type="text" name="mb_num" value="1234" /><div class="next_col">密码&nbsp;</div>
+                                        工号&nbsp;<input class="dialog_input" type="text" name="mb_num" value="1234" /><span class="next_col">密码&nbsp;</span>
                   <input class="dialog_input" type="password" name="mb_pwd" value="1234" />
                 </p>
                 <p class="dialog_content">

@@ -149,6 +149,7 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:0px 0px 1px 0px;
+    line-height:45px;
 }
 
 .item_40 > input{
@@ -161,10 +162,12 @@
 
 .item_40 > p{
     margin:0px;
+    display:inline-block;
+    float:left;
 }
 
 .item_40 > img{
-    margin:0px;
+    margin-top:5px;
     float:right;
     width:40px;
     height:40px;
@@ -194,6 +197,8 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:0px 0px 1px 0px;
+    vertical-align:bottom;
+    line-height:45px;
 }
 
 .item_s40 > input{
@@ -238,6 +243,7 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:0px 0px 1px 0px;
+    line-height:45px;
 }
 
 .item_30 > p{
@@ -276,6 +282,7 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:0 0px 1px 0px;
+    line-height:30px;
 }
 
 .item_alone{
@@ -287,6 +294,7 @@
     border-style: solid;
     border-color:#ADB5BD;
     border-width:2px;
+    line-height:45px;
 }
 
 .item_alone > p{

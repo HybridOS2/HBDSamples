@@ -129,11 +129,11 @@
         
         <dialog id="dlg_mbpwd" class="dlg">
             <form method="dialog">
-                <p class="dialog_title">修改密码</p>
-                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >密码</div>
+                <div class="dialog_title">修改密码</div>
+                <p class="dialog_content">密码
                     <input class="dialog_input" type="password" name="mb_pwd" value="123456" />
                 </p>
-                <p class="dialog_content"><div style="display:inline-block;width:100px;text-align:right;" >确认密码</div>
+                <p class="dialog_content">确认密码
                     <input class="dialog_input" type="password" name="mb_pwd1" value="123456" />
                 </p>
                 <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
