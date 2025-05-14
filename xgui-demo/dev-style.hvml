@@ -21,18 +21,18 @@
             <div class="title_h1 ml6">设置选项样式</div>
             <div class="list_content lsth3">
                 <div class="item" hvml-events="click">
+                                            下一级设置
                     <img src="exported/assets/icon/play.png" width="40" height="40" value="1" hvml-events="click" />
-                    <p>下一级设置</p>
                 </div>
                 
                 <div class="item" hvml-events="click">
+                                            开关打开
                     <img class="imgLarge" src="exported/assets/icon/on_off.png" width="146" height="92" value="2" hvml-events="click" />
-                    <p>开关打开</p>
                 </div>
                 
                 <div class="item" hvml-events="click">
+                                            开关关闭
                     <img class="imgLarge" src="exported/assets/icon/off_on.png" width="146" height="92" value="3" hvml-events="click" />
-                    <p>开关关闭</p>
                 </div>
             </div>
             <div id="bottom_pane" class="dialog_bottom0 rel30">

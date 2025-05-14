@@ -34,21 +34,22 @@
              
         <archetype name="item_piece">
             <div id="$?.item_id" class="item">
+                $?.strtext
                 <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
                 <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
-                <p>$?.strtext</p>
             </div>
         </archetype>
         
         <archetype name="item_piece2">
+            $?.strtext
             <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
             <input id="$?.input_id" type="text" value="$?.pwd" tabindex="1" />
-            <p>$?.strtext</p>
         </archetype>
+        
         <archetype name="item_piece3">
+            $?.strtext
             <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
             <input id="$?.input_id" type="password" value="$?.pwd" tabindex="1" />
-            <p>$?.strtext</p>
         </archetype>
         
         <div id="main_pane">
