@@ -49,8 +49,6 @@
 .lsth4{
    height:200px; 
    overflow: auto;
-   border-top-right-radius:0px;
-   border-bottom-right-radius:0px;
 }
 
 .lsth3{
@@ -69,15 +67,11 @@
 .lstof5{
     height:200px;
     overflow: auto;
-    border-top-right-radius:0px;
-    border-bottom-right-radius:0px;
 }
 
 .lstof4{
     height:140px;
     overflow: auto;
-    border-top-right-radius:0px;
-    border-bottom-right-radius:0px;
 }
                    
 .list_60{
