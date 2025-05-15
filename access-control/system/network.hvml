@@ -143,6 +143,8 @@
 
         <define as 'loadWifiList'>
             <update on $globalState at '.refreshList' with true />
+            <init as 'tmpWifiList' with {} temp />
+
             <test with "$L.gt($DATA.count($?),0)">
                 <update on "$wifiList" to "displace" with {} />
                 <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
@@ -165,8 +167,10 @@
 
                 <test with $item_data.is_5g>
                     <update on "$item_data" at ".five_g_visble" with "visible" />
+                    <update on "$item_data" at ".tmpid" with $STR.join($?.ssid, "_TMPID_5G") />
                     <differ>
                         <update on "$item_data" at ".five_g_visble" with "invisible" />
+                        <update on "$item_data" at ".tmpid" with $STR.join($?.ssid, "_TMPID") />
                     </differ>
                 </test>
 
@@ -202,11 +206,16 @@
                     </match>
                 </test>
 
+                <init as tmpListCount with $DATA.count($tmpWifiList) />
+                <update on "$tmpWifiList" at ".$item_data.tmpid" with $item_data />
+                <init as tmpListCountAfter with $DATA.count($tmpWifiList) />
 
-                <update on "$wifiList" at ".$?.id" with $item_data />
-                <update on "$wifiArr" to 'append' with $item_data />
-                <test with $item_data.isConnected>
-                    <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                <test with $L.gt($tmpListCountAfter, $tmpListCount) >
+                    <update on "$wifiList" at ".$?.id" with $item_data />
+                    <update on "$wifiArr" to 'append' with $item_data />
+                    <test with $item_data.isConnected>
+                        <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    </test>
                 </test>
             </iterate>
 
