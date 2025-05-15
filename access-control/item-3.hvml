@@ -91,13 +91,15 @@
                 _renderer:{
                     keepContents:{
                         forSuppressing:{
-                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
                             outTransitionDirection:"right",
-                            inTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
                         },
                         forExposing:{
-                            outTransitionStyle:"window-transition-move: none",
-                            inTransitionStyle:"window-transition-move: linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
                             inTransitionDirection:"right",
                         }
                     }
@@ -115,13 +117,15 @@
                 _renderer:{
                     keepContents:{
                         forSuppressing:{
-                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
                             outTransitionDirection:"right",
-                            inTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
                         },
                         forExposing:{
-                            outTransitionStyle:"window-transition-move: none",
-                            inTransitionStyle:"window-transition-move: linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
                             inTransitionDirection:"right",
                         }
                     }
@@ -139,13 +143,15 @@
                 _renderer:{
                     keepContents:{
                         forSuppressing:{
-                            outTransitionStyle:"window-transition-move:  linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
                             outTransitionDirection:"right",
-                            inTransitionStyle:"window-transition-move: none",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
                         },
                         forExposing:{
-                            outTransitionStyle:"window-transition-move: none",
-                            inTransitionStyle:"window-transition-move: linear 300",
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
                             inTransitionDirection:"right",
                         }
                     }
