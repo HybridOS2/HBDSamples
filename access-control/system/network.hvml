@@ -237,6 +237,7 @@
 
 
         <define as 'connectedWifi'>
+            <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
             <execute with $logMsg on "connectedWifi is called: " />
             <execute with $logMsg on $DATA.serialize($?, 'pretty') />
 
@@ -562,6 +563,7 @@
 
         <observe on $globalState for 'wifiConnect'>
             <update on $globalState at '.connectingSsid' with $?.ssid />
+            <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading visible" silently />
             <test with $databus.call(
                     $hbdinetdMain,'wifiConnect',
                     "{device:'$globalState.wifi', ssid:'$?.ssid', bssid:'$?.bssid', keymgmt:'$?.keymgmt', passphrase:'$?.passphrase'}"
@@ -572,6 +574,7 @@
 
                         <test with="$L.or($L.eq($?.errCode,'0'), $L.eq($?.errCode,'-4'))">
                             <differ>
+                                <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
                                 <call on $wifiDialog with "$3?.errMsg" />
                             </differ>
                         </test>
