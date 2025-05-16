@@ -114,73 +114,73 @@ list:
             <div class="d-grid">
                 <!-- scenario -->
                 <define as 'widgetScenario' from 'widget/scenario.hvml' temp />
-                <include with $widgetScenario on { withTitle: true } />
+                <execute with $widgetScenario on { withTitle: true } />
 
                 <!-- music -->
                 <define as 'widgetMusic' from 'widget/music.hvml' />
-                <include with $widgetMusic on { withTitle: true } />
+                <execute with $widgetMusic on { withTitle: true } />
 
                 <!-- curtain -->
                 <define as 'widgetCurtain' from 'widget/curtain.hvml' temp />
-                <include with $widgetCurtain on { withTitle: true, roomName: '主卧' } />
+                <execute with $widgetCurtain on { withTitle: true, roomName: '主卧' } />
 
                 <!-- air conditioner -->
                 <define as 'widgetAirConditioner' from 'widget/air_conditioner.hvml' temp />
-                <include with $widgetAirConditioner on { withTitle: true, roomName: '主卧' } />
+                <execute with $widgetAirConditioner on { withTitle: true, roomName: '主卧' } />
 
                 <!-- airer -->
                 <define as 'widgetAirer' from 'widget/airer.hvml' temp />
-                <include with $widgetAirer on { withTitle: true, roomName: '阳台' } />
+                <execute with $widgetAirer on { withTitle: true, roomName: '阳台' } />
 
                 <!-- air purifier -->
                 <define as 'widgetAirPurifier' from 'widget/air_purifier.hvml' temp />
-                <include with $widgetAirPurifier on { withTitle: true, roomName: '客厅' } />
+                <execute with $widgetAirPurifier on { withTitle: true, roomName: '客厅' } />
 
                 <!-- dimmer -->
                 <define as 'widgetDimmer' from 'widget/dimmer.hvml' temp />
-                <include with $widgetDimmer on { withTitle: true, roomName: '主卧' } />
+                <execute with $widgetDimmer on { withTitle: true, roomName: '主卧' } />
 
                 <!-- camera -->
                 <define as 'widgetCamera' from 'widget/camera.hvml' temp />
-                <include with $widgetCamera on { withTitle: true, roomName: '门厅' } />
+                <execute with $widgetCamera on { withTitle: true, roomName: '门厅' } />
 
                 <!-- settings -->
                 <define as 'widgetSettings' from 'widget/settings.hvml' temp />
-                <include with $widgetSettings on { withTitle: true } />
+                <execute with $widgetSettings on { withTitle: true } />
             </div>
         </div>
 
         <!-- component for toasts -->
         <define as 'compToasts' from 'component/toasts.hvml' temp />
-        <include with $compToasts />
+        <execute with $compToasts />
 
         <!-- controller for main -->
         <define as 'controllerMain' from 'controller/main.hvml' temp />
-        <include with $controllerMain />
+        <execute with $controllerMain />
 
         <!-- controller for scenario -->
         <define as 'controllerScenario' from 'controller/scenario.hvml' temp />
-        <include with $controllerScenario />
+        <execute with $controllerScenario />
 
         <!-- controller for curtain -->
         <define as 'controllerCurtain' from 'controller/curtain.hvml' temp />
-        <include with $controllerCurtain />
+        <execute with $controllerCurtain />
 
         <!-- controller for air purifier -->
         <define as 'controllerAirPurifier' from 'controller/air_purifier.hvml' temp />
-        <include with $controllerAirPurifier />
+        <execute with $controllerAirPurifier />
 
         <!-- controller for air conditioner -->
         <define as 'controllerAirConditioner' from 'controller/air_conditioner.hvml' temp />
-        <include with $controllerAirConditioner />
+        <execute with $controllerAirConditioner />
 
         <!-- controller for dimmer -->
         <define as 'controllerDimmer' from 'controller/dimmer.hvml' temp />
-        <include with $controllerDimmer />
+        <execute with $controllerDimmer />
 
         <!-- controller for music -->
         <define as 'controllerMusic' from 'controller/music.hvml' temp />
-        <include with $controllerMusic />
+        <execute with $controllerMusic />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />

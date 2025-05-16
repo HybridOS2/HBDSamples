@@ -2,7 +2,6 @@
 <hvml target="html" template="/app/cn.fmsoft.hybridos.smartcontrolpanel/exported/templates/main.html">
     <head>
         <base href=$CRTN.base(! "file:///app/cn.fmsoft.hybridos.smartcontrolpanel/" ) hvml:silently />
-        <init as 'v_loadpanel' with $CRTN.sendingDocumentByURL(! false) />
 
         <init as 'theme_option' at '_runner'>
             {
@@ -98,31 +97,31 @@ list:
 
         <!-- controller for system -->
         <define as 'controllerSystem' from 'controller/system.hvml' temp />
-        <include with $controllerSystem />
+        <execute with $controllerSystem />
 
         <!-- controller for scenario -->
         <define as 'controllerScenario' from 'controller/scenario.hvml' temp />
-        <include with $controllerScenario />
+        <execute with $controllerScenario />
 
         <!-- controller for curtain -->
         <define as 'controllerCurtain' from 'controller/curtain.hvml' temp />
-        <include with $controllerCurtain />
+        <execute with $controllerCurtain />
 
         <!-- controller for air purifier -->
         <define as 'controllerAirPurifier' from 'controller/air_purifier.hvml' temp />
-        <include with $controllerAirPurifier />
+        <execute with $controllerAirPurifier />
 
         <!-- controller for air conditioner -->
         <define as 'controllerAirConditioner' from 'controller/air_conditioner.hvml' temp />
-        <include with $controllerAirConditioner />
+        <execute with $controllerAirConditioner />
 
         <!-- controller for dimmer -->
         <define as 'controllerDimmer' from 'controller/dimmer.hvml' temp />
-        <include with $controllerDimmer />
+        <execute with $controllerDimmer />
 
         <!-- controller for music -->
         <define as 'controllerMusic' from 'controller/music.hvml' temp />
-        <include with $controllerMusic />
+        <execute with $controllerMusic />
 
         <observe on $CRTN for "rdrState:pageClosed">
             <exit with 'Ok' />

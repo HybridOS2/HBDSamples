@@ -1,4 +1,4 @@
-<init as 'weather_map'>
+<init as 'weather_map' at '_runner'>
     {
         bingbao:    [! 'bi bi-cloud-sleet-fill',            'bg-weather-sleet' ],
         lei:        [! 'bi bi-cloud-lightning-rain-fill',   'bg-weather-lightning' ],
@@ -12,7 +12,7 @@
     }
 </init>
 
-<init as "lockscreen_week">
+<init as "lockscreen_week" at '_runner'>
     [
         "星期日",
         "星期一",
@@ -49,14 +49,14 @@
     </choose>
 </observe>
 
-<init as 'lockscreen_hm'>
+<init as 'lockscreen_hm' at '_runner'>
     {
         "hour": 0,
         "min": 0
     }
 </init>
 
-<init as 'lockscreen_mdw'>
+<init as 'lockscreen_mdw' at '_runner'>
     {
         "mon": 0,
         "mday": 0,

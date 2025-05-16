@@ -131,10 +131,10 @@
                 </div>
             </div>
 
-            <include with $widgetMusic on { withTitle: false } />
+            <execute with $widgetMusic on { withTitle: false } />
 
             <define as 'widgetMessages' from 'widget/messages.hvml' temp />
-            <include with $widgetMessages on { withTitle: false } />
+            <execute with $widgetMessages on { withTitle: false } />
 
           </div>
 
@@ -148,7 +148,7 @@
 
         <!-- controller for lockscreen -->
         <define as 'controllerLockscreen' from 'controller/lockscreen.hvml' temp />
-        <include with $controllerLockscreen />
+        <execute with $controllerLockscreen />
 
         <observe on $CRTN for "rdrState:closed">
             <exit with "closed" />
