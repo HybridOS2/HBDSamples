@@ -36,7 +36,7 @@
 
 <define as="settingWifi" from="file://$SYS.cwd/settingWifi.hvml" />
 <div class="dialog settingWifi">
-    <include with="$settingWifi" />
+    <execute with="$settingWifi" />
 </div>
 <observe on="#settingWifi" for="click">
     <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog settingWifi popIn show" />
@@ -44,7 +44,7 @@
 
 <define as="settingBluetooth" from="file://$SYS.cwd/settingBluetooth.hvml" />
 <div class="dialog settingBluetooth">
-    <include with="$settingBluetooth" />
+    <execute with="$settingBluetooth" />
 </div>
 <observe on="#settingBluetooth" for="click">
     <update on="$DOC.query('.settingBluetooth')" at="attr.class" with="dialog settingBluetooth popIn show" />

@@ -38,7 +38,7 @@
 
 <define as="clockEdit" from="file://$SYS.cwd/clockEdit.hvml" />
 <div class="dialog clockEdit">
-    <include with="$clockEdit" />
+    <execute with="$clockEdit" />
 </div>
 
 <observe on=".clock-list .clock-add" for="click">

@@ -21,7 +21,7 @@
 
 <define as="photoView" from="file://$SYS.cwd/photoView.hvml" />
 <div class="dialog photoView">
-    <include with="$photoView" />
+    <execute with="$photoView" />
 </div>
 
 <observe on=".photo-list .photo-content .photo-item" for="click">

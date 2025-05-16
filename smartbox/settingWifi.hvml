@@ -1,17 +1,11 @@
-<init as 'globalState' with {wifi:'',ssid:'',isConnected:false} />
-<init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
+<init as 'globalState' with {wifi:'',ssid:'',isConnected:false} at="_runner" />
+<init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' at="_runner"/>
 <init as 'scanTimes' at="_root" with 1 />
-<init as 'wifiList' with [] />
-<init as 'wifiMyList' with [] />
-<init as 'wifiArr' with [] />
-<init as 'wifiInfo' at="_runner">
-{
-    isWifiOpen:true,
-    isConnected:false,
-    canDeviceChange:true
-}
-</init>
-<init as="delayTime">
+<init as 'wifiList' with [] at="_runner" />
+<init as 'wifiMyList' with [] at="_runner"/>
+<init as 'wifiArr' with [] at="_runner"/>
+
+<init as="delayTime" at="_runner">
     {
         isShow:false,
         count:0
@@ -23,8 +17,8 @@
         <div class="$?.lockClass">
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/lock.png" />
         </div>
-        <div class="$?.statusClass">
-            <div class="wifi-name">
+        <div class="$?.statusClass" style="pointer-events:none;">
+            <div class="wifi-name" style="pointer-events:none;">
                 $?.ssid
                 <!-- <span class="$?.wifiClass">【5G】</span> -->
             </div>
@@ -41,8 +35,8 @@
         <div id="wi-$?.bssid" class="wifi-icon hidden">
             <img src="hvml://localhost/_system/_filesystem/-$SYS.cwd/static/link.png" />
         </div>
-        <div class="$?.statusClass">
-            <div class="wifi-name">
+        <div class="$?.statusClass" style="pointer-events:none;">
+            <div class="wifi-name" style="pointer-events:none;">
                 $?.ssid
                 <!-- <span class="$?.wifiClass">【5G】</span> -->
             </div>
@@ -113,7 +107,7 @@
     <request on="#setting-wifi-goBack" to="call:goBackPage('settingWifi'); return true;" />
 </observe>
 
-<define as 'showResult'>
+<define as 'showResult' at="_runner">
     <test with $L.eq($?.result.retCode,200)>
         <return with $DATA.parse($2?.result.retValue) />
         <differ>
@@ -123,7 +117,7 @@
     </test>
 </define>
 
-<define as 'getInetdResult'>
+<define as 'getInetdResult' at="_runner">
     <test with $L.eq($?.result.retCode,200) >
         <init as 'retValue' with $DATA.parse($2?.result.retValue) temp />
         <test with $L.eq($retValue.errCode,0) >
@@ -138,13 +132,13 @@
     </test>
 </define>
 
-<define as 'showBubbleData'>
+<define as 'showBubbleData' at="_runner">
     <init as 'bubbleData' with $DATA.parse($?.bubbleData) temp />
     <return with $bubbleData />
 </define>
 
 <!-- *************WiFi列表渲染*********** -->
-<define as 'loadWifiList'>
+<define as 'loadWifiList' at="_runner">
     <test with "$L.gt($DATA.count($?),0)">
         <update on "$wifiArr" to "displace" with [] />
         <update on "$wifiList" to "displace" with [] />
@@ -325,7 +319,7 @@
 <!-- *************WiFi列表渲染*********** -->
 
 <!-- ***********WiFi连接渲染************** -->
-<define as 'connectedWifi'>
+<define as 'connectedWifi' at="_runner">
     <init as 'wifiListTmp' with [] />
     <iterate on $wifiList>
         
@@ -350,7 +344,7 @@
 <!-- ***********WiFi连接渲染************** -->
 
 <!-- ***********WiFi断开渲染************** -->
-<define as 'disconnectedWifi'>
+<define as 'disconnectedWifi' at="_runner">
     <init as 'wifiListTmp' with [] />
     <iterate on $wifiList>
         <test with $L.and($L.streq('case',$2?.bssid,$?.bssid),$L.eq($?.isConnected,true))>
@@ -379,7 +373,7 @@
 <!-- ***********WiFi断开渲染************** -->
 
 <!-- ***************消息提示************** -->
-<define as 'wifiDialog'>
+<define as 'wifiDialog' at="_runner">
     <!-- 隐藏标题 -->
     <request on="#dialog-header" to="call:ELEMENT.style['display']=ARG; return true" with "none" />
     <!-- 隐藏结尾 -->
@@ -436,14 +430,11 @@
                         <!-- ****************修改wifi图标和文字***************** -->
                         <inherit>
                             $STREAM.stdout.writelines($DATA.serialize($?))
-                            $STREAM.stdout.writelines("开始调用天气接口")
                             $STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))
                         </inherit>
-                        <init as 'weatherSource' at='_runner' with undefined />
-                        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
                         <request on="#muisc-player-audio" to="call:reloadImg(); return true;" />
-                        <update on "$wifiInfo" at=".canDeviceChange" with="false" />
-                        <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" />
+                        <!-- <update on "$wifiInfo" at=".canDeviceChange" with="false" /> -->
+                        <!-- <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" /> -->
                     </call>
                 </observe>
                 <!-- ***********适配器设置完成************* -->
@@ -556,7 +547,10 @@
 
                         <request on="#wifi-my-group" to="call:changeWifiLoading('$?.bssid'); return true;" />
                         
-                       
+                        <update on $wifiInfo at '.isConnected' with true />
+
+                        <init as 'isWifiConnected' at="_runner" with undefined />
+                        <init as 'isWifiConnected' at="_runner" with true />
                     </call>
                 </observe>
                 <!-- ****************无线信号强度发生变化********************* -->
@@ -708,7 +702,7 @@
 </observe>
 <!-- ***********关闭网络适配器************ -->
 
-<define as 'onHBDBusReady'>
+<define as 'onHBDBusReady' at="_runner">
     <!-- ************网络适配器列表************ -->
     <test with $databus.call($hbdinetdMain,'getDeviceStatus','{device:"*"}')>
         <observe on $databus for 'result:getDeviceStatus'>
@@ -736,7 +730,7 @@
     <!-- ************网络适配器列表************ -->
 </define>
 
-<init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock','default','hbdbus')>
+<init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock','default','hbdbus') at="_runner">
     <observe on $databus for 'state:ready'>
         <inherit>
             $STREAM.stdout.writelines("Connection to HBDBus is now ready.")
@@ -846,7 +840,7 @@
 
 <define as="settingWifiPassword" from="file://$SYS.cwd/settingWifiPassword.hvml" />
 <div class="dialog settingWifiPassword">
-    <include with="$settingWifiPassword" />
+    <execute with="$settingWifiPassword" />
 </div>
 
 <observe on="#keyboardEnter" for="keyboardClick">

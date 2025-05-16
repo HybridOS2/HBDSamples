@@ -1,4 +1,4 @@
-<init as 'globalState' with {wifi:'',ssid:'',isConnected:false} />
+<init as 'globalState' with {wifi:'',ssid:'',isConnected:false}  at="_runner" />
 <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
 <init as 'scanTimes' at="_root" with 1 />
 <init as 'wifiList' with [] />
@@ -424,7 +424,7 @@
                             $STREAM.stdout.writelines($DATA.serialize($currentWifiInfo))
                         </inherit>
                         <init as 'weatherSource' at='_runner' with undefined />
-                        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+                        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:45864835, appsecret:'skses52I'} via="GET" async />
                         <request on="#muisc-player-audio" to="call:reloadImg(); return true;" />
                         <update on "$wifiInfo" at=".canDeviceChange" with="false" />
                         <request on "#loading-icon" to="call:ELEMENT.style.display=ARG; return true" with "block" />
@@ -830,7 +830,7 @@
 
 <define as="settingWifiPassword" from="file://$SYS.cwd/settingWifiPassword.hvml" />
 <div class="dialog settingWifiPassword">
-    <include with="$settingWifiPassword" />
+    <execute with="$settingWifiPassword" />
 </div>
 
 <observe on="#keyboardEnter" for="keyboardClick">

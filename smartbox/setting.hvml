@@ -52,7 +52,7 @@
 
 <define as="settingWifi" from="file://$SYS.cwd/settingWifi.hvml" />
 <div class="dialog settingWifi">
-    <include with="$settingWifi" />
+    <execute with="$settingWifi" />
 </div>
 <observe on="#setting-main-wlan" for="click">
     <update on="$DOC.query('.settingWifi')" at="attr.class" with="dialog settingWifi popIn show" />
@@ -60,7 +60,7 @@
 
 <define as="settingBluetooth" from="file://$SYS.cwd/settingBluetooth.hvml" />
 <div class="dialog settingBluetooth">
-    <include with="$settingBluetooth" />
+    <execute with="$settingBluetooth" />
 </div>
 <observe on="#setting-main-bluetooth" for="click">
     <update on="$DOC.query('.settingBluetooth')" at="attr.class" with="dialog settingBluetooth popIn show" />
@@ -68,7 +68,7 @@
 
 <define as="settingScreen" from="file://$SYS.cwd/settingScreen.hvml" />
 <div class="dialog settingScreen">
-    <include with="$settingScreen" />
+    <execute with="$settingScreen" />
 </div>
 <observe on="#settingScreen" for="click">
     <update on="$DOC.query('.settingScreen')" at="attr.class" with="dialog settingScreen popIn show" />
@@ -76,7 +76,7 @@
 
 <define as="settingUser" from="file://$SYS.cwd/settingUser.hvml" />
 <div class="dialog settingUser">
-    <include with="$settingUser" />
+    <execute with="$settingUser" />
 </div>
 <observe on="#settingUser" for="click">
     <update on="$DOC.query('.settingUser')" at="attr.class" with="dialog settingUser popIn show" />

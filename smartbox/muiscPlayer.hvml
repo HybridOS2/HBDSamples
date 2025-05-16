@@ -1,4 +1,4 @@
-<init as "progressData">
+<init as "progressData" at="_runner">
     {
         isPlayed:false,
         allLength:0,

@@ -3,7 +3,6 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1"/>
-        <init as 'v_loadpanel' with $CRTN.sendingDocumentByURL(! false) />
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-5.3.1-dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/font/bootstrap-icons.css" />
         <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
@@ -118,6 +117,16 @@
             }
         </init>
 
+        <!-- wifi信息 -->
+        <init as 'isWifiConnected' at="_runner" with undefined />
+        <init as 'wifiInfo' at="_runner">
+        {
+            isWifiOpen:true,
+            isConnected:false,
+            canDeviceChange:true
+        }
+        </init>
+
         <!-- 闹钟数据 -->
         <init as "clockData" at="_runner" from "file://$SYS.cwd/json/clock-data.json"></init>
         <init as "clockUrl" at="_runner" with "https://files.fmsoft.cn/hvml/smartbox/mp3/clocking.mp3"></init>
@@ -143,65 +152,63 @@
         
         <define as="index" from="file://$SYS.cwd/index.hvml" />
         <div class="mian show">
-            <include with="$index" />
+            <execute with="$index" />
         </div>
 
         <define as="weatherInfo" from="file://$SYS.cwd/weatherInfo.hvml" />
         <div class="dialog weatherInfo">
-            <include with="$weatherInfo" />
+            <execute with="$weatherInfo" />
         </div>
 
         <define as="muiscList" from="file://$SYS.cwd/muiscList.hvml" />
         <div class="dialog muiscList">
-            <include with="$muiscList" />
+            <execute with="$muiscList" />
         </div>
 
         <define as="photoList" from="file://$SYS.cwd/photoList.hvml" />
         <div class="dialog photoList">
-            <include with="$photoList" />
+            <execute with="$photoList" />
         </div>
        
         <define as="videoList" from="file://$SYS.cwd/videoList.hvml" />
         <div class="dialog videoList">
-            <include with="$videoList" />
+            <execute with="$videoList" />
         </div>
 
     
         <define as="setting" from="file://$SYS.cwd/setting.hvml" />
         <div class="dialog setting">
-            <include with="$setting" />
+            <execute with="$setting" />
         </div>
 
              
         <define as="clockList" from="file://$SYS.cwd/clockList.hvml" />
         <div class="dialog clockList">
-            <include with="$clockList" />
+            <execute with="$clockList" />
         </div>
 
         <define as="toolsTop" from="file://$SYS.cwd/toolsTop.hvml" />
         <div class="dialog toolsTop">
-            <include with="$toolsTop" />
+            <execute with="$toolsTop" />
         </div>
 
         <define as="screenSaver" from="file://$SYS.cwd/screenSaver.hvml" />
         <div class="dialog screenSaver">
-            <include with="$screenSaver" />
+            <execute with="$screenSaver" />
         </div>
 
         <define as="clockingInfo" from="file://$SYS.cwd/clocking.hvml" />
         <div class="dialog clockingInfo">
-            <include with="$clockingInfo" />
+            <execute with="$clockingInfo" />
         </div>
 
         <define as="showDialog" from="file://$SYS.cwd/showDialog.hvml" />
         <div class="dialog showDialog">
-            <include with="$showDialog" />
+            <execute with="$showDialog" />
         </div>
-        
-         
 
         <!-- <div class="dialog keyboard">
-            <include with="$keyboard" />
+            <execute with="$keyboard" />
         </div> -->
 
         <observe on $CRTN for "rdrState:closed">
@@ -210,6 +217,15 @@
 
         <observe on "#all-body" for="click">
             <update on="$clickTime" at=".timestamp" with="$SYS.time" />
+            <inherit>$STREAM.stdout.writelines($DATA.serialize($?))</inherit>
+        </observe>
+
+        <observe against="isWifiConnected" for="change:attached">
+            <inherit>
+                $STREAM.stdout.writelines("开始调用天气接口")
+            </inherit>
+            <init as 'weatherSource' at='_runner' with undefined />
+            <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:45864835, appsecret:'skses52I'} via="GET" async />
         </observe>
 
         <!--
@@ -217,7 +233,6 @@
             <inherit>$STREAM.stdout.writelines($DATA.serialize($?))</inherit>
         </observe>
         -->
-
 
         <!-- **********************屏保事件 开始************************** -->
         <observe on "$TIMERS" for="expired:time-span">
@@ -292,7 +307,7 @@
 
                 <define as="pageTmp" from="$loadPages[$loadPageNumber.number].url" />
                 <div class="dialog $loadPages[$loadPageNumber.number].name">
-                    <include with="$pageTmp" />
+                    <execute with="$pageTmp" />
                 </div>
 
                 <update on="$loadPageNumber" at=".number" with += 1 />

@@ -12,7 +12,7 @@
         </test>
     </iterate>
 </define>
-<include with="$initMuisceData" />
+<execute with="$initMuisceData" />
 
 <archetype name="muisc_item">
     <li class="list-group-item" id="$?.id" hvml-events="click" value="$?.title">
@@ -51,11 +51,11 @@
 
 <define as="muiscPlayer" from="file://$SYS.cwd/muiscPlayer.hvml" />
 <div id="id-muiscPlayer" class="dialog muiscPlayer" >
-    <include with="$muiscPlayer" />
+    <execute with="$muiscPlayer" />
 </div>
 
 <!-- **********************切换歌曲 开始************************** -->
-<define as="changeMuisc">
+<define as="changeMuisc" at="_runner" >
     <init as index with $? />
     <iterate on="0" onlyif $L.lt($0<,$DATA.count($muisceList)) with $DATA.arith('+',$0<,1) nosetotail>
         <test with="$L.streq('case',$index,$muisceList[$?].id)">
@@ -97,7 +97,7 @@
 <!-- **********************切换歌曲 结束************************** -->
 
 <observe on=".content .list-group .list-group-item" for="click">
-    <include with="$changeMuisc" on="$?.targetId" />
+    <execute with="$changeMuisc" on="$?.targetId" />
     <update on="$DOC.query('.muiscPlayer')" at="attr.class" with="dialog muiscPlayer popIn show" />
 </observe>
 
@@ -105,7 +105,7 @@
     <update on="$DOC.query('.muiscList')" at="attr.class" with="dialog muiscList popOut show" />
 </observe>
 
-<define as="refreshList">
+<define as="refreshList" at="_runner">
     <update on "#muisc-list-group" at "content" with ' ' />
     <iterate on $muisceList >
         <update on "#muisc-list-group" at "content" to "append" with $muisc_item />
@@ -119,7 +119,7 @@
     <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item" />
 
     <update on "$muisceList" to="displace" with="$muisceData" />
-    <include with "$refreshList" on="like" />
+    <execute with "$refreshList" on="like" />
 </observe>
 <observe on="#lately-button" for="click">
     <update on="$DOC.query('#like-button')" at="attr.class" with="list-group-item tab-item" />
@@ -127,14 +127,14 @@
     <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item" />
 
     <update on "$muisceList" to="displace" with="$muiscLatelyData" />
-    <include with "$refreshList" on="lately" />
+    <execute with "$refreshList" on="lately" />
 </observe>
 <observe on="#collect-button" for="click">
     <update on="$DOC.query('#like-button')" at="attr.class" with="list-group-item tab-item" />
     <update on="$DOC.query('#lately-button')" at="attr.class" with="list-group-item tab-item" />
     <update on="$DOC.query('#collect-button')" at="attr.class" with="list-group-item tab-item active" />
     <update on "$muisceList" to="displace" with="$muiscLikeData" />
-    <include with "$refreshList" on="collect" />
+    <execute with "$refreshList" on="collect" />
 </observe>
 <!-- *******音乐列表TAB切换 结束********** -->
 
