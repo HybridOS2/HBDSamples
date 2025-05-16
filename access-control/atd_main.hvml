@@ -9,7 +9,8 @@
         <update on="$TIMERS" to="unite">
             [
                 { "id" : "clock", "interval" : 500, "active" : "yes" },
-                { "id" : "weather", "interval" : 1800000, "active" : "yes" },
+                { "id" : "weather_update_timer", "interval" : 1000, "active" : "no" }
+                { "id" : "weather_refresh_timer", "interval" : 1800000, "active" : "no" }
             ]
         </update>
 
@@ -28,7 +29,9 @@
 
         <init as 'wth_id' at '_runner'>
         {
-            id:0L
+            id:0L,
+            weather:0L,
+            tickcount:0L
         }
         </init>
 
@@ -39,6 +42,38 @@
 
 
     <body>
+        <define as 'start_weather_update' at="_topmost">
+            <update on="$TIMERS" to="unite">
+                [
+                    { "id" : "weather_update_timer", "interval" : 1000, "active" : "yes" }
+                ]
+            </update>
+        </define>
+
+        <define as 'stop_weather_update' at="_topmost">
+            <update on="$TIMERS" to="unite">
+                [
+                    { "id" : "weather_update_timer", "interval" : 1000, "active" : "no" }
+                ]
+            </update>
+        </define>
+
+        <define as 'start_weather_refresh' at="_topmost">
+            <update on="$TIMERS" to="unite">
+                [
+                    { "id" : "weather_refresh_timer", "interval" : 1800000, "active" : "yes" }
+                ]
+            </update>
+        </define>
+
+        <define as 'stop_weather_refresh' at="_topmost">
+            <update on="$TIMERS" to="unite">
+                [
+                    { "id" : "weather_refresh_timer", "interval" : 1000, "active" : "no" }
+                ]
+            </update>
+        </define>
+
         <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />
         <init as 'main_date'>
         {
@@ -112,6 +147,7 @@
             </load>
              <observe on $managerCert for="corState:exited">
                 <forget on $managerCert for "corState:exited" />
+                <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
                 <test on $?>
                     <match with "$L.eq($?, 0)" exclusively>
                         <inherit>
@@ -122,7 +158,7 @@
                         <inherit>
                             $STREAM.stdout.writelines("Manager auth exited with auth success goto atd_setting.hvml")
                         </inherit>
-                        <load from 'atd_setting.hvml' onto 'self:' with {
+                        <load from 'atd_setting.hvml' onto 'self:' as 'settingPage' with {
                             _renderer:{
                                 keepContents:{
                                     forSuppressing:{
@@ -140,6 +176,10 @@
                                 }
                             }
                         } async />
+                        <observe on $settingPage for="corState:exited">
+                            <forget on $settingPage for "corState:exited" />
+                            <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
+                        </observe>
                     </match>
                     <match with "$L.eq($?, 2)" exclusively>
                         <inherit>
@@ -157,6 +197,7 @@
             }
             </load>
              <observe on $userCert for="corState:exited">
+                <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
                 <forget on $userCert for "corState:exited" />
                 <test on $?>
                     <match with "$L.eq($?, 0)" exclusively>
@@ -178,12 +219,46 @@
              </observe>
         </observe>
 
-        <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+        <define as 'request_weather_info' at="_topmost">
+            <init as 'weather_info' at='_runner' with undefined />
+            <init as 'weather_info' at '_runner' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+            <inherit>
+                $STREAM.stdout.writelines("call request weather async")
+            </inherit>
+        </define>
+
+        <observe on $TIMERS for 'expired:weather_update_timer'>
+            <update on $wth_id at ".tickcount" with $DATA.arith('+', $wth_id.tickcount, 1 ) />
+            <inherit>
+                $STREAM.stdout.writelines("tickcount: $wth_id.tickcount")
+            </inherit>
+            <test with $L.eq($wth_id.weather, 0)>
+                <test with $L.eq($DATA.arith('%', $wth_id.tickcount, 5), 0) >
+                    <execute with $request_weather_info />
+                </test>
+                <differ>
+                    <update on $wth_id at ".tickcount" with 0L />
+                    <execute with $stop_weather_update />
+                    <execute with $start_weather_refresh />
+                </differ>
+            </test>
+        </observe>
+
+        <observe on $TIMERS for 'expired:weather_refresh_timer'>
+            <inherit>
+                $STREAM.stdout.writelines("##### weather refresh timer")
+            </inherit>
+            <update on $wth_id at ".weather" with 0L />
+            <execute with $start_weather_update />
+        </observe>
+
+        <execute with $start_weather_update />
 
         <observe against "weather_info" for "change:displaced">
             <inherit>
                     $STREAM.stderr.writelines("update weather1 $weather_info\n")
             </inherit>
+            <update on $wth_id at ".weather" with 1L />
             <iterate on $wea_images >
                     <test with $L.streq("case", $weather_info.wea_img,$?.name) >
                         <update on $wth_id at ".id" with $?.id />
@@ -205,10 +280,6 @@
                     $STREAM.stderr.writelines("update weather2 failed\n\n")
                 </inherit>
             </catch>
-        </observe>
-
-        <observe on $TIMERS for "expired:weather">
-            <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
         </observe>
 
         <observe on="#lock" for="click">
