@@ -55,6 +55,18 @@
     color:#5C5C5C;
 }
 
+#main_pane_dev_pwd {
+    width:640px;
+    height:360px;
+    font-family:sans-serif;
+    padding:0px;
+    margin:0px;
+    background-color:#EBEBEB;
+    background-image:url('exported/assets/icon/background.png');
+    background-size:cover;
+    color:#5C5C5C;
+}
+
 #user {
     position:absolute;
     top:0px;
@@ -138,6 +150,7 @@
     width:110px;
     height:22px;
     vertical-align:top;
+    outline: none;
 }
 
 .dialog_content > select{

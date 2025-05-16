@@ -13,7 +13,7 @@
             ]
         </update>
     </head>
-    <body>
+    <body style="margin:0px;padding:0px;">
         
         <init as 'idgroups' at '_root'>
             [ 
@@ -52,7 +52,7 @@
             <input id="$?.input_id" type="password" value="$?.pwd" tabindex="1" />
         </archetype>
         
-        <div id="main_pane">
+        <div id="main_pane_dev_pwd">
             <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
             <img id="save_pwd" class="right_img" src="exported/assets/icon/save.png" hvml-events="click" />
             <div class="title_h1 ml6">设备密码设置</div>
