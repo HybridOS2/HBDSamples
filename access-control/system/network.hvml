@@ -165,12 +165,13 @@
                     </update>
                 </call>
 
+
                 <test with $item_data.is_5g>
                     <update on "$item_data" at ".five_g_visble" with "visible" />
-                    <update on "$item_data" at ".tmpid" with $STR.join($?.ssid, "_TMPID_5G") />
+                    <update on "$item_data" at ".tmpid" with $STR.join($STR.replace($?.ssid, ' ', '_'), "_TMPID_5G") />
                     <differ>
                         <update on "$item_data" at ".five_g_visble" with "invisible" />
-                        <update on "$item_data" at ".tmpid" with $STR.join($?.ssid, "_TMPID") />
+                        <update on "$item_data" at ".tmpid" with $STR.join($STR.replace($?.ssid, ' ', '_'), "_TMPID") />
                     </differ>
                 </test>
 
