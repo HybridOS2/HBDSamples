@@ -35,7 +35,7 @@
             
             <div class="list_content rel30"> 
                 <div class="item_30">
-                        <input id="search_value" type="text" value="输入姓名查找" tabindex="1" />
+                        <input id="search_value" type="text" value="" placeholder="输入姓名查找" tabindex="1" />
                         <div style="float:right;width:200px;" id="search" hvml-events="click" >
                             <img style="float:right" id="search_img" src="exported/assets/icon/play.png" width="30" height="30" />
                         </div>
