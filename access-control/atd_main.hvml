@@ -147,7 +147,6 @@
             </load>
              <observe on $managerCert for="corState:exited">
                 <forget on $managerCert for "corState:exited" />
-                <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
                 <test on $?>
                     <match with "$L.eq($?, 0)" exclusively>
                         <inherit>
@@ -178,7 +177,6 @@
                         } async />
                         <observe on $settingPage for="corState:exited">
                             <forget on $settingPage for "corState:exited" />
-                            <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
                         </observe>
                     </match>
                     <match with "$L.eq($?, 2)" exclusively>
@@ -197,7 +195,6 @@
             }
             </load>
              <observe on $userCert for="corState:exited">
-                <request on="#main_pane" to="set:style.background-image" with "url($wea_images[$wth_id.id].bkg)" />
                 <forget on $userCert for "corState:exited" />
                 <test on $?>
                     <match with "$L.eq($?, 0)" exclusively>
@@ -270,7 +267,7 @@
                         <update on $? at ".temp" with $weather_info.tem />
                         <choose on $? >
                             <update on #wth at="content" with $wea_piece />
-                            <request on="#main_pane" to="set:style.background-image" with "url('$?.bkg')" />
+                            <update on "#main_pane" at "attr.style" with $STR.join('color:#fefefe;background-image:url(', "$?.bkg", ');') />
                         </choose>
                     </test>
             </iterate>
