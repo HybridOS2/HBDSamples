@@ -157,7 +157,7 @@
                         <inherit>
                             $STREAM.stdout.writelines("Manager auth exited with auth success goto atd_setting.hvml")
                         </inherit>
-                        <load from 'atd_setting.hvml' onto 'self:' as 'settingPage' with {
+                        <load from 'atd_setting.hvml' onto 'self:' with {
                             _renderer:{
                                 keepContents:{
                                     forSuppressing:{
@@ -175,9 +175,6 @@
                                 }
                             }
                         } async />
-                        <observe on $settingPage for="corState:exited">
-                            <forget on $settingPage for "corState:exited" />
-                        </observe>
                     </match>
                     <match with "$L.eq($?, 2)" exclusively>
                         <inherit>
