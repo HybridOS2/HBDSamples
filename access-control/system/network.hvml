@@ -143,7 +143,8 @@
 
         <define as 'loadWifiList'>
             <update on $globalState at '.refreshList' with true />
-            <init as 'tmpWifiList' with {} temp />
+            <init as 'tmpWifiList' with { } temp />
+            <init as 'tmpState' with { connected:false } temp />
 
             <test with "$L.gt($DATA.count($?),0)">
                 <update on "$wifiList" to "displace" with {} />
@@ -182,8 +183,14 @@
                     </differ>
                 </test>
 
-                <test with $item_data.isConnected>
-                    <update on "$item_data" at ".link_visible" with "visible" />
+                <test with $L.not($tmpState.connected)>
+                    <test with $item_data.isConnected>
+                        <update on $tmpState at '.connected' with 'true' />
+                        <update on "$item_data" at ".link_visible" with "visible" />
+                        <differ>
+                            <update on "$item_data" at ".link_visible" with "invisible" />
+                        </differ>
+                    </test>
                     <differ>
                         <update on "$item_data" at ".link_visible" with "invisible" />
                     </differ>
