@@ -25,4 +25,5 @@ CTestTestfile.cmake
 _deps
 *_include.cmake
 *_tests.cmake
+atd.db
 

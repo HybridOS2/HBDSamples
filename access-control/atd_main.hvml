@@ -1,0 +1,236 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+                { "id" : "weather", "interval" : 1800000, "active" : "yes" },
+            ]
+        </update>
+
+        <init as 'wea_images' at '_runner'>
+            [ { id : 0, name : "bingbao",  bkg : "exported/assets/weather/background-bingbao.jpg" ,  icon : "exported/assets/weather/bingbao.png", city: "北京", temp: 25 },
+              { id : 1, name : "lei",  bkg : "exported/assets/weather/background-lei.jpg" , icon : "exported/assets/weather/lei.png", city: "北京", temp: 25},
+              { id : 2, name : "qing",  bkg : "exported/assets/weather/background-qing.jpg" , icon : "exported/assets/weather/qing.png", city: "北京", temp: 25},
+              { id : 3, name : "shachen",  bkg : "exported/assets/weather/background-shachenbao.jpg" , icon : "exported/assets/weather/shachenbao.png", city: "北京", temp: 25},
+              { id : 4, name : "wu",  bkg : "exported/assets/weather/background-wu.jpg" , icon : "exported/assets/weather/wu.png", city: "北京", temp: 25},
+              { id : 5, name : "xue",  bkg : "exported/assets/weather/background-xue.jpg" , icon : "exported/assets/weather/xue.png", city: "北京", temp: 25},
+              { id : 6, name : "yin",  bkg : "exported/assets/weather/background-yin.jpg" , icon : "exported/assets/weather/yin.png", city: "北京", temp: 25},
+              { id : 7, name : "yun",  bkg : "exported/assets/weather/background-yun.jpg" , icon : "exported/assets/weather/yun.png", city: "北京", temp: 25},
+              { id : 8, name : "yu",  bkg : "exported/assets/weather/background-yu.jpg" , icon : "exported/assets/weather/yu.png", city: "北京", temp: 25},
+            ]
+        </init>
+
+        <init as 'wth_id' at '_runner'>
+        {
+            id:0L
+        }
+        </init>
+
+        <style hvml:raw>
+        </style>
+    </head>
+
+
+
+    <body>
+        <init as 'weeks' with [ "星期日", "星期一","星期二","星期三","星期四","星期五","星期六"] />
+        <init as 'main_date'>
+        {
+            "mon": 0,
+            "mday": 0,
+            "wday": 0,
+            "hour": 0,
+            "min": 0
+        }
+        </init>
+        <archetype name="pwd_piece">
+            <p>请输入用户名密码:</p>
+            <p>
+                <label>用户名:</label>
+                <input type="text" value="admin"/>
+            </p>
+            <p>
+                <label>密&nbsp;&nbsp;&nbsp;&nbsp;码:</label>
+                <input type="password" value="password"/>
+            </p>
+        </archetype>
+
+        <archetype name="wea_piece">
+            <p class="wea_text"><span id="city">$?.city:</span><span id="tem">&nbsp;&nbsp;$?.temp</span><span>°C</span></p>
+            <DIV class="wea_div" ><img class="wea_img" src="$?.icon" width="72" height="40" alt="."/></DIV>
+        </archetype>
+
+        <archetype name="cert_piece">
+            <div id="cert_ok">
+                <img src="exported/assets/icon/link.png" width="70" height="70"/>
+            </div>
+        </archetype>
+
+        <inherit>
+            $STREAM.stderr.writelines("\n\nenter wth_id $wth_id.id\n\n")
+        </inherit>
+        <div id="main_pane" style="color:#fefefe;background-image:url('$wea_images[$wth_id.id].bkg')">
+            <div id="day">
+                <p><span id="clock">$DATETIME.fmttime("%m月%e日 ")</span>
+                    <span id="week">$weeks[$DATETIME.localtime().wday]</span>
+                </p>
+                <p id="curr_time">
+                    $DATETIME.fmttime("%H:%M")
+                </p>
+            </div>
+
+            <div id="wth" class="weather">
+                <choose on $wea_images[$wth_id.id] >
+                    <update on $@ to 'append' with $wea_piece />
+                </choose>
+            </div>
+            <div id="right-btn">
+                <p>
+                    <img id="user" src="exported/assets/icon/user.png" width="60" height="60" hvml-events="click" />
+                </p>
+                <p>
+                    <img id="setting" src="exported/assets/icon/setting.png" width="60" height="60" hvml-events="click" />
+                </p>
+            </div>
+
+            <div id="center_pane">
+            </div>
+
+        </div>
+
+        <observe on="#setting" for="click" >
+            <load from 'atd_cert.hvml' onto 'self:' as 'managerCert' async>
+            {
+                is_user: 0,
+            }
+            </load>
+             <observe on $managerCert for="corState:exited">
+                <forget on $managerCert for "corState:exited" />
+                <test on $?>
+                    <match with "$L.eq($?, 0)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth  exited with auth failed")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 1)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth exited with auth success goto atd_setting.hvml")
+                        </inherit>
+                        <load from 'atd_setting.hvml' onto 'self:' with {
+                            _renderer:{
+                                keepContents:{
+                                    forSuppressing:{
+                                        outTransitionStyle:"window-transition-move: linear 200",
+                                        outTransitionDirection:"right",
+                                        inTransitionStyle:"window-transition-move: linear 200",
+                                        inTransitionDirection:"left",
+                                    },
+                                    forExposing:{
+                                        outTransitionStyle:"window-transition-move: linear 200",
+                                        outTransitionDirection:"left",
+                                        inTransitionStyle:"window-transition-move: linear 200",
+                                        inTransitionDirection:"right",
+                                    }
+                                }
+                            }
+                        } async />
+                    </match>
+                    <match with "$L.eq($?, 2)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("Manager auth exited without auth")
+                        </inherit>
+                    </match>
+                </test>
+             </observe>
+        </observe>
+
+        <observe on="#user" for="click">
+            <load from 'atd_cert.hvml' onto 'self:' as 'userCert' async>
+            {
+                is_user: 1,
+            }
+            </load>
+             <observe on $userCert for="corState:exited">
+                <forget on $userCert for "corState:exited" />
+                <test on $?>
+                    <match with "$L.eq($?, 0)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth  exited with auth failed")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 1)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth exited with auth success pop message")
+                        </inherit>
+                    </match>
+                    <match with "$L.eq($?, 2)" exclusively>
+                        <inherit>
+                            $STREAM.stdout.writelines("User auth exited without auth")
+                        </inherit>
+                    </match>
+                </test>
+             </observe>
+        </observe>
+
+        <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+
+        <observe against "weather_info" for "change:displaced">
+            <inherit>
+                    $STREAM.stderr.writelines("update weather1 $weather_info\n")
+            </inherit>
+            <iterate on $wea_images >
+                    <test with $L.streq("case", $weather_info.wea_img,$?.name) >
+                        <update on $wth_id at ".id" with $?.id />
+                        <inherit>
+                            $STREAM.stderr.writelines("update wth_id $wth_id.id\n")
+                        </inherit>
+
+                        <update on $? at ".city" with $weather_info.city />
+                        <update on $? at ".temp" with $weather_info.tem />
+                        <choose on $? >
+                            <update on #wth at="content" with $wea_piece />
+                            <request on="#main_pane" to="set:style.background-image" with "url('$?.bkg')" />
+                        </choose>
+                    </test>
+            </iterate>
+
+            <catch for `NoSuchKey`>
+                <inherit>
+                    $STREAM.stderr.writelines("update weather2 failed\n\n")
+                </inherit>
+            </catch>
+        </observe>
+
+        <observe on $TIMERS for "expired:weather">
+            <init as 'weather_info' at '_root' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
+        </observe>
+
+        <observe on="#lock" for="click">
+            <update on "#center_pane" at "content" with $cert_piece />
+        </observe>
+        <observe on $TIMERS for "expired:clock">
+            <init as dt with $DATETIME.localtime() temp />
+            <test with $L.or($L.ne($dt.hour, $main_date.hour), $L.ne($dt.min, $main_date.min)) >
+                <update on "#curr_time" at "textContent" to "displace" with $DATETIME.fmttime('%H:%M') />
+                <update on $main_date at ".hour .min" with [$dt.hour, $dt.min] />
+            </test>
+
+            <test with $L.or($L.ne($dt.mon, $main_date.mon), $L.ne($dt.mday, $main_date.mday), $L.ne($dt.wday, $main_date.wday)) >
+                <update on "#clock" at "textContent" to "displace" with "$DATETIME.fmttime('%m月%e日 ')" />
+                <update on "#week" at "textContent" to "displace" with "$weeks[$dt.wday]" />
+                <update on $main_date at ".mon .mday .wday" with [$dt.mon, $dt.mday, $dt.wday] />
+            </test>
+        </observe>
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

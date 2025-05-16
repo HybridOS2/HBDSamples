@@ -1,0 +1,39 @@
+#in_stat{
+    margin-left:200px;
+    margin-top:5px;
+    width:320px;
+    height:20px;
+    position:relative;
+    top: 40px;
+}
+.in_num{
+    width:20px;
+    height:15px;
+    margin-left: 5px;
+    font-size: 8px;
+    float:left;
+}
+
+#key_bd{
+    margin-left:175px;
+    margin-top:50px;
+    width:200px;
+    height:320px;
+}
+.key_v{
+    border-style: solid;
+    width:50px;
+    height:47px;
+    border-color:#5C5C5C;
+    border-width:2px;
+    border-top-left-radius:25px; 
+    border-top-right-radius:25px;
+    border-bottom-left-radius:25px; 
+    border-bottom-right-radius:25px;
+    margin-left:8px;
+    margin-top:8px;
+    font-size:2em;
+    float:left;
+    text-align:center;
+    padding-top:3px;
+}

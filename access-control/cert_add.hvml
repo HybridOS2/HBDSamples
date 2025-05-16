@@ -1,0 +1,208 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as repeatstr at '_root' with "" />
+        <init as repeatfix at '_root' with "" />
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <div class="title_h1 ml7">添加认证时间段</div>
+            <div class="list_content rel30">
+                <div class="item_40">
+                    <input id="chg_name" type="text" value="名称" tabindex="1" />
+                    <p>名称</p>
+                </div>
+                
+                <div class="item_40">
+                    <input id="start_time" type="text" value="00:00" tabindex="2" />
+                    <p>开始时间</p>
+                </div>
+                
+                <div class="item_40">
+                    <input id="end_time" type="text" value="24:00" tabindex="3" />
+                    <p>结束时间</p>
+                </div>
+                
+                <div id="repeat" class="item_40" value="4" hvml-events="click">
+                    <img src="exported/assets/icon/play.png" width="40" height="40" value="4" hvml-events="click" />
+                    <span style="float:right" id="repeat_txt">周一</span>
+                    <p>重复</p>
+                </div>
+            </div>
+            
+            <p class="rel30" id="bottom_pane">
+                <img id="cert_save" class="right_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
+            </p>
+        </div>
+        
+        <dialog style="width:70%;left:15%;top:8%;" id="dlg_repeat" >
+            <form method="dialog">
+                <p class="dialog_title">重复设置</p>
+                <p class="dialog_content2">
+                    <span class="first_col" /><label id="week0" >周日&nbsp;</label><input type="checkbox"  name="cb1" tabindex="1" value="week0" checked/> 
+                    <span class="next_col" /><label id="week1" >周一&nbsp;</label><input type="checkbox"  name="cb2" tabindex="2" value="week1" checked/>
+                    <span class="next_col" /><label id="week1" >周二&nbsp;</label><input type="checkbox"  name="cb3" tabindex="3" value="week2" checked/>
+                </p>
+                <p class="dialog_content2">
+                    <span class="first_col" /><label id="week2" >周三&nbsp;</label><input type="checkbox"  name="cb4" tabindex="4" value="week3" checked/> 
+                    <span class="next_col" /><label id="week3" >周四&nbsp;</label><input type="checkbox"  name="cb5" tabindex="5" value="week4" checked/>
+                    <span class="next_col" /><label id="week1" >周五&nbsp;</label><input type="checkbox"  name="cb6" tabindex="6" value="week5" checked/>
+                </p>
+                <p class="dialog_content2">
+                    <span class="first_col" /><label id="week6" >周六&nbsp;</label><input type="checkbox"  name="cb7" tabindex="7" value="week6" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+             
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#cert_cancel" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'cert_time.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+             
+        <observe on="#repeat" for="click">
+            <request on '#dlg_repeat' to 'call:show' />
+        </observe>
+        
+        <observe on '#dlg_repeat' for "close">
+            <inherit>
+               $STREAM.stderr.writelines("dialog_value=$?")
+            </inherit>
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>
+                <init as repeatstr at '_root' with "" />
+                <init as repeatfix at '_root' with "" />
+                <test with $ret.cb1 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周日 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"0") />
+                </test>
+                <test with $ret.cb2 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周一 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"1") />
+                </test>
+                <test with $ret.cb3 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周二 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"2") /> 
+                </test>
+                <test with $ret.cb4 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周三 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"3") />  
+                </test>
+                <test with $ret.cb5 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周四 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"4") /> 
+                </test>
+                <test with $ret.cb6 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周五 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"5") />
+                </test>
+                <test with $ret.cb7 silently>
+                    <init as repeatstr at '_root' with $STR.join($repeatstr,"周六 ") />
+                    <init as repeatfix at '_root' with $STR.join($repeatfix,"6") /> 
+                </test>
+                <update on "#repeat_txt" at 'textContent' with "$repeatstr" />
+                </match>
+            </test>
+        </observe>
+        
+        <observe on '#cert_save' for "click">
+            <init as certname at '_root' with "" />
+            <init as starttime at '_root' with "" />
+            <init as endtime at '_root' with "" />
+            
+            <request on="#chg_name" to="get:value" >
+                <init as certname at '_root' with $? />  
+            </request>
+            
+            <request on="#start_time" to="get:value" >
+                <init as starttime at '_root' with $? />  
+            </request>
+            
+            <request on="#end_time" to="get:value" >
+                <init as endtime at '_root' with $? />  
+            </request>
+            
+            <inherit>
+               $STREAM.stderr.writelines("save cert_data=insert into cert_data (certname,starttime,endtime,repeat) values ('$certname','$starttime','$endtime','$repeatfix');")
+               $sqliteConn.execute("insert into cert_data (certname,starttime,endtime,repeat) values ('$certname','$starttime','$endtime','$repeatfix');");
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'cert_time.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

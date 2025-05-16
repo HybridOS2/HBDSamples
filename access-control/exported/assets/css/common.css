@@ -1,0 +1,74 @@
+.text-light {
+    color: #999999;
+}
+
+.fs-0 {
+    font-size: 3vh;
+}
+
+.fs-1 {
+    font-size: 4vh;
+}
+
+.fs-2 {
+    font-size: 6vh;
+}
+
+.fs-3 {
+    font-size: 8vh;
+}
+
+.fs-4 {
+    font-size: 10vh;
+}
+
+.fs-5 {
+    font-size: 12vh;
+}
+
+.fs-6 {
+    font-size: 14vh;
+}
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    margin: 0px 0px;
+}
+
+.page-dark {
+    background-color: #EEF2F6;
+    background-image:url('exported/assets/icon/background.png');
+    background-size:cover;
+    color: #5C5C5C;
+}
+
+.content {
+    width: 536px;
+    height: 70vh;
+    margin-top: 40px;
+    margin-left:50px;
+    margin-right:50px;
+    overflow-y:auto;
+
+    border-style:solid;
+    border-width:2px;
+    border-top-left-radius:10px; 
+    border-top-right-radius:10px;
+    border-bottom-left-radius:10px; 
+    border-bottom-right-radius:10px;
+}
+
+.hidden {
+    display:none;
+}
+
+.visible {
+  visibility: visible !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+

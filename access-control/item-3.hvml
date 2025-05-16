@@ -1,0 +1,190 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+        <init as vtimeout at '_root' with 30 />
+        <test with $L.ge($DATA.count($dbsets), 1) >
+            <init as vtimeout at '_root' with $dbsets[0].timeout />
+        </test>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_h1 ml4">系统设置</div>
+            <div class="list_content rel30 lsth4">
+                <div id="net_setting" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
+                <p>网络设置</p>
+                </div>
+                <div id="tmout" class="item_40" hvml-events="click">
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
+                <span id="tm_value" style="float:right;background-color:#EEF2F6;">$vtimeout</span>
+                <p>超时时间设置</p>
+                </div>
+                <div id="dev_pwd" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
+                <p>设备密码设置</p>
+                </div>
+                <div id="dev_style" class="item_40" hvml-events="click" >
+                <img src="exported/assets/icon/play.png" width="40" height="40" />
+                <p>设置选项样式</p>
+                </div>
+            </div>
+        </div>
+        
+        <dialog style="width:45%;left:27.5%;" id="dlg_timeout" >
+            <form method="dialog">
+                <p class="dialog_title">超时时间设置</p>
+                <p class="dialog_content">
+                    <span class="first_col" /><span>超时时间&nbsp;</span>
+                    <select class="dialog_input" name="selt" value="30" size="1">
+                        <option value="15">15</option>
+                        <option value="30">30</option>
+                        <option value="45">45</option>
+                        <option value="60">60</option>
+                        <option value="90">90</option>
+                        <option value="120">120</option>
+                        <option value="150">150</option>
+                    </select>
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <observe on="#go-back" for="click">
+             <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#tmout" for="click">
+            <request on '#dlg_timeout' to 'call:show' />
+        </observe>
+        
+        <observe on="#dev_style" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'dev-style.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
+        </observe>
+        
+        <observe on="#dev_pwd" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'dev-pwd.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
+        </observe>
+        
+        <observe on="#net_setting" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'system/network.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
+        </observe>
+        
+        <observe on '#dlg_timeout' for "close">
+            <inherit>
+                $STREAM.stderr.writelines("$?")
+            </inherit>
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>
+                    <init as vtimeout at '_root' with $ret.selt />
+                    <update on "#tm_value" at 'textContent' with "$vtimeout" />
+                    <inherit>
+                       $sqliteConn.execute("update setting set timeout=$vtimeout");
+                       $sqliteConn.commit();
+                    </inherit>             
+                </match>
+            </test>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

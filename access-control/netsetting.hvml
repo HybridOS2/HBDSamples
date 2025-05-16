@@ -1,0 +1,103 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+        <init as net_switch at '_root' with 0 />
+        
+        <test with $L.ge($DATA.count($dbsets), 1) >
+            <init as net_switch at '_root' with $dbsets[0].net_switch />
+        </test>
+        
+        <archetype name="net_off">
+            <img src="exported/assets/icon/on_off.png" width="40" height="40" value="1"/>
+            <p>开启<span style="font-style:italic;">WIFI</span></p>
+        </archetype>
+        
+        <archetype name="net_open">
+            <img src="exported/assets/icon/off_on.png" width="40" height="40" value="1"/>
+            <p>关闭<span style="font-style:italic;">WIFI</span></p>
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <div class="title_h1">网络设置</div>
+            <div class="list_60">
+                <div id="net_open" class="item_alone" hvml-events="click">
+                    <test with $net_switch >
+                        <update on $@ to 'append' with $net_open/>
+                        
+                        <differ>
+                            <update on $@ to 'append' with $net_off/>
+                        </differ>
+                    </test>
+                </div>
+                <div class="item_alone">
+                    <img src="exported/assets/icon/wifi.png" width="40" height="40" value="1" hvml-events="click" />
+                    <p>信源<span style="font-style:oblique;">001</span></p>
+                </div>
+                <div class="item_alone">
+                    <img src="exported/assets/icon/wifi.png" width="40" height="40" value="1" hvml-events="click" />
+                    <p>信源<span style="font-style:oblique;">002</span></p>
+                </div>
+            </div>
+            <div class="dialog_bottom">
+                <button type="button" id="net_save" style="float:left" hvml-events="click">保存</button>
+                <div class="next_col"></div><button type="button" id="net_cancel" style="float:right" hvml-events="click">取消</button>
+            </div>
+        </div>
+                     
+        <observe on="#net_open" for="click">
+            <test with $net_switch >
+                <update on #net_open at "content" with $net_off />
+                <init as net_switch at '_root' with 0 />
+                
+                <differ>
+                    <update on #net_open at "content" with $net_open />
+                    <init as net_switch at '_root' with 1 />
+                </differ>
+            </test>
+        </observe>
+        
+        <observe on="#net_save" for="click">
+            <inherit>
+               $sqliteConn.execute("update setting set net_switch=$net_switch");
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+        
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <load from 'item-3.hvml' onto 'self:' />
+        </observe>
+                        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

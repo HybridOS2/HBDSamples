@@ -1,0 +1,125 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    
+    <body>
+               
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from dpartment") />
+        <init as dparts at '_root' with $sqliteCursor.fetchall('object') />
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <img id="dpart-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
+            <div class="title_h1 ml4">部门管理</div>
+            <div class="list_content rel30 lstof5">
+                <iterate on $dparts >
+                    <div id="dpart-$?.partnum" class="item_s40" value=$?.id hvml-events="click" >
+                        <img id="item-$?.partnum-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
+                        <p class="itext">$?.partname</p>
+                    </div>
+                </iterate>
+            </div>
+        </div>
+        
+        <dialog id="id_dlg" >
+            <form method="dialog">
+                <p class="dialog_title">添加部门</p>
+                <p class="dialog_content">
+                                        部门编号 <input type="text" name="dpart_num" value="1234" />
+                </p>
+                <p class="dialog_content">
+                                        部门名称 <input type="text" name="dpart_name" value="部门" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+                  
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on '#id_btn_close' for "click">
+            <request on '#id_dlg' to 'call:close' with 0 />
+        </observe>
+        
+        <observe on="#dpart-add" for="click">
+            <request on '#id_dlg' to 'call:show' />
+        </observe>
+        
+        <observe on '#id_dlg' for "close">
+            <init as ret with $?.details.data temp />
+            <inherit>
+                $STREAM.stderr.writelines("id_dlg $?")
+            </inherit>
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <inherit>
+                        $sqliteConn.execute("insert into dpartment (partname,partnum) values ('$ret.dpart_name',$ret.dpart_num)");
+                        $sqliteConn.commit();
+                        $sqliteCursor.close();
+                        $sqliteConn.close();
+                    </inherit>
+                </match>
+            </test>
+        </observe>
+                
+        <observe on=".item_s40" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("item click $?")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'dpart-detail.hvml' onto 'self:' >
+            {
+                dpart_id: "$?.targetValue",
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

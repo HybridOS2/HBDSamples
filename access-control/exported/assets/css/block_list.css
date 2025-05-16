@@ -1,0 +1,30 @@
+#title_h1{
+    margin-left:200px;
+    margin-top:5px;
+    font-size:32px;
+    width:200px;
+    height:50px;
+    float:left;
+}
+
+#list_content{
+    margin-left:75px;
+    margin-top:60px;
+    width:480px;
+    height:160px;
+}
+
+.blockitem > img{
+    margin-left:20px;
+    margin-right:20px;
+    width:80px;
+    height:80px;
+}
+.blockitem{
+    width:120px;
+    height:120px;
+    font-size:16px;
+    text-align:center;
+    padding-top:12px;
+    float:left;
+}

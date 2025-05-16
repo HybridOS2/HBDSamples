@@ -1,0 +1,115 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from cert_data") />
+        <init as certs at '_root' with $sqliteCursor.fetchall('object') />
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <img id="cert-add" class="right_img" src="exported/assets/icon/add.png" hvml-events="click" />
+            <div class="title_h1 ml7">认证时间段设置</div>
+            <div class="list_content rel30 lstof5">
+                <iterate on $certs >
+                    <div id="crt-$?.id" class="item_s40" value="$?.id" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p>$?.certname</p>
+                    </div>
+                </iterate>
+            </div>
+        </div>
+                
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#cert-add" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'cert_add.hvml' onto 'self:' >
+            {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+        
+        <observe on=".item_s40" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            
+            <load from 'cert_detail.hvml' onto 'self:' >
+            {
+                cert_id: "$?.targetValue",
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+                
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

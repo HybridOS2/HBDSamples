@@ -1,0 +1,22 @@
+            <div class="titlebar">
+                <img id="id__titlebar__back" class="titlebar__back"
+                    src="exported/assets/icon/go-back.png"
+                    alt="&nbsp;"
+                    hvml-events="click" />
+
+                <div class="titlebar__title">$titlebarLabel</div>
+
+                <test with $titlebarAddButtonEnable>
+                    <img id="id__titlebar__add" class="titlebar__add"
+                        src="exported/assets/images/plus.png"
+                        alt="&nbsp;"
+                        hvml-events="click" />
+                </test>
+            </div>
+
+            <test with $titlebarBackButtonDefaultHandleeEnable>
+                <observe on="#id__titlebar__back" for="click">
+                    <exit />
+                </observe>
+            </test>
+

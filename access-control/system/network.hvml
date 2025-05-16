@@ -1,0 +1,721 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+
+        <link rel="stylesheet" href="exported/assets/css/common.css" />
+        <link rel="stylesheet" href="exported/assets/css/titlebar.css" />
+        <link rel="stylesheet" href="exported/assets/css/network.css" />
+
+        <define as 'logMsg' at '_root' >
+            <test with $DATA.is_container($?) >
+                <inherit>
+                    $STREAM.stdout.writelines($DATA.serialize($?))
+                </inherit>
+
+                <differ>
+                    <inherit>
+                        $STREAM.stdout.writelines($DATA.stringify($?))
+                    </inherit>
+                </differ>
+            </test>
+        </define>
+    </head>
+
+    <body class="page page-dark">
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+
+        <init as 'wifiList' with {} />
+        <init as 'globalState' with { wifi: null, ssid: null, bssid:null, connectingSsid:null, refreshList:false, wifiSwitch:$dbsets[0].net_switch } />
+        <init as 'currWifiInfo' with {} />
+        <init as 'hbdinetdMain' with 'edpt://localhost/cn.fmsoft.hybridos.inetd/main' />
+
+
+        <define as 'showResult'>
+            <test with $L.eq($?.result.retCode, 200) >
+                <execute with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <execute with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+
+                <return with $DATA.parse($2?.result.retValue) />
+
+                <differ>
+                    <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <return with false />
+                </differ>
+            </test>
+        </define>
+
+        <!-- page framework begin  -->
+
+        <archetype name='wifiItemTmpl'>
+                    <div class="network__wlan__item" id="$?.id" hvml-events="click">
+                        <img id="network__wlan__item__rssi__$?.id" class="network__wlan__item__rssi" src="$?.levelIcon" alt="&nbsp;" />
+                        <div class="network__wlan__item__rssi__5g fs-0 text-light $?.five_g_visble">5G</div>
+                        <div class="network__wlan__item__title">$?.ssid</div>
+                        <img id="network__wlan__item__link__$?.id" class="network__wlan__item__link $?.link_visible" src="exported/assets/images/check.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__lock $?.lock_visble" src="exported/assets/images/lock.png" alt="&nbsp;" />
+                        <img class="network__wlan__item__arrow" src="exported/assets/images/arrow-right.png" alt="&nbsp;" />
+                    </div>
+        </archetype>
+
+        <archetype name='wifiOnTmpl'>
+                    <div id="id__network__wifi__title" class="network__wifi__title">Wi-Fi</div>
+                    <img id="id__network__wifi_loading" class="network__wifi__loading"
+                        src="exported/assets/images/loading.gif" alt="&nbsp;" />
+                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
+                        src="exported/assets/icon/off_on.png" alt="&nbsp;" />
+        </archetype>
+
+        <archetype name='wifiOffTmpl'>
+                    <div id="id__network__wifi__title" class="network__wifi__title">Wi-Fi</div>
+                    <img id="id__network__wifi_toggle" class="network__wifi__toggle"
+                        src="exported/assets/icon/on_off.png" alt="&nbsp;" />
+        </archetype>
+
+        <!-- title bar -->
+        <define as 'titlebarWidget' from 'widget/titlebar.hvml' />
+        <execute with $titlebarWidget on { titlebarLabel:"网络设置", titlebarAddButtonEnable:false, titlebarBackButtonDefaultHandleeEnable:true } />
+
+        <div class="content">
+
+            <div id="id__network__wifi__cntr">
+                <div id="id__network__wifi" class="network__wifi" hvml-events="click" >
+                    <test with $globalState.wifiSwitch>
+                        <update on $@ to 'append' with $wifiOnTmpl />
+                        <differ>
+                            <update on $@ to 'append' with $wifiOffTmpl />
+                        </differ>
+                    </test>
+                </div>
+            </div>
+
+            <div id="id__network__saved__wlan" class="network__saved__wlan">
+                <div class="network__saved__wlan__title text-light fs-0">我的网络</div>
+                <div id="id__network__saved__wlan__list" class="network__saved__wlan__list">
+                </div>
+            </div>
+
+            <div id="id__network__other__wlan" class="network__other__wlan">
+                <div class="network__other__wlan__title text-light fs-0">其它网络</div>
+                <div id="id__network__other__wlan__list" class="network__other__wlan__list">
+                </div>
+            </div>
+
+        </div>
+
+        <dialog id="id__dlg__pwd" class="dlg__pwd">
+            <form method="dialog">
+                <p id="id__dlg__title__title" class="dialog_title">SSID</p>
+
+                <p class="dialog_content"><span>密码&nbsp;</span>
+                    <input id="id__dlg__title__pw" class="dialog_input" type="password" name="dlg_pwd" value="" />
+                    <div id="id__dlg__err__msg" class="dlg__err__msg invisible"> 连接失败，请重试！</div>
+                </p>
+                <div class="dialog_bottom">
+                    <button id="id__dlg__btn__connect" style="float:right;" value=1>连接</button>
+                    <button style="position:absolute;top:8px;right:8px;border-style:none;background-color:white;color:black;font-size:32px;text-align:right;width:80px" value=0L hvml-events="click">×</button>
+                </div>
+            </form>
+        </dialog>
+
+        <observe on '#id__dlg__btn__connect' for 'click'>
+            <request on '#id__dlg__pwd' to 'call:close' with 1L />
+        </observe>
+
+        <observe on '#id__dlg__pwd' for 'close'>
+            <init as ret with $?.details.data temp />
+            <test with $L.eq($ret.returnValue, 1)>
+                <update on "$currWifiInfo" at '.passphrase' with $ret.dlg_pwd />
+                <fire on $globalState for 'wifiConnect' with $currWifiInfo/>
+            </test>
+        </observe>
+
+        <!-- page framework end  -->
+
+        <!-- page operation group -->
+        <define as 'buildWifiItemId'>
+            <return with $STR.replace($?.bssid, ':', '_') />
+        </define>
+
+        <define as 'loadWifiList'>
+            <update on $globalState at '.refreshList' with true />
+            <init as 'tmpWifiList' with { } temp />
+            <init as 'tmpState' with { connected:false } temp />
+
+            <test with "$L.gt($DATA.count($?),0)">
+                <update on "$wifiList" to "displace" with {} />
+                <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
+                <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />
+            </test>
+
+            <init as 'wifiArr' with [] temp />
+            <iterate on $?>
+                <init as 'item_data' with $? temp />
+
+                <call on $buildWifiItemId with $? >
+                    <update on "$item_data" to "merge">
+                        {
+                            id: $?,
+                            is_5g: $L.ge($item_data.frequency, 5000),
+                            is_lock: $STR.contains($item_data.capabilities, 'PSK')
+                        }
+                    </update>
+                </call>
+
+
+                <test with $item_data.is_5g>
+                    <update on "$item_data" at ".five_g_visble" with "visible" />
+                    <update on "$item_data" at ".tmpid" with $STR.join($STR.replace($?.ssid, ' ', '_'), "_TMPID_5G") />
+                    <differ>
+                        <update on "$item_data" at ".five_g_visble" with "invisible" />
+                        <update on "$item_data" at ".tmpid" with $STR.join($STR.replace($?.ssid, ' ', '_'), "_TMPID") />
+                    </differ>
+                </test>
+
+                <test with $item_data.is_lock>
+                    <update on "$item_data" at ".lock_visble" with "visible" />
+                    <differ>
+                        <update on "$item_data" at ".lock_visble" with "invisible" />
+                    </differ>
+                </test>
+
+                <test with $L.not($tmpState.connected)>
+                    <test with $item_data.isConnected>
+                        <update on $tmpState at '.connected' with 'true' />
+                        <update on "$item_data" at ".link_visible" with "visible" />
+                        <differ>
+                            <update on "$item_data" at ".link_visible" with "invisible" />
+                        </differ>
+                    </test>
+                    <differ>
+                        <update on "$item_data" at ".link_visible" with "invisible" />
+                    </differ>
+                </test>
+
+                <test on $item_data.signalLevel>
+                    <match with "$L.ge($?.signalLevel, -33)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -66)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-2.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -90)" exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-1.png" />
+                    </match>
+
+                    <match exclusively>
+                        <update on "$item_data" at ".levelIcon" with "exported/assets/images/wifi-0.png" />
+                    </match>
+                </test>
+
+                <init as tmpListCount with $DATA.count($tmpWifiList) />
+                <update on "$tmpWifiList" at ".$item_data.tmpid" with $item_data />
+                <init as tmpListCountAfter with $DATA.count($tmpWifiList) />
+
+                <test with $L.gt($tmpListCountAfter, $tmpListCount) >
+                    <update on "$wifiList" at ".$?.id" with $item_data />
+                    <update on "$wifiArr" to 'append' with $item_data />
+                    <test with $item_data.isConnected>
+                        <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                    </test>
+                </test>
+            </iterate>
+
+            <iterate on $wifiArr>
+                <test with $?.isConnected>
+                    <differ>
+                        <test with $?.isSaved>
+                            <update on "#id__network__saved__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                            <differ>
+                                <update on "#id__network__other__wlan__list" at "content" to "append" with $wifiItemTmpl />
+                            </differ>
+                        </test>
+                    </differ>
+                </test>
+            </iterate>
+            <update on $globalState at '.refreshList' with false />
+
+        </define>
+
+
+        <define as 'connectedWifi'>
+            <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
+            <execute with $logMsg on "connectedWifi is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+
+            <call on $buildWifiItemId with $? >
+                <update on "$wifiList[$?]" at ".isConnected" with true />
+                <update on "$wifiList[$?]" at ".iSaved" with true />
+            </call>
+
+            <init as "wifiListTmp" with [] temp />
+            <iterate on $wifiList by 'KEY: ALL FOR KV' >
+                <update on $wifiListTmp to 'append' with $?.v />
+            </iterate>
+            <call on $loadWifiList with $wifiListTmp />
+
+            <update on $globalState at '.ssid' with $?.ssid />
+            <update on $globalState at '.bssid' with $?.bssid />
+        </define>
+
+        <define as 'disconnectedWifi'>
+            <execute with $logMsg on "disconnectedWifi is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+
+            <test with $L.strne('case', $DATA.type($globalState.bssid), 'null')>
+                <call on $buildWifiItemId with $globalState >
+                    <update on "$wifiList[$?]" at ".isConnected" with false />
+                    <init as 'elem_id' with "#network__wlan__item__link__$?" temp />
+                    <update on "$elem_id" at "attr.class" with "network__wlan__item__link invisible" silently />
+                </call>
+            </test>
+
+            <init as 'event_data' with "$?" temp />
+
+            <update on $globalState at '.ssid' with null />
+            <update on $globalState at '.bssid' with null />
+        </define>
+
+        <define as 'connWifiFailed'>
+            <execute with $logMsg on "connWifiFailed is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <request on '#id__dlg__pwd' to 'call:show' />
+        </define>
+
+        <define as 'wifiSignalLevelChanged'>
+            <execute with $logMsg on "wifiSignalLevelChanged is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+
+            <init as 'signal_data' with "$?" temp />
+            <call on $buildWifiItemId with $? >
+                <init as 'elem_id' with "#network__wlan__item__rssi__$?" temp />
+                <test on $signal_data.signalLevel>
+                    <match with "$L.ge($?.signalLevel, -33)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -66)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-2.png" />
+                    </match>
+
+                    <match with "$L.ge($?.signalLevel, -90)" exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-1.png" />
+                    </match>
+
+                    <match exclusively>
+                        <update on "$elem_id" at "attr.src" with "exported/assets/images/wifi-0.png" />
+                    </match>
+                </test>
+            </call>
+
+        </define>
+
+        <!-- wifiHotspotLost and wiFiHotspotFound fired before WiFiScanFinished -->
+        <define as 'wifiHotspotLost'>
+            <execute with $logMsg on "wifiHotspotLost is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'wiFiHotspotFound'>
+            <execute with $logMsg on "wiFiHotspotFound is called: " />
+            <execute with $logMsg on $DATA.serialize($?, 'pretty') />
+            <!-- TODO -->
+        </define>
+
+        <define as 'wifiDialog'>
+            <execute with $logMsg on "popup dialog with errmsg: $?" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg fs-2 visible" />
+            <request on '#id__dlg__pwd' to 'call:show' />
+        </define>
+
+        <define as 'showPwdDlg'>
+            <update on '#id__dlg__title__title' at "content" with $?.ssid />
+            <!-- update set:value sometimes crash -->
+            <request on '#id__dlg__title__pw' to "set:value" with "" />
+            <update on '#id__dlg__err__msg' at "attr.class" with "dlg__err__msg invisible" />
+            <request on '#id__dlg__pwd' to 'call:show' />
+        </define>
+
+        <!-- page operation group -->
+
+        <define as 'getInetdResult'>
+            <test with $L.eq($?.result.retCode, 200) >
+                <execute with $logMsg on "Got successfull result from $?.edpt/method/$?.method: " />
+                <execute with $logMsg on $DATA.serialize($DATA.parse($?.result.retValue), 'pretty') />
+
+                <init as 'retValue' with $DATA.parse($2?.result.retValue) temp />
+
+                <test with $L.eq($retValue.errCode, 0) >
+                    <return with {{ $retValue.data || null }} silently />
+                    <differ>
+                        <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $retValue.errMsg" />
+                        <return with undefined />
+                    </differ>
+                </test>
+
+                <differ>
+                    <execute with $logMsg on "Got failed result from $2?.edpt/method/$2?.method: $2?.result.retMsg" />
+                    <return with false />
+                </differ>
+
+            </test>
+        </define>
+
+        <define as 'showBubbleData'>
+            <init as 'bubbleData' with $DATA.parse($?.bubbleData) temp />
+
+            <execute with $logMsg on "Got an event from $?.fromEndpoint/bubble/$?.fromBubble: $?.bubbleData" />
+            <execute with $logMsg on $DATA.serialize($bubbleData, 'pretty') />
+
+            <return with $bubbleData />
+        </define>
+
+        <define as 'showWiFiStatus'>
+            <test with $databus.call($hbdinetdMain, 'getDeviceStatus', "{device: '$globalState.wifi'}") >
+                <execute with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+
+                <forget on $databus for 'result:getDeviceStatus' />
+                <observe on $databus for 'result:getDeviceStatus'>
+                    <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } />
+
+                    <!--
+                        <exit with 'Success' />
+                    -->
+                </observe>
+
+                <differ>
+                    <execute with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                </differ>
+            </test>
+        </define>
+
+        <init as 'scanTimes' at '_root' with 1 />
+        <observe on $globalState for 'scanHotspots' >
+            <test with $databus.call($hbdinetdMain, 'wifiStartScan', "{device: '$globalState.wifi', waitSeconds: 2}") >
+                <observe on $databus for 'result:wifiStartScan'>
+                    <forget on $databus for "result:wifiStartScan" />
+
+                    <iterate on ['DeviceConfigured', 'DeviceConfigFailed', 'WiFiScanFinished', 'WiFiHotspotLost', 'WiFiHotspotFound',
+                                'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+                        <forget on $databus for "event:$?" />
+                    </iterate>
+
+                    <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'wifiStartScan', result: $? } >
+                        <test with $L.strne('case', $DATA.type($?), 'undefined') >
+
+                            <iterate on ['WiFiHotspotFound'] >
+                                <observe on $databus for "event:$?" with $showBubbleData />
+                            </iterate>
+
+                            <observe on $databus for 'event:WiFiScanFinished'>
+                                <call on $showBubbleData with $?>
+                                    <test with $?.success>
+                                        <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
+                                        <call on $loadWifiList with $2?.hotspots />
+                                    </test>
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiConnected'>
+                                <call on $showBubbleData with $? >
+                                    <call on $connectedWifi with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiDisconnected'>
+                                <call on $showBubbleData with $? >
+                                    <call on $disconnectedWifi with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiFailedConnAttempt'>
+                                <call on $showBubbleData with $?>
+                                    <call on $connWifiFailed with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiSignalLevelChanged'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wifiSignalLevelChanged with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiHotspotLost'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wifiHotspotLost with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:WiFiHotspotFound'>
+                                <call on $showBubbleData with $?>
+                                    <call on $wiFiHotspotFound with $? />
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceChanged'>
+                                <call on $showBubbleData with $? >
+                                    <execute with $logMsg on "DeviceChanged for the device $?.device: " />
+                                    <execute with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+
+                                    <call on $showWiFiStatus />
+                                    <!-- TODO: update UI -->
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceConfigured'>
+                                <call on $showBubbleData with $? >
+                                    <execute with $logMsg on "Configuration for the device $?.device: " />
+                                    <execute with $logMsg on $DATA.serialize($DATA.parse($?.config), 'pretty') />
+
+                                    <call on $showWiFiStatus />
+                                    <!-- "Connected to $globalState.ssid and it is configured by using $?.method" / -->
+                                    <!-- TODO: update UI -->
+                                    <!-- hide loading icon -->
+                                </call>
+                            </observe>
+
+                            <observe on $databus for 'event:DeviceConfigFailed'>
+                                <call on $showBubbleData with $? >
+                                    <execute with $logMsg on "Connected to $globalState.ssid but failed to configure the device using $?.method " />
+                                    <!-- TODO: update UI -->
+                                </call>
+                            </observe>
+
+                        </test>
+
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <observe on $globalState for 'GotWiFiDevice' >
+            <execute with $logMsg on "Found the WiFi Device: $globalState.wifi ($?)" />
+
+            <test with $databus.call($hbdinetdMain, 'openDevice', "{device: '$globalState.wifi'}") >
+                <execute with $logMsg on "Calling $hbdinetdMain/method/openDevice..." />
+
+                <observe on $databus for 'result:openDevice'>
+                    <call on $getInetdResult with { edpt: $hbdinetdMain, method: 'openDevice', result: $? } >
+                        <test with $L.strne('case', $DATA.type($?), 'undefined') >
+
+                            <iterate on ['DeviceConfigured', 'DeviceConfigFailed', 'WiFiScanFinished', 'WiFiHotspotLost', 'WiFiHotspotFound',
+                                        'WiFiConnected', 'WiFiDisconnected', 'WiFiFailedConnAttempt', 'WiFiSignalLevelChanged'] >
+
+                                <test with $databus.subscribe($hbdinetdMain, $?) silently >
+                                    <execute with $logMsg on "Subscribing $hbdinetdMain/bubble/$?..." />
+
+                                    <differ>
+                                        <execute with $logMsg on "Failed to subscribe $hbdinetdMain/bubble/$2?..." />
+                                    </differ>
+                                </test>
+                            </iterate>
+                            <fire on $globalState for 'scanHotspots' />
+                        </test>
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <define as 'onHBDBusReady'>
+            <test with $databus.call($hbdinetdMain, 'getDeviceStatus', '{device: "*"}') >
+                <execute with $logMsg on "Calling $hbdinetdMain/method/getDeviceStatus..." />
+
+                <observe on $databus for 'result:getDeviceStatus'>
+                    <call on $showResult with { edpt: $hbdinetdMain, method: 'getDeviceStatus', result: $? } >
+                        <test with $?>
+                            <iterate on $2?.data >
+                                <test with $L.streq('caseless', $?.type, 'wifi') >
+                                    <execute with $logMsg on "Testing device type: $?.type" />
+
+                                    <update on $globalState at '.wifi' with $2?.device />
+                                    <fire on $globalState for 'GotWiFiDevice' with $2?.device />
+                                    <back to '_nexttolast' />
+                                </test>
+                            </iterate>
+                        </test>
+                    </call>
+                </observe>
+
+                <differ>
+                    <execute with $logMsg on "Failed to call $hbdinetdMain/method/getDeviceStatus" />
+                </differ>
+            </test>
+
+            <test with $databus.register_proc('terminate') >
+                <observe on $databus for 'call:terminate'>
+
+                    <execute with $logMsg on "Got a call to `terminate` from $?.fromEndpoint" />
+
+                    <test with $databus.send_result($?.resultId, 'Ok') >
+                        <exit with "Terminated by $2?.fromEndpoint">
+                            $databus.revoke_proc('terminate')
+                        </exit>
+                    </test>
+
+                </observe>
+
+                <differ>
+                    <execute with $logMsg on "Failed to register `terminate` method" />
+                </differ>
+            </test>
+
+        </define>
+
+        <observe on $globalState for 'wifiConnect'>
+            <update on $globalState at '.connectingSsid' with $?.ssid />
+            <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading visible" silently />
+            <test with $databus.call(
+                    $hbdinetdMain,'wifiConnect',
+                    "{device:'$globalState.wifi', ssid:'$?.ssid', bssid:'$?.bssid', keymgmt:'$?.keymgmt', passphrase:'$?.passphrase'}"
+                ) >
+                <observe on $databus for 'result:wifiConnect'>
+                    <call on $showResult with {edpt:$hbdinetdMain, method:'wifiConnect', result:$?} >
+                        <forget on $databus for "result:wifiConnect" />
+
+                        <test with="$L.or($L.eq($?.errCode,'0'), $L.eq($?.errCode,'-4'))">
+                            <differ>
+                                <update on "#id__network__wifi_loading" at "attr.class" with "network__wifi__loading invisible" silently />
+                                <call on $wifiDialog with "$3?.errMsg" />
+                            </differ>
+                        </test>
+
+                        <test on $?.errCode >
+                            <match with $L.eq($?, -4) exclusively>
+                                <execute with $logMsg on "Waiting for result event..." />
+                            </match>
+
+                            <match with $L.eq($?, 0) exclusively>
+                                <execute with $logMsg on "Correctly connected to $globalState.connectingSsid..." />
+                            </match>
+
+                            <match>
+                                <execute with $logMsg on "Failed $hbdinetdMain/method/wifiConnect $2?.errCode ($2?.errMsg) ..." />
+                            </match>
+                        </test>
+                    </call>
+                </observe>
+            </test>
+        </observe>
+
+        <observe on ".network__wlan__item" for "click">
+            <init as 'item_data' with $wifiList[$?.targetId] temp />
+
+            <test with $item_data.isConnected>
+                <back to '_nexttolast' />
+            </test>
+
+            <update on "$currWifiInfo" to "merge">
+                {
+                    ssid: $item_data.ssid,
+                    bssid: $item_data.bssid
+                }
+            </update>
+
+            <test with $item_data.is_lock>
+                <test with $STR.contains($item_data.capabilities, 'WEP')>
+                    <update on "$currWifiInfo" at ".keymgmt" with "WEP" />
+                </test>
+                <test with $STR.contains($item_data.capabilities,'WPA2')>
+                    <update on "$currWifiInfo" at ".keymgmt" with "WPA2-PSK" />
+                    <differ>
+                        <update on "$currWifiInfo" at ".keymgmt" with "WPA-PSK" />
+                    </differ>
+                </test>
+                <execute with $showPwdDlg  on $item_data />
+
+                <differ>
+                    <update on "$currWifiInfo" at '.passphrase' with null />
+                    <update on "$currWifiInfo" at '.keymgmt' with 'NONE' />
+                    <fire on $globalState for 'wifiConnect' with $currWifiInfo />
+                </differ>
+            </test>
+
+        </observe>
+
+
+        <observe on $globalState for 'wifiSwitchOn'>
+            <execute with $logMsg on "begin Connection to HBDBus ..." />
+            <init as 'databus' with $STREAM.open('unix:///var/tmp/hbdbus.sock', 'default', 'hbdbus') at '_topmost'>
+                <execute with $logMsg on "register state observe ..." />
+
+                <observe on $databus for 'state:ready' >
+                    <execute with $logMsg on "Connection to HBDBus is now ready." />
+                    <call on $onHBDBusReady />
+                </observe>
+
+                <execute with $logMsg on "after register state observe ..." />
+
+                <observe on $databus for 'state:LostEventGenerator' >
+
+                    <test with $L.streq('caseless', $?.endpointName, $hbdinetdMain) >
+                        <execute with $logMsg on "HBDInetd disconnected from HBDBus" />
+                        <!-- TODO: pop dialog -->
+                    </test>
+
+                </observe>
+
+                <observe on $databus for 'close' >
+                    <execute with $logMsg on "HBDBus is closed" />
+                    <inherit>
+                        <!-- TODO: pop dialog -->
+                    </inherit>
+                </observe>
+
+                <observe on $databus for 'error:hbdbus' >
+                    <execute with $logMsg on "Error when using HBDBus: $?.retMsg ($?.retCode)" />
+                    <!-- TODO: pop dialog -->
+                </observe>
+
+                <catch for `ANY`>
+                    <execute with $logMsg on "Failed to connected to HBDBus" />
+                    <!-- TODO: pop dialog -->
+                </catch>
+            </init>
+        </observe>
+
+        <observe on $globalState for 'wifiSwitchOff'>
+            <forget on $databus for '*' />
+            <execute with $logMsg on "Close databus ret : $databus.close() " />
+            <update on "$wifiList" to "displace" with {} />
+            <update on "#id__network__saved__wlan__list" at "content" to="displace" with ' ' />
+            <update on "#id__network__other__wlan__list" at "content" to="displace" with ' ' />
+        </observe>
+
+        <observe on '#id__network__wifi' for 'click'>
+            <test with $globalState.wifiSwitch>
+                <update on $globalState at '.wifiSwitch' with false />
+                <update on '#id__network__wifi' at 'content' with $wifiOffTmpl />
+                <fire on $globalState for 'wifiSwitchOff' />
+
+                <differ>
+                    <update on $globalState at '.wifiSwitch' with true />
+                    <update on '#id__network__wifi' at 'content' with $wifiOnTmpl />
+                    <fire on $globalState for 'wifiSwitchOn' />
+                </differ>
+            </test>
+            <inherit>
+            {{
+               $sqliteConn.execute("update setting set net_switch=$globalState.wifiSwitch");
+               $sqliteConn.commit();
+            }}
+            </inherit>
+        </observe>
+
+        <test with $globalState.wifiSwitch>
+            <fire on $globalState for 'wifiSwitchOn' />
+        </test>
+
+        <observe on $CRTN for "rdrState:closed">
+            <exit />
+        </observe>
+
+    </body>
+</hvml>

@@ -1,0 +1,4 @@
+<div class="dialog_bottom">
+<button style="float:right;" value=1>保存</button>
+<button style="position:absolute;top:8px;right:8px;border-style:none;background-color:white;color:black;font-size:32px;text-align:right;width:80px" value=2 hvml-events="click">×</button>
+</div>

@@ -1,0 +1,152 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <init as 'dpartid' at '_root' with $REQ.dpart_id >
+            <catch>
+                <!-- set the default case -->
+                <init as 'dpartid' at '_root' with "1" />
+            </catch>
+        </init>
+        
+    </head>
+    
+    <body>
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from dpartment where id='$dpartid'") />
+        <init as dparts at '_root' with $sqliteCursor.fetchall('object') />
+        <init as dpart_name at '_root' with "test" />
+        <init as dpart_num at '_root' with 1234 /> 
+        
+        <archetype name="modify_t">
+            <img id="save" class="left_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <archetype name="delete_t">
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_h1 ml4">部门详情</div>
+            <div class="list_content rel50 lsth2">
+                <iterate on $dparts >
+                    <init as dpart_name at '_root' with $?.partname />
+                    <init as dpart_num at '_root' with $?.partnum />
+                    <div id="partnum" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p class="itext" id="num_edit">部门编号:$dpart_num</p>
+                    </div>
+                    <div id="partname" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p class="itext" id="name_edit">部门名称:$dpart_name</p>
+                    </div>
+                </iterate>
+            </div>
+            
+            <p class="absbottom" id="bottom_pane">
+                <img id="delete" class="right_img" src="exported/assets/icon/delete.png" alt="*" width="40" height="40" hvml-events="click" />
+            </p>
+        </div>
+        
+        <dialog id="id_dlg_num" >
+            <form method="dialog">
+                <p class="dialog_title">修改部门编号</p>
+                <p class="dialog_content">
+                                        部门编号 <input class="dialog_input" type="text" name="dpart_num" value="$dpart_num" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="id_dlg_name" >
+            <form method="dialog">
+                <p class="dialog_title">修改部门名称</p>
+                <p class="dialog_content">
+                                        部门名称 <input class="dialog_input" type="text" name="dpart_name" value="$dpart_name" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+                
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#partnum" for="click">
+            <request on '#id_dlg_num' to 'call:show' />
+        </observe>
+                
+        <observe on="#partname" for="click">
+            <request on '#id_dlg_name' to 'call:show' />
+        </observe>
+        
+        <observe on="#save" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid;");
+                $sqliteConn.execute("update dpartment set partnum=$dpart_num,partname=\"$dpart_name\" where id=$dpartid")
+            </inherit>
+            <update on "#bottom_pane" at "content" with $delete_t /> 
+        </observe>
+        
+        <observe on="#delete" for="click">
+            <inherit>
+                $sqliteConn.execute("delete from dpartment where id=$dpartid;")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close(); 
+            </inherit>
+            <exit with 1L />
+        </observe>
+ 
+        <observe on '#id_dlg_num' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <init as dpart_num at '_root' with $ret.dpart_num />
+                    <update on "#num_edit" at 'textContent' with "部门编号:$ret.dpart_num" />
+                    <update on "#bottom_pane" at "content" with $modify_t /> 
+                </match>
+            </test>
+        </observe>
+        
+        <observe on '#id_dlg_name' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>           
+                    <init as dpart_name at '_root' with $ret.dpart_name />
+                    <update on "#name_edit" at 'textContent' with "部门名称:$ret.dpart_name" />
+                    <update on "#bottom_pane" at "content" with $modify_t />
+                </match>
+            </test>
+        </observe>
+               
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

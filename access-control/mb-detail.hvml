@@ -1,0 +1,236 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+        <style hvml:raw>
+                
+        
+        </style>
+        <init as 'mb_id' at '_root' with $REQ.mb_id >
+            <catch>
+                <!-- set the default case -->
+                <init as 'mb_id' at '_root' with "1" />
+            </catch>
+        </init>
+        
+    </head>
+    
+    <body>
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from members where id='$mb_id'") />
+        <init as members with $sqliteCursor.fetchall('object') />
+        <init as mb_name at '_root' with "test" />
+        <init as mb_num at '_root' with 1234 />
+        <init as mb_pwd at '_root' with "1234" />
+        <init as mb_partid at '_root' with 1 />
+        <init as partname at '_root' with "test" />
+        
+        <archetype name="modify_t">
+            <img id="save" class="left_img" src="exported/assets/icon/save.png" width="40" height="40" hvml-events="click" />
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <archetype name="delete_t">
+            <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_h1 ml4">人员详情</div>
+            <div class="list_content rel30">
+                <test with $L.ge($DATA.count($members), 1) >
+                    <init as mb_name at '_root' with $members[0].mbname />
+                    <init as mb_num at '_root' with $members[0].mbid />
+                    <init as mb_pwd at '_root' with $members[0].passwd />
+                    <init as mb_partid at '_root' with $members[0].partid />
+                    
+                    <init as cursor with $sqliteConn.execute("select * from dpartment where id=$mb_partid") temp />
+                    <init as mbb with $cursor.fetchall('object') temp />
+                    <test with $L.ge($DATA.count($mbb), 1) >
+                        <init as partname at '_root' with "$mbb[0].partname" />
+                    </test>
+                    
+                     <inherit>
+                        $STREAM.stderr.writelines("$mb_name,$mb_num,$mb_pwd,$partname");
+                    </inherit>
+                    
+                    <div id="partname" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p id="part_edit">部门名称:$partname</p>
+                    </div>
+                    <div id="mbname" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p id="name_edit">姓名:$mb_name</p>
+                    </div>
+                     <div id="mbnum" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p id="num_edit">工号:$mb_num</p>
+                    </div>
+                     <div id="mbpwd" class="item_40" hvml-events="click" >
+                        <img src="exported/assets/icon/play.png" width="40" height="40" />
+                        <p id="pwd_edit">密码:******</p>
+                    </div>
+                </test>
+            </div>
+            
+            <p id="bottom_pane" class="absbottom">
+                <img id="delete" class="right_img" src="exported/assets/icon/delete.png" width="40" height="40" hvml-events="click" />
+            </p>
+        </div>
+        
+        <dialog id="dlg_partname" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改部门名称</p>
+                <p class="dialog_content"><span>部门名称&nbsp;</span>
+                    <select class="dialog_input" name="part_select" size="1">
+                        <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <iterate on $mbb >
+                            <option value="$?.partname">$?.partname</option>
+                        </iterate>
+                    </select>
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbname" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改姓名</p>
+                <p class="dialog_content"><span>姓名&nbsp;</span>
+                    <input class="dialog_input" type="text" name="mb_name" value="$mb_name" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbnum" class="dlg" >
+            <form method="dialog">
+                <p class="dialog_title">修改工号</p>
+                <p class="dialog_content"><span>工号&nbsp;</span>
+                    <input class="dialog_input" type="text" name="mb_num" value="$mb_num" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <dialog id="dlg_mbpwd" class="dlg">
+            <form method="dialog">
+                <div class="dialog_title">修改密码</div>
+                <p class="dialog_content">密码
+                    <input class="dialog_input" type="password" name="mb_pwd" value="123456" />
+                </p>
+                <p class="dialog_content">确认密码
+                    <input class="dialog_input" type="password" name="mb_pwd1" value="123456" />
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+                        
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#mbname" for="click">
+            <request on '#dlg_mbname' to 'call:show' />
+        </observe>
+        
+        <observe on="#mbnum" for="click">
+            <request on '#dlg_mbnum' to 'call:show' />
+        </observe>
+        
+        <observe on="#mbpwd" for="click">
+            <request on '#dlg_mbpwd' to 'call:show' />
+        </observe>
+                
+        <observe on="#partname" for="click">
+            <request on '#dlg_partname' to 'call:show' />
+        </observe>
+        
+        <observe on="#save" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("update members set mbid=$mb_num,mbname=\"$mb_name\",partid=$mb_partid,passwd=\"$mb_pwd\", where id=$mb_id;");
+                $sqliteConn.execute("update members set mbid=$mb_num,mbname=\"$mb_name\",partid=$mb_partid,passwd=\"$mb_pwd\" where id=$mb_id;")
+            </inherit>
+            <update on "#bottom_pane" at "content" with $delete_t /> 
+        </observe>
+        
+        <observe on="#delete" for="click">
+            <inherit>
+                $sqliteConn.execute("delete from members where id=$mb_id;")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close(); 
+            </inherit>
+            <exit with 1L />
+        </observe>
+                
+        <observe on '.dlg' for "close">
+            <inherit>
+                $STREAM.stderr.writelines("dlg_partname $?");
+            </inherit>
+            <test with $L.eq($?.details.data.returnValue, 1) >
+                <init as ret with $?.details.data temp />
+                <init as tid with $?.targetId temp />
+                
+                <test on $tid >
+                    <match for="AS 'dlg_partname'" exclusively>
+                        <init as partname at '_root' with "$ret.part_select" />   
+                        <update on "#part_edit" at 'textContent' with "部门名称:$partname" />
+                        <update on "#bottom_pane" at "content" with $modify_t />
+                        <init as cursor with $sqliteConn.execute("select * from dpartment where partname=\"$partname\"") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <test with $L.ge($DATA.count($mbb), 1) >
+                            <init as mb_partid at '_root' with "$mbb[0].id" />
+                        </test>
+                    </match>
+                    <match for="AS 'dlg_mbname'" exclusively>
+                        <init as mb_name at '_root' with "$ret.mb_name" />       
+                        <update on "#name_edit" at 'textContent' with "姓名:$mb_name" />
+                        <update on "#bottom_pane" at "content" with $modify_t /> 
+                    </match>
+                    <match for="AS 'dlg_mbnum'" exclusively>
+                        <init as mb_num at '_root' with "$ret.mb_num" />       
+                        <update on "#num_edit" at 'textContent' with "工号:$mb_num" />
+                        <update on "#bottom_pane" at "content" with $modify_t /> 
+                    </match>
+                    <match for="AS 'dlg_mbpwd'" exclusively>
+                        <test with $L.streq("case",$ret.mb_pwd,$ret.mb_pwd1) >
+                            <init as mb_pwd at '_root' with "$ret.mb_pwd" />
+                            <update on "#bottom_pane" at "content" with $modify_t />
+                        </test>
+                    </match>
+                </test>
+            </test>
+        </observe>
+                       
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

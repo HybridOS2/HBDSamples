@@ -1,0 +1,128 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    <body style="margin:0px;padding:0px;">
+        
+        <init as 'idgroups' at '_root'>
+            [ 
+                {item_id: "item_oldpwd", pwd:"123456", img_id: "hidden_old", input_id: "old_pwd", strtext: "原密码", type:"password", value: 0},
+                {item_id: "item_newpwd", pwd:"123456", img_id: "hidden_new", input_id: "new_pwd", strtext: "新密码", type:"password", value: 1},
+                {item_id: "item_renewpwd", pwd:"123456", img_id: "hidden_renew", input_id: "renew_pwd", strtext: "重复新密码", type:"password", value: 2},
+            ] 
+        </init>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from setting") />
+        <init as dbsets at '_root' with $sqliteCursor.fetchall('object') />
+        <init as old_pwd at '_root' with "12345678" />
+        
+        <test with $L.ge($DATA.count($dbsets), 1) >
+            <init as old_pwd at '_root' with $dbsets[0].devpwd />
+        </test>
+             
+        <archetype name="item_piece">
+            <div id="$?.item_id" class="item">
+                $?.strtext
+                <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
+                <input id="$?.input_id" type="$?.type" value="$?.pwd" tabindex="1" />
+            </div>
+        </archetype>
+        
+        <archetype name="item_piece2">
+            $?.strtext
+            <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/hidden.png" width="40" height="40" hvml-events="click"/>
+            <input id="$?.input_id" type="text" value="$?.pwd" tabindex="1" />
+        </archetype>
+        
+        <archetype name="item_piece3">
+            $?.strtext
+            <img id="$?.img_id" class="pwd_click" value=$?.value src="exported/assets/icon/eye.png" width="40" height="40" hvml-events="click"/>
+            <input id="$?.input_id" type="password" value="$?.pwd" tabindex="1" />
+        </archetype>
+        
+        <div id="main_pane_dev_pwd">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <img id="save_pwd" class="right_img" src="exported/assets/icon/save.png" hvml-events="click" />
+            <div class="title_h1 ml6">设备密码设置</div>
+            <div class="list_content rel50">
+                <iterate on $idgroups >
+                    <update on $@ to 'append' with $item_piece />
+                </iterate>
+            </div>
+        </div>
+                     
+        <observe on="#go-back" for="click">
+            <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on '.pwd_click' for "click">
+            <init as pwd_idx with $?.targetValue />
+            <request on="#$idgroups[$pwd_idx].input_id" to="get:value" >
+                <update on "$idgroups[$pwd_idx]" at ".pwd" with "$?" />
+            </request>
+            
+            <test with $L.streq("case", $idgroups[$pwd_idx].type,"text") >
+                <choose on $idgroups[$pwd_idx] >
+                    <update on #$?.item_id at="content" with $item_piece3 />
+                </choose>
+                <update on "$idgroups[$pwd_idx]" at ".type" with "password" />
+                <differ>
+                    <update on "$idgroups[$pwd_idx]" at ".type" with "text" />
+                    <choose on $idgroups[$pwd_idx] >
+                        <update on #$?.item_id at="content" with $item_piece2 />
+                    </choose>
+                </differ>
+            </test>            
+        </observe>
+        
+        <observe on '#save_pwd' for "click">
+            <inherit>
+                $STREAM.stderr.writelines("pwd set old_pwd=$old_pwd,old=$idgroups[0].pwd,new1=$idgroups[1].pwd,new2=$idgroups[2].pwd")
+            </inherit>
+            <request on="#$idgroups[0].input_id" to="get:value" >
+                <update on "$idgroups[0]" at ".pwd" with "$?" />
+            </request>
+            <request on="#$idgroups[1].input_id" to="get:value" >
+                <update on "$idgroups[1]" at ".pwd" with "$?" />
+            </request>
+            <request on="#$idgroups[2].input_id" to="get:value" >
+                <update on "$idgroups[2]" at ".pwd" with "$?" />
+            </request>
+            <test with $L.streq("case", $idgroups[0].pwd,$old_pwd) >
+                <test with $L.streq("case", $idgroups[1].pwd,$idgroups[2].pwd) >
+                    <inherit>
+                       $sqliteConn.execute("update setting set devpwd=\"$idgroups[1].pwd\"");
+                       $sqliteConn.commit();
+                       $sqliteConn.close();
+                    </inherit>
+                    <exit with 1L />
+                </test>
+            </test>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+             <inherit>
+               $sqliteConn.commit();
+               $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

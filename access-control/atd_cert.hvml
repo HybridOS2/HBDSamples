@@ -1,0 +1,126 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/key.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+                
+        <init as 'is_user' at '_root' with $REQ.is_user >
+            <catch>
+                <!-- set the default case -->
+                <init as 'is_user' at '_root' with 0 />
+            </catch>
+        </init>
+    </head>
+    
+    <body>
+        
+        <test with $FS.file_exists("exported/assets/database/atd.db") >
+            <differ>
+                <inherit>
+                    $FS.copy("exported/assets/database/atd_template.db","exported/assets/database/atd.db");
+                </inherit>
+            </differ>
+        </test>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as input_idx at '_root' with 0L />
+        <init as strpwd at '_root' with "" />
+        <init as innum_ids at '_root' with [ "in_n1", "in_n2","in_n3","in_n4","in_n5","in_n6"] />
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div id="in_stat">
+                <iterate on $innum_ids >
+                    <div id="$?" class="in_num">○</div>
+                </iterate>
+            </div>
+            <div id="key_bd">
+                <init as 'key_v' with [ "1", "2","3","4","5","6","7","8","9","*","0","#"] />
+                <iterate on [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] >
+                    <div id="key-$?" class="key_v" value="$key_v[$?]" hvml-events="click">$key_v[$?]</div>
+                </iterate>
+            </div>
+        </div>
+        
+        <observe on="#go-back" for="click">
+            <!-- 0 failed, 1 success, 2 return  -->
+            <exit with 2L />
+        </observe>
+        
+        <observe on=".key_v" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("key_v $?")
+            </inherit>
+                    
+            <init as one_char with $?.targetValue />
+            <inherit>
+                $STREAM.stdout.writelines("Failed cases:targetId=$?.targetId,targetValue=$?.targetValue\n")
+            </inherit>
+            
+            <test with $L.lt($input_idx, 6) >
+                <update on "#$innum_ids[$input_idx]" at "textContent" to "displace" with "●" />
+                <init as strpwd at '_root' with $STR.join($strpwd,$one_char) />
+                
+                <test with $L.eq($input_idx, 5) >
+                    <test with $L.eq($is_user,1) >
+                        <init as cusor with $sqliteConn.execute("select * from members where passwd='$strpwd'") temp/>
+                        <init as users with $cusor.fetchall('object') temp/>
+                        <test with $L.ge($DATA.count($users), 1) >
+                            <inherit>
+                                $STREAM.stdout.writelines("open the door, the user enter in\n")
+                            </inherit>
+                        </test>
+                        
+                        <inherit>
+                            $cusor.close();
+                        </inherit>  
+                    
+                        <differ>
+                            <init as devcursor with $sqliteConn.execute("select * from setting where devpwd='$strpwd'") temp/>
+                            <init as devuser with $devcursor.fetchall('object') temp />
+                            <test with $L.ge($DATA.count($devuser), 1) silently>
+                                <inherit>
+                                    $STREAM.stdout.writelines("enter in setting!!! $devuser\n")
+                                    $devcursor.close();
+                                    $sqliteConn.close(); 
+                                </inherit>
+                                <!-- 0 failed, 1 success, 2 return  -->
+                                <exit with 1L/>
+                            </test>
+                            
+                            <inherit>
+                                $devcursor.close();
+                            </inherit>
+                        </differ>
+                    </test>
+                    
+                    <inherit>
+                        $STREAM.stderr.writelines("strpwd $strpwd")
+                    </inherit>  
+                </test>
+                
+                <init as 'input_idx' at '_root' with $DATA.arith('+', $input_idx, 1L) />
+                <differ>
+                    <init as strpwd at '_root' with "" />
+                    <iterate on $innum_ids >
+                        <update on "#$?" at "textContent" to "displace" with "○" />
+                    </iterate>
+                    <init as input_idx at '_root' with 0L /> 
+                </differ>
+            </test>
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

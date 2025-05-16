@@ -1,0 +1,62 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    
+    <body>
+        
+        <init as 'items' with [ "认证时间段" ] />
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" width="40" height="40" hvml-events="click" />
+            <div class="title_h1 ml4">认证设置</div>
+            <div class="list_content rel50 lsth1">
+                <div id="cert_set" class="item_40" hvml-events="click" >
+                    <img id="time-add" src="exported/assets/icon/play.png" width="40" height="40" hvml-events="click" />
+                    <p>"认证时间段"</p>
+                </div>
+            </div>
+        </div>
+        
+        
+        <observe on="#go-back" for="click">
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#cert_set" for="click">
+            <load from 'cert_time.hvml' onto 'self:' with {
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            } async />
+        </observe>
+        
+        <observe on $CRTN for "rdrState:closed">
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>

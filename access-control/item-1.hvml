@@ -1,0 +1,159 @@
+#!/usr/bin/purc
+
+<!DOCTYPE hvml SYSTEM 'f: SQLITE FS'>
+<hvml target="html" lang="{{ $REQ.lang || $STR.substr($SYS.locale, 0, 2) }}" silently >
+    <head>
+        <base href=$CRTN.base(! "file://$SYS.cwd" ) hvml:silently />
+        <link rel="stylesheet" href="exported/assets/css/main.css" />
+        <link rel="stylesheet" href="exported/assets/css/list.css" />
+        
+        <update on="$TIMERS" to="unite">
+            [
+                { "id" : "clock", "interval" : 500, "active" : "yes" },
+            ]
+        </update>
+    </head>
+    
+    <body>
+        
+        <init as sqliteConn at '_root' with $SQLITE.connect("exported/assets/database/atd.db") />
+        <init as sqliteCursor at '_root' with $sqliteConn.execute("select * from members") />
+        <init as members at '_root' with $sqliteCursor.fetchall('object') />
+        <init as dpartid at '_root' with 1 />
+        
+        <archetype name="list_v">
+                <div id="mb-$?.id" class="item_30" value="$?.id" hvml-events="click" >
+                    <img src="exported/assets/icon/play.png" width="30" height="30"/>
+                    <p>$?.mbname</p>
+                </div>
+        </archetype>
+        
+        <div id="main_pane">
+            <img id="go-back" class="left_img" src="exported/assets/icon/go-back.png" hvml-events="click" />
+            <img id="mb-add" class="right_img1" style="width:30px;height:30px;" src="exported/assets/icon/person_add.png" hvml-events="click" />
+            <div class="title_h1 ml4">人员管理</div>
+            
+            <div class="list_content rel30"> 
+                <div class="item_30">
+                        <input id="search_value" type="text" value="输入姓名查找" tabindex="1" />
+                        <div style="float:right;width:200px;" id="search" hvml-events="click" >
+                            <img style="float:right" id="search_img" src="exported/assets/icon/play.png" width="30" height="30" />
+                        </div>
+                </div>
+            </div>
+            
+            <div id="mb_list" class="list_content lstof4 rel50"> 
+                <iterate on $members >
+                <div id="mb-$?.id" class="item_30" value="$?.id" hvml-events="click" >
+                    <img src="exported/assets/icon/play.png" width="30" height="30"/>
+                    <span>$?.mbname</span>
+                </div>
+                </iterate>
+            </div>
+        </div>
+        
+        <dialog style="width:70%;left:15%;" id="id_dlg" >
+            <form method="dialog">
+                <p class="dialog_title">添加人员</p>
+                <p class="dialog_content">
+                                        工号&nbsp;<input class="dialog_input" type="text" name="mb_num" value="1234" /><span class="next_col">密码&nbsp;</span>
+                  <input class="dialog_input" type="password" name="mb_pwd" value="1234" />
+                </p>
+                <p class="dialog_content">
+                                        姓名&nbsp;<input class="dialog_input" type="text" name="mb_name" value="姓名" />
+                    <div class="next_col">部门&nbsp;&nbsp;</div>
+                    <select class="dialog_input" name="part_select" size="1">
+                        <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
+                        <init as mbb with $cursor.fetchall('object') temp />
+                        <iterate on $mbb >
+                            <option value="$?.id">$?.partname</option>
+                        </iterate>
+                    </select>
+                </p>
+                <define as 'dlg_bottom' from 'dialog_bottom.hvml' temp />
+                <execute with $dlg_bottom />
+            </form>
+        </dialog>
+        
+        <observe on="#search" for="click">
+            <request on="#search_value" to="get:value" >
+                <inherit>
+                    $STREAM.stderr.writelines("search_value=$?")
+                </inherit>
+                
+                <init as cursor with $sqliteConn.execute("select * from members where mbname=\"$?\"") temp />
+                <init as mbb with $cursor.fetchall('object') temp />
+                <iterate on $mbb >
+                    <update on "#mb_list" at "content" with $list_v />
+                </iterate>   
+            </request>
+        </observe>
+        
+        <observe on="#go-back" for="click">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with 1L />
+        </observe>
+        
+        <observe on="#mb-add" for="click">
+            <request on '#id_dlg' to 'call:show' />
+        </observe>
+        
+        <observe on=".item_30" for="click">
+            <inherit>
+                $STREAM.stderr.writelines("item click $?")
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <load from 'mb-detail.hvml' onto 'self:' >
+            {
+                mb_id: "$?.targetValue",
+                _renderer:{
+                    keepContents:{
+                        forSuppressing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"right",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"left",
+                        },
+                        forExposing:{
+                            outTransitionStyle:"window-transition-move: linear 200",
+                            outTransitionDirection:"left",
+                            inTransitionStyle:"window-transition-move: linear 200",
+                            inTransitionDirection:"right",
+                        }
+                    }
+                }
+            }
+            </load>
+        </observe>
+        
+        <observe on '#id_dlg' for "close">
+            <init as ret with $?.details.data temp />
+            <test on $ret.returnValue >
+                <match for="AS '1'" exclusively>
+                    <inherit>
+                       $STREAM.stderr.writelines("dialog_value=$ret")
+                    </inherit>                   
+                    <inherit>
+                       $sqliteConn.execute("insert into members (mbid,mbname,partid,passwd) values ($ret.mb_num,'$ret.mb_name',$ret.part_select,$ret.mb_pwd)");
+                    </inherit>
+                </match>
+            </test>
+        </observe>
+                
+        <observe on $CRTN for "rdrState:closed">
+            <inherit>
+                $sqliteConn.commit();
+                $sqliteCursor.close();
+                $sqliteConn.close();
+            </inherit>
+            <exit with "closed" />
+        </observe>
+
+    </body>
+</hvml>
