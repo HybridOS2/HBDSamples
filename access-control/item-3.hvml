@@ -34,7 +34,7 @@
                 </div>
                 <div id="tmout" class="item_40" hvml-events="click">
                 <img src="exported/assets/icon/play.png" width="40" height="40" />
-                <span id="tm_value" style="float:right;background-color:#EEF2F6;">$vtimeout</span>
+                <span id="tm_value" style="float:right;background-color:#EEF2F6;height:35px;margin-top:2px;margin-bottom:7px;">$vtimeout</span>
                 <p>超时时间设置</p>
                 </div>
                 <div id="dev_pwd" class="item_40" hvml-events="click" >
