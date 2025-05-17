@@ -2,7 +2,65 @@
 
 [toc]
 
+## Introduction
+
 ## Usage
+
+The `smartbox` is a smart speaker sample application implemented in HTML programming language.
+  It uses bootstrap to implement some functions, so it uses xGUI Pro as the renderer.
+
+The `smart-panel` is a smart panel sample application implemented in HTML programming language.
+  It uses bootstrap to implement some functions, so it uses xGUI Pro as the renderer.
+
+The `instrument` is a smart car instrument sample application implemented in HTML programming language.
+  It uses bootstrap to implement some functions, so it uses xGUI Pro as the renderer.
+
+The `access-control` is a access control sample application implemented in HTML programming language.
+  It only uses HTML and CSS, so it can use xGUI as a renderer.
+
+## Install and Run
+
+* smartbox
+
+```SHELL
+$ sudo mkdir -p app
+$ sudo cp smartbox /app/cn.fmsoft.hybridos.settings
+$ xguipro &
+$ cd /app/cn.fmsoft.hybridos.settings
+$ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.settings -r radio -v main.hvml
+```
+
+* smart-panel
+
+```SHELL
+$ sudo mkdir -p app
+$ sudo cp smart-panel /app/cn.fmsoft.hybridos.smartcontrolpanel
+$ xguipro &
+$ cd /app/cn.fmsoft.hybridos.smartcontrolpanel
+$ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.smartcontrolpane -r smartpanel -v single_runner_app.hvml
+```
+
+* instrument
+
+```SHELL
+$ sudo mkdir -p app
+$ sudo cp instrument /app/cn.fmsoft.hybridos.instrument
+$ xguipro &
+$ cd /app/cn.fmsoft.hybridos.instrument
+$ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.instrument -r instrument -v index.hvml
+```
+
+* access-control
+
+```SHELL
+$ sudo mkdir -p app
+$ sudo cp access-control /app/cn.fmsoft.hybridos.ac
+$ cd /app/cn.fmsoft.hybridos.ac
+# xgui4gtk
+$ xgui4gtk -i skia -d remote -S true -a cn.fmsoft.hybridos.ac -r ac -k -v atd_main.hvml
+# xgui4mgsa
+$ xgui4mgsa -i minigui -d remote -S true -a cn.fmsoft.hybridos.ac -r ac -k -v atd_main.hvml
+```
 
 ## Copying
 
