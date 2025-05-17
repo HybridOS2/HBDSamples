@@ -25,6 +25,8 @@ The `access-control` is a access control sample application implemented in HTML 
 ```SHELL
 $ sudo mkdir -p app
 $ sudo cp -r smartbox /app/cn.fmsoft.hybridos.settings
+$ sudo ln -sf  /app/cn.fmsoft.hybridos.settings /app/smartbox
+$ sudo chown -R $USER /app/cn.fmsoft*
 $ xguipro &
 $ cd /app/cn.fmsoft.hybridos.settings
 $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.settings -r radio -v main.hvml
@@ -35,9 +37,10 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.settings -r radio -v 
 ```SHELL
 $ sudo mkdir -p app
 $ sudo cp -r smart-panel /app/cn.fmsoft.hybridos.smartcontrolpanel
+$ sudo chown -R $USER /app/cn.fmsoft*
 $ xguipro &
 $ cd /app/cn.fmsoft.hybridos.smartcontrolpanel
-$ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.smartcontrolpane -r smartpanel -v single_runner_app.hvml
+$ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.smartcontrolpane -r smartpanel -L "window-size:480px 480px; window-position:center" -v single_runner_app.hvml
 ```
 
 * instrument
@@ -45,6 +48,7 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.smartcontrolpane -r s
 ```SHELL
 $ sudo mkdir -p app
 $ sudo cp -r instrument /app/cn.fmsoft.hybridos.instrument
+$ sudo chown -R $USER /app/cn.fmsoft*
 $ xguipro &
 $ cd /app/cn.fmsoft.hybridos.instrument
 $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.instrument -r instrument -v index.hvml
@@ -55,6 +59,7 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.instrument -r instrum
 ```SHELL
 $ sudo mkdir -p app
 $ sudo cp -r access-control /app/cn.fmsoft.hybridos.ac
+$ sudo chown -R $USER /app/cn.fmsoft*
 $ cd /app/cn.fmsoft.hybridos.ac
 # xgui4gtk
 $ xgui4gtk -i skia -d remote -S true -a cn.fmsoft.hybridos.ac -r ac -k -v atd_main.hvml
