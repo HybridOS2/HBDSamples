@@ -66,7 +66,12 @@
                         <init as cursor with $sqliteConn.execute("select * from dpartment") temp />
                         <init as mbb with $cursor.fetchall('object') temp />
                         <iterate on $mbb >
-                            <option value="$?.id">$?.partname</option>
+                            <test with $L.eq($0%,0L) >
+                                <option value="$?.id" selected>$?.partname</option>
+                                <differ>
+                                    <option value="$?.id">$?.partname</option>
+                                </differ>
+                            </test>
                         </iterate>
                     </select>
                 </p>
@@ -142,6 +147,9 @@
                     <inherit>
                        $sqliteConn.execute("insert into members (mbid,mbname,partid,passwd) values ($ret.mb_num,'$ret.mb_name',$ret.part_select,$ret.mb_pwd)");
                     </inherit>
+                    <catch>
+                        $STREAM.stderr.writelines("sqlite execute error =$ret")
+                    </catch>
                 </match>
             </test>
         </observe>
