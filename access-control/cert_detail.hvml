@@ -142,26 +142,7 @@
                $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' >
-            {
-                _renderer:{
-                    keepContents:{
-                        forSuppressing:{
-                            outTransitionStyle:"window-transition-move: linear 200",
-                            outTransitionDirection:"right",
-                            inTransitionStyle:"window-transition-move: linear 200",
-                            inTransitionDirection:"left",
-                        },
-                        forExposing:{
-                            outTransitionStyle:"window-transition-move: linear 200",
-                            outTransitionDirection:"left",
-                            inTransitionStyle:"window-transition-move: linear 200",
-                            inTransitionDirection:"right",
-                        }
-                    }
-                }
-            }
-            </load>
+            <exit with 1L />
         </observe>
           
         <observe on="#repeat" for="click">
@@ -231,7 +212,7 @@
                $sqliteCursor.close();
                $sqliteConn.close();
             </inherit>
-            <load from 'cert_time.hvml' onto 'self:' />
+            <exit with 1L />
         </observe>
         
         <observe on $CRTN for "rdrState:closed">
