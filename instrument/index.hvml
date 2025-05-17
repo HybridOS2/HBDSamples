@@ -14,7 +14,7 @@
         <link rel="stylesheet" href="hvml://localhost/_system/_filesystem/-$SYS.cwd/assets/css/carRadar.css" />
         <update on="$TIMERS" to="unite">
             [
-                {"id":"state-time","interval":1000,"active":"yes"}
+                {"id":"stateTime","interval":1000,"active":"yes"}
             ]
         </update>        
         <!-- 系统运行时间戳 -->
@@ -747,33 +747,33 @@
                 <div class="content">
                     <define as="playerInfo" from="file://$SYS.cwd/player.hvml" />
                     <div class="playerInfo hidden">
-                        <include with="$playerInfo" />
+                        <execute with="$playerInfo" />
                     </div>
                     
                     
                     <define as="driveInfo" from="file://$SYS.cwd/drive.hvml" />
                     <div class="driveInfo hidden">
-                        <include with="$driveInfo" />
+                        <execute with="$driveInfo" />
                     </div>
 
                     <define as="callingInfo" from="file://$SYS.cwd/calling.hvml" />
                     <div class="callingInfo hidden">
-                        <include with="$callingInfo" />
+                        <execute with="$callingInfo" />
                     </div>
 
                     <define as="carStatusInfo" from="file://$SYS.cwd/carStatus.hvml" />
                     <div class="carStatusInfo hidden">
-                        <include with="$carStatusInfo" />
+                        <execute with="$carStatusInfo" />
                     </div>
 
                     <define as="carUnderpanInfo" from="file://$SYS.cwd/carUnderpan.hvml" />
                     <div class="carUnderpanInfo hidden">
-                        <include with="$carUnderpanInfo" />
+                        <execute with="$carUnderpanInfo" />
                     </div>
 
                     <define as="carRadarInfo" from="file://$SYS.cwd/carRadar.hvml" />
                     <div class="carRadarInfo hidden">
-                        <include with="$carRadarInfo" />
+                        <execute with="$carRadarInfo" />
                     </div>
                 </div>
 
@@ -797,7 +797,7 @@
             <exit with "closed" />
         </observe>
 
-        <observe on "$TIMERS" for="expired:state-time">
+        <observe on "$TIMERS" for="expired:stateTime">
             <iterate on="0" onlyif $L.lt($0<,$DATA.count($timeState)) with $DATA.arith('+',$0<,1) nosetotail>
                 <init as "index" with $? />
                 <test with $L.eq($systemTimestamp.timestamp,$timeState[$index].timestamp)>
