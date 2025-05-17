@@ -1,4 +1,4 @@
-<init as="time_clock">
+<init as="time_clock" at="_runner">
 {
     only:false,
     mon:false,

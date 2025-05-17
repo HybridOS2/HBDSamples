@@ -8,12 +8,12 @@
 </define>
 
 <define as 'post_event_to_lockscreen' at="_topmost">
-    <include with $main_log on "@@@@@ post to lockscreen: $?" />
+    <execute with $main_log on "@@@@@ post to lockscreen: $?" />
     <request on="/-/lockscreen/CHAN/chanLockscreen" to="post" with=$? />
 </define>
 
 <define as 'on_lockscreen_state_event' at="_topmost">
-    <include with $main_log on "@@@@@ on_lockscreen_state_event: $?" />
+    <execute with $main_log on "@@@@@ on_lockscreen_state_event: $?" />
     <test on $?.name>
         <match for "AS 'lock'" exclusively>
             <request on '#mainContent' to="call:enable_post_music_event()" noreturn />
@@ -39,7 +39,7 @@
 </define>
 
 <define as 'on_music_player_event' at="_topmost">
-    <include with $main_log on "@@@@@ on_music_player_event: $?" />
+    <execute with $main_log on "@@@@@ on_music_player_event: $?" />
     <test on $?.name>
         <match for "AS 'playOrPause'" exclusively>
             <fire on '#id_music_play_or_pause' for 'click' />
@@ -66,14 +66,14 @@
 </define>
 
 <define as 'on_channel_event' at="_topmost">
-    <include with $main_log on "@@@@@  main Got a message: $?" />
+    <execute with $main_log on "@@@@@  main Got a message: $?" />
     <test on $?.type>
         <match for "AS 'lockscreenState'" exclusively>
-            <include with $on_lockscreen_state_event on $3? />
+            <execute with $on_lockscreen_state_event on $3? />
         </match>
 
         <match for "AS 'musicPlayer'" exclusively>
-            <include with $on_music_player_event on $3? />
+            <execute with $on_music_player_event on $3? />
         </match>
 
         <match for "AS 'network'" exclusively>
@@ -85,11 +85,11 @@
 </define>
 
 <observe on $chIn for 'innerEvent'>
-    <include with $on_channel_event on $? />
+    <execute with $on_channel_event on $? />
 </observe>
 
 <observe on $chIn for 'receivable'>
-    <include with $main_log on "@@@@@  main recv count ($chIn.len)" />
+    <execute with $main_log on "@@@@@  main recv count ($chIn.len)" />
     <init as 'dataArray' temp>
         []
     </init>
@@ -102,27 +102,27 @@
     </iterate>
 
     <iterate on $dataArray>
-        <include with $on_channel_event on $? />
+        <execute with $on_channel_event on $? />
     </iterate>
 </observe>
 
 <observe on '#mainContent' for 'locked'>
-    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
+    <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
 
 <observe on '.time-to-lock-screen' for 'click'>
     <test with $L.ne($main_data.lockscreenTimeout, $?.originValue) >
-        <include with $main_log on "@@@@@ Changing time-to-lock to $2?.originValue $2?.originId" />
+        <execute with $main_log on "@@@@@ Changing time-to-lock to $2?.originValue $2?.originId" />
         <update on "#theTimeToLockIcon{$main_data.lockscreenTimeout}" to 'displace' at 'attr.class' with 'd-none' />
         <update on "#theTimeToLockIcon{$2?.originValue}" to 'displace' at 'attr.class' with 'x-show' />
         <update on $main_data at '.lockscreenTimeout' with "$2?.originValue" />
 
-        <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'timeOut', 'data':$2?.originValue} />
+        <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'timeOut', 'data':$2?.originValue} />
     </test>
 </observe>
 
 <observe on '#mainContent' for 'load'>
-    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'enableUnlock'} />
+    <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'enableUnlock'} />
     <test with $music_info.playing >
         <request on ".music-pic" to='call:ELEMENT.classList.add("animate-img")' noreturn />
         <request on "#theMusicPlayer" to='call:set_music_play_or_pause_btn_icon(ARG)' with 'true' noreturn />
@@ -133,17 +133,17 @@
 </observe>
 
 <observe on '.switch-theme-to-dark' for 'click'>
-    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToDark'} />
+    <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToDark'} />
 </observe>
 
 <observe on '.switch-theme-to-light' for 'click'>
-    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToLight'} />
+    <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'themeToLight'} />
 </observe>
 
 <observe on '#theMusicPlayer' for 'stateChange'>
-    <include with $main_log on "@@@@@ stateChange" />
+    <execute with $main_log on "@@@@@ stateChange" />
     <choose on $?.originValue silently>
-        <include with $post_event_to_lockscreen on $? />
+        <execute with $post_event_to_lockscreen on $? />
         <test on $?.name>
             <match for "AS 'timeupdate'" exclusively>
                 <update on $music_info at '.currentTime' with $3?.currentTime />
@@ -153,8 +153,8 @@
 </observe>
 
 <observe on $CRTN for "rdrState:newRenderer">
-    <include with $main_log on "@@@@@ switch to new rdr" />
-    <include with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
+    <execute with $main_log on "@@@@@ switch to new rdr" />
+    <execute with $post_event_to_lockscreen on {'type':'lockscreen', 'name':'lock'} />
 </observe>
 
 

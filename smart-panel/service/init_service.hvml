@@ -98,7 +98,7 @@
             { "id" : "network_service_load_main_timer", "interval" : 200, "active" : "yes" }
         ]
     </update>
-    <include with $set_status on {status:' ', sub_status:' ' } />
+    <execute with $set_status on {status:' ', sub_status:' ' } />
 </define>
 
 <define as 'stop_load_main_timer' at="_topmost">
@@ -111,36 +111,36 @@
 
 <define as 'get_device_status' at="_topmost">
     <update on $init_status at ".step"  with 1L />
-    <include with $set_status on {status:"获取设备状态", sub_status:' '} />
-    <include with="$start_timeout_timer" />
+    <execute with $set_status on {status:"获取设备状态", sub_status:' '} />
+    <execute with="$start_timeout_timer" />
     <test with $hbdbus.call($inetd, 'getDeviceStatus', '{device:"*"}')>
         <differ>
-            <include with="$stop_timeout_timer" />
-            <include with $report_failed on {status:"获取设备状态失败", sub_status:' '} />
+            <execute with="$stop_timeout_timer" />
+            <execute with $report_failed on {status:"获取设备状态失败", sub_status:' '} />
         </differ>
     </test>
 </define>
 
 <define as 'open_device' at="_topmost">
     <update on $init_status at ".step"  with 2L />
-    <include with $set_status on {status:"打开设备 $init_status.device", sub_status:' '} />
-    <include with="$start_timeout_timer" />
+    <execute with $set_status on {status:"打开设备 $init_status.device", sub_status:' '} />
+    <execute with="$start_timeout_timer" />
     <test with $hbdbus.call($inetd, 'openDevice', "{device: '$init_status.device'}")>
         <differ>
-            <include with="$stop_timeout_timer" />
-            <include with $report_failed on {status:"打开设备失败", sub_status:' '} />
+            <execute with="$stop_timeout_timer" />
+            <execute with $report_failed on {status:"打开设备失败", sub_status:' '} />
         </differ>
     </test>
 </define>
 
 <define as 'config_device' at="_topmost">
     <update on $init_status at ".step"  with 3L />
-    <include with $set_status on {status:"配置网络", sub_status:' '} />
-    <include with="$start_timeout_timer" />
+    <execute with $set_status on {status:"配置网络", sub_status:' '} />
+    <execute with="$start_timeout_timer" />
     <test with $hbdbus.call($inetd, 'configDevice', "{device: '$init_status.device', method:'dhcp'}")>
         <differ>
-            <include with="$stop_timeout_timer" />
-            <include with $report_failed on {status:"配置网络失败", sub_status:' '} />
+            <execute with="$stop_timeout_timer" />
+            <execute with $report_failed on {status:"配置网络失败", sub_status:' '} />
         </differ>
     </test>
 </define>
@@ -168,19 +168,19 @@
 </define>
 
 <define as 'show_main_page' at="_topmost">
-    <include with $set_status on {status:' ', sub_status:' ' } />
-    <include with $start_weather_update />
+    <execute with $set_status on {status:' ', sub_status:' ' } />
+    <execute with $start_weather_update />
 <!--
-    <include with $hide_init_window />
+    <execute with $hide_init_window />
 -->
 </define>
 
 <define as 'test_http_request' at="_topmost">
     <update on $init_status at ".step"  with 4L />
-    <include with $set_status on {status:"检测网络通讯", sub_status:' ' } />
+    <execute with $set_status on {status:"检测网络通讯", sub_status:' ' } />
     <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
 <!--
-    <include with $show_main_page />
+    <execute with $show_main_page />
 -->
 </define>
 
@@ -190,14 +190,14 @@
 
 <define as 'regist_hbdbus_listener' at="_topmost">
     <observe on $hbdbus for 'state:ready'>
-        <include with $set_status on {status:"连接 HBDBus 成功", sub_status:' '} />
-        <include with $get_device_status />
+        <execute with $set_status on {status:"连接 HBDBus 成功", sub_status:' '} />
+        <execute with $get_device_status />
     </observe>
 
     <observe on $hbdbus for 'result:getDeviceStatus'>
-        <include with="$stop_timeout_timer" />
+        <execute with="$stop_timeout_timer" />
         <test with $L.eq($?.retCode, 200)>
-            <include with $set_status on {status:"获取设备状态成功", sub_status:' '} />
+            <execute with $set_status on {status:"获取设备状态成功", sub_status:' '} />
             <init as devices with $DATA.parse($?.retValue) />
             <iterate on $devices.data>
                 <test with $L.streq('caseless', $?.type, 'wired')>
@@ -208,20 +208,20 @@
             </iterate>
 
             <test with $L.streq('case', $init_status.device, "null")>
-                <include with $report_failed on {status:"未找到网络设备", sub_status:' '} />
+                <execute with $report_failed on {status:"未找到网络设备", sub_status:' '} />
                 <differ>
-                    <include with $set_status on {status:"找到网络设备", sub_status:' '} />
+                    <execute with $set_status on {status:"找到网络设备", sub_status:' '} />
 
-                    <include with="$open_device" />
+                    <execute with="$open_device" />
 
                     <catch for `RequestFailed`>
-                        <include with $report_failed on {status:"无法访问网络设备", sub_status:' '} />
+                        <execute with $report_failed on {status:"无法访问网络设备", sub_status:' '} />
                     </catch>
                 </differ>
             </test>
 
             <differ>
-                <include with $report_failed on {status:"获取设备状态失败", sub_status:' '} />
+                <execute with $report_failed on {status:"获取设备状态失败", sub_status:' '} />
             </differ>
         </test>
     </observe>
@@ -233,49 +233,49 @@
     </observe>
 
     <observe on $hbdbus for 'result:openDevice'>
-        <include with="$stop_timeout_timer" />
+        <execute with="$stop_timeout_timer" />
 
         <test with $L.eq($?.retCode, 200)>
             <init as retValue with $DATA.parse($?.retValue) />
             <test with $L.eq($retValue.errCode, 0) >
-                <include with $set_status on {status:"打开设备成功", sub_status:' '} />
-                <include with="$config_device" />
+                <execute with $set_status on {status:"打开设备成功", sub_status:' '} />
+                <execute with="$config_device" />
                 <differ>
-                    <include with $report_failed on {status:"打开设备失败", sub_status:"$retValue.errMsg"} />
+                    <execute with $report_failed on {status:"打开设备失败", sub_status:"$retValue.errMsg"} />
                 </differ>
             </test>
             <differ>
-                <include with $report_failed on {status:"打开设备失败", sub_status:"$retValue.errMsg"} />
+                <execute with $report_failed on {status:"打开设备失败", sub_status:"$retValue.errMsg"} />
             </differ>
         </test>
     </observe>
 
     <observe on $hbdbus for 'result:configDevice'>
-        <include with="$stop_timeout_timer" />
+        <execute with="$stop_timeout_timer" />
 
         <test with $L.eq($?.retCode, 200)>
             <init as retValue with $DATA.parse($?.retValue) />
             <test with $L.eq($retValue.errCode, 0) >
-                <include with $set_status on {status:"配置网络成功", sub_status:' '} />
-                <include with="$test_http_request" />
+                <execute with $set_status on {status:"配置网络成功", sub_status:' '} />
+                <execute with="$test_http_request" />
                 <!--
                 <observe on $hbdbus for 'event:DeviceConfigured'>
-                    <include with="$test_http_request" />
+                    <execute with="$test_http_request" />
                 </observe>
                 -->
                 <catch for `RequestFailed`>
-                    <include with="$start_delay_timer" />
+                    <execute with="$start_delay_timer" />
                     <!--
-                    <include with $report_failed on {status:"无法访问网络", sub_status:' '} />
+                    <execute with $report_failed on {status:"无法访问网络", sub_status:' '} />
                     -->
                 </catch>
 
                 <differ>
-                    <include with $report_failed on {status:"配置网络失败", sub_status:"$retValue.errMsg"} />
+                    <execute with $report_failed on {status:"配置网络失败", sub_status:"$retValue.errMsg"} />
                 </differ>
             </test>
             <differ>
-                <include with $report_failed on {status:"配置网络失败", sub_status:' '} />
+                <execute with $report_failed on {status:"配置网络失败", sub_status:' '} />
             </differ>
         </test>
     </observe>
@@ -303,17 +303,17 @@
         <inherit>
             $STREAM.stdout.writelines(".....................................error: $?")
         </inherit>
-        <include with="$stop_timeout_timer" />
-        <include with $report_failed on {status:$init_status.status, sub_status:"$?.retMsg"} />
+        <execute with="$stop_timeout_timer" />
+        <execute with $report_failed on {status:$init_status.status, sub_status:"$?.retMsg"} />
     </observe>
 </define>
 
 <define as 'open_dbus' at="_topmost">
-    <include with $set_status on {status:"连接 HBDBus", sub_status:' '} />
+    <execute with $set_status on {status:"连接 HBDBus", sub_status:' '} />
     <init as 'hbdbus' at '_root' with $STREAM.open('unix:///var/tmp/hbdbus.sock','default','hbdbus')>
-        <include with $regist_hbdbus_listener />
+        <execute with $regist_hbdbus_listener />
         <catch for `ANY`>
-            <include with $report_failed on {status:"连接 HBDBus 失败", sub_status:' '} />
+            <execute with $report_failed on {status:"连接 HBDBus 失败", sub_status:' '} />
         </catch>
     </init>
 </define>
@@ -321,47 +321,47 @@
 <define as 'do_network_check' at="_topmost">
     <test on $init_status.step >
         <match for="EQ 0" exclusively>
-            <include with $open_dbus />
+            <execute with $open_dbus />
         </match>
         <match for="EQ 1" exclusively>
-            <include with $get_device_status />
+            <execute with $get_device_status />
         </match>
         <match for="EQ 2" exclusively>
-            <include with $open_device />
+            <execute with $open_device />
         </match>
         <match for="EQ 3" exclusively>
-            <include with="$config_device" />
+            <execute with="$config_device" />
         </match>
         <match for="EQ 4" exclusively>
-            <include with="$test_http_request" />
+            <execute with="$test_http_request" />
             <catch for `RequestFailed`>
-                <include with $report_failed on {status:"无法访问网络", sub_status:' '} />
+                <execute with $report_failed on {status:"无法访问网络", sub_status:' '} />
             </catch>
         </match>
     </test>
 </define>
 
 <define as 'report_failed' at="_topmost">
-    <include with $set_status on $? />
-    <include with="$start_delay_timer" />
+    <execute with $set_status on $? />
+    <execute with="$start_delay_timer" />
 </define>
 
 <define as 'request_weather_info' at="_topmost">
     <init as 'weather_info' at='_runner' with undefined />
-    <init as 'weather_info' at '_runner' from 'https://www.yiketianqi.com/free/day?unescape=1&appid=82797486&appsecret=v5iakhCe' async />
+    <init as 'weather_info' at '_runner' from 'http://v1.yiketianqi.com/free/day' with { appid:"45864835",appsecret:"skses52I", unescape:"1"} async />
     <inherit>
         $STREAM.stdout.writelines("call request weather async")
     </inherit>
 </define>
 
 <observe on $TIMERS for 'expired:network_service_timeout_timer'>
-    <include with="$stop_timeout_timer" />
-    <include with $report_failed on {status:"$init_status.status 操作超时", sub_status:' '} />
+    <execute with="$stop_timeout_timer" />
+    <execute with $report_failed on {status:"$init_status.status 操作超时", sub_status:' '} />
 </observe>
 
 <observe on $TIMERS for 'expired:network_service_delay_timer'>
-    <include with="$stop_delay_timer" />
-    <include with $do_network_check />
+    <execute with="$stop_delay_timer" />
+    <execute with $do_network_check />
 </observe>
 
 <observe on $TIMERS for 'expired:network_service_load_main_timer'>
@@ -374,9 +374,9 @@
         </inherit>
     </catch>
     <init as 'hbdbus' at='_runner' with undefined />
-    <include with="$stop_load_main_timer" />
+    <execute with="$stop_load_main_timer" />
     <forget on $TIMERS for 'expired:network_service_load_main_timer' />
-    <include with="$main_hvml" />
+    <execute with="$main_hvml" />
 </observe>
 
 <observe against "weather_info" for "change:displaced" >
@@ -402,12 +402,12 @@
     </inherit>
     <test with $L.eq($init_status.weather, 0)>
         <test with $L.eq($DATA.arith('%', $init_status.tickcount, 5), 0) >
-            <include with $request_weather_info />
+            <execute with $request_weather_info />
         </test>
         <differ>
             <update on $init_status at ".tickcount" with 0L />
-            <include with $stop_weather_update />
-            <include with $start_weather_refresh />
+            <execute with $stop_weather_update />
+            <execute with $start_weather_refresh />
         </differ>
     </test>
 </observe>
@@ -417,15 +417,15 @@
         $STREAM.stdout.writelines("#####> weather refresh timer")
     </inherit>
     <update on $init_status at ".weather" with 0L />
-    <include with $start_weather_update />
+    <execute with $start_weather_update />
 </observe>
 
 
 <init as 'network_state' from 'http://ws.fmsoft.cn/tools/echo.php' />
-<include with $show_main_page />
+<execute with $show_main_page />
 
 <catch for `RequestFailed`>
-    <include with="$do_network_check" />
+    <execute with="$do_network_check" />
 </catch>
 
 </hvml>

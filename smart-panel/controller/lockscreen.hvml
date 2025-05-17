@@ -1,4 +1,4 @@
-<init as 'weather_map'>
+<init as 'weather_map' at "_runner">
     {
         bingbao:    [! 'bi bi-cloud-sleet-fill',            'bg-weather-sleet' ,'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-sleet-fill.svg'],
         lei:        [! 'bi bi-cloud-lightning-rain-fill',   'bg-weather-lightning' ,'hvml://localhost/_renderer/_builtin/-/assets/bootstrap-icons-1.10.5/cloud-lightning-rain-fill.svg'],
@@ -12,7 +12,7 @@
     }
 </init>
 
-<init as "lockscreen_week">
+<init as "lockscreen_week" at ="_runner">
     [
         "星期日",
         "星期一",
@@ -33,7 +33,7 @@
 </define>
 
 <define as 'post_event_to_main' at="_topmost">
-    <include with $logger on "##### lockscreen post event: $?  $SYS.time" />
+    <execute with $logger on "##### lockscreen post event: $?  $SYS.time" />
     <test with $lockscreen_option.enablePostEvent >
         <request on="/-/main/CHAN/chanMain" to="post" with=$2? />
     </test>
@@ -48,7 +48,7 @@
     }
     </request>
     <update on "$lockscreen_option" at '.locked' with false />
-    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'unlock'} />
+    <execute with $post_event_to_main on {'type':'lockscreenState', 'name':'unlock'} />
 </define>
 
 <define as 'lock' at="_topmost">
@@ -60,11 +60,11 @@
     }
     </request>
     <update on "$lockscreen_option" at '.locked' with true />
-    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
+    <execute with $post_event_to_main on {'type':'lockscreenState', 'name':'lock'} />
 </define>
 
 <define as 'on_lockscreen_event' at="_topmost">
-    <include with $logger on "##### on_lockscreen_event: $?" />
+    <execute with $logger on "##### on_lockscreen_event: $?" />
     <test on $?.name>
         <match for "AS 'enableUnlock'" exclusively>
             <update on "$lockscreen_option" at '.enableUnlock' with true />
@@ -72,10 +72,10 @@
             <request on "#id__unlock__btn" to 'call:ELEMENT.classList.add(ARG)' with 'text-light' noreturn />
         </match>
         <match for "AS 'lock'" exclusively>
-            <include with $lock />
+            <execute with $lock />
         </match>
         <match for "AS 'unlock'" exclusively>
-            <include with $unlock />
+            <execute with $unlock />
         </match>
         <match for "AS 'themeToDark'" exclusively>
             <update on $theme_option at ".user" with 1L />
@@ -95,7 +95,7 @@
 </define>
 
 <define as 'on_music_player_event' at="_topmost">
-    <include with $logger on "##### on_music_player_event: $?" />
+    <execute with $logger on "##### on_music_player_event: $?" />
     <test on $?.name>
         <match for "AS 'playerState'" exclusively>
             <test on $3?.playState>
@@ -145,10 +145,10 @@
 </define>
 
 <define as 'on_channel_event' at="_topmost">
-    <include with $logger on "#####  lockscreen Got a message: $? " />
+    <execute with $logger on "#####  lockscreen Got a message: $? " />
     <test on $?.type>
         <match for "AS 'weather'" exclusively>
-            <include with $logger on "##### Got a weather change message: $3?.value.wea_img" />
+            <execute with $logger on "##### Got a weather change message: $3?.value.wea_img" />
 
             <update on '#theWeatherIcon' to 'displace' at 'attr.src' with $weather_map[$3?.value.wea_img][2] />
             <update on '#theWeatherTemp' to 'displace' at 'textContent' with $3?.value.tem />
@@ -162,11 +162,11 @@
         </match>
 
         <match for "AS 'lockscreen'" exclusively>
-            <include with $on_lockscreen_event on $3? />
+            <execute with $on_lockscreen_event on $3? />
         </match>
 
         <match for "AS 'musicPlayer'" exclusively>
-            <include with $on_music_player_event on $3? />
+            <execute with $on_music_player_event on $3? />
         </match>
 
         <match for="ANY">
@@ -175,11 +175,11 @@
 </define>
 
 <observe on $chIn for 'innerEvent'>
-    <include with $on_channel_event on $? />
+    <execute with $on_channel_event on $? />
 </observe>
 
 <observe on $chIn for 'receivable'>
-    <include with $logger on "#####  lockscreen recv count ($chIn.len) " />
+    <execute with $logger on "#####  lockscreen recv count ($chIn.len) " />
     <init as 'dataArray' temp>
         []
     </init>
@@ -192,18 +192,18 @@
     </iterate>
 
     <iterate on $dataArray>
-        <include with $on_channel_event on $? />
+        <execute with $on_channel_event on $? />
     </iterate>
 </observe>
 
-<init as 'lockscreen_hm'>
+<init as 'lockscreen_hm' at "_runner">
     {
         "hour": 0,
         "min": 0
     }
 </init>
 
-<init as 'lockscreen_mdw'>
+<init as 'lockscreen_mdw' at "_runner">
     {
         "mon": 0,
         "mday": 0,
@@ -228,13 +228,13 @@
             <test with $L.ne($running_state.theme, 2)>↵
                 <update on $running_state at ".theme" with 2L />↵
                 <update on '#theMainBody' at 'attr.data-bs-theme' with 'light' />
-                <include with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeLight'} />
+                <execute with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeLight'} />
             </test>↵
             <differ>↵
                 <test with $L.ne($running_state.theme, 1)>↵
                     <update on $running_state at ".theme" with 1L />↵
                     <update on '#theMainBody' at 'attr.data-bs-theme' with 'dark' />
-                    <include with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeDark'} />
+                    <execute with $post_event_to_main on {'type':'lockscreenState', 'name':'autoSwitchThemeDark'} />
                 </test>↵
             </differ>↵
         </test>↵
@@ -242,17 +242,17 @@
 </observe>
 
 <observe on '#theLockScreen' for 'locked'>
-    <include with $logger on "##### screen locked" />
+    <execute with $logger on "##### screen locked" />
 </observe>
 
 <observe on '#theLockScreen' for 'unlocked'>
-    <include with $logger on "##### screen unlocked" />
+    <execute with $logger on "##### screen unlocked" />
 </observe>
 
 <observe on '.time-to-lock-screen' for 'click'>
     <choose on $DOC.query("#theLockScreen").attr('data-time-to-lock') >
         <test with $L.ne($?, $2?.originValue) >
-            <include with $logger on "##### Changing time-to-lock to $3?.originValue $3?.originId" />
+            <execute with $logger on "##### Changing time-to-lock to $3?.originValue $3?.originId" />
 
             <update on '#theLockScreen' at 'attr.data-time-to-lock' with "$3?.originValue" />
             <request on "#theTimeToLock{$?} span" to 'call:ELEMENT.classList.add(ARG)' with 'd-none' noreturn />
@@ -264,49 +264,49 @@
 
 <observe on "#id__unlock__btn" for "click">
     <test with $lockscreen_option.enableUnlock >
-        <include with $unlock />
+        <execute with $unlock />
         <differ>
-            <include with $logger on "##### not allow unlock" />
+            <execute with $logger on "##### not allow unlock" />
         </differ>
     </test>
 </observe>
 
 
 <observe on '#id_music_switch_to_prev' for 'click'>
-    <include with $logger on "##### music-switch-to-prev clicked" />
-    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
+    <execute with $logger on "##### music-switch-to-prev clicked" />
+    <execute with $post_event_to_main on {'type':'musicPlayer', 'name':'prev'} />
 </observe>
 
 <observe on '#id_music_switch_to_next' for 'click'>
-    <include with $logger on "##### music-switch-to-next clicked" />
-    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
+    <execute with $logger on "##### music-switch-to-next clicked" />
+    <execute with $post_event_to_main on {'type':'musicPlayer', 'name':'next'} />
 </observe>
 
 <observe on '#id_music_play_or_pause' for 'click'>
-    <include with $logger on "##### music-play-or-pause clicked" />
-    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
+    <execute with $logger on "##### music-play-or-pause clicked" />
+    <execute with $post_event_to_main on {'type':'musicPlayer', 'name':'playOrPause'} />
 </observe>
 
 <observe on '.range-for-music-volume' for 'change'>
-    <include with $logger on "##### music-player volume change $?.targetValue" />
-    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'volume', 'value':$?.targetValue} />
+    <execute with $logger on "##### music-player volume change $?.targetValue" />
+    <execute with $post_event_to_main on {'type':'musicPlayer', 'name':'volume', 'value':$?.targetValue} />
 </observe>
 
 <observe on '#id__volume__mute' for 'click'>
-    <include with $logger on "##### music-player volumn mute" />
-    <include with $post_event_to_main on {'type':'musicPlayer', 'name':'mute'} />
+    <execute with $logger on "##### music-player volumn mute" />
+    <execute with $post_event_to_main on {'type':'musicPlayer', 'name':'mute'} />
 </observe>
 
 
 <observe on '.message-title' for 'click'>
-    <include with $unlock />
+    <execute with $unlock />
 </observe>
 
 <observe on $CRTN for 'rdrState:idle' >
-    <include with $logger on "##### idle $? " />
+    <execute with $logger on "##### idle $? " />
     <test with $L.and($L.ge($?, $lockscreen_option.lockTimeOut), $L.not($lockscreen_option.locked)) >↵
-        <include with $lock />
-        <include with $logger on "##### idle $? call locked" />
+        <execute with $lock />
+        <execute with $logger on "##### idle $? call locked" />
     </test>
 </observe>
 

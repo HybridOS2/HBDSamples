@@ -1,4 +1,4 @@
-<define as 'switchToMusic'>
+<define as 'switchToMusic' at '_runner'>
     <inherit>
         $STREAM.stdout.writelines("Switching to music #$item")
     </inherit>
@@ -15,7 +15,7 @@
     </test>
 </define>
 
-<define as 'switchToPrevMusic'>
+<define as 'switchToPrevMusic' at '_runner'>
     <init as 'prev' with $DATA.arith('-', $music_info.current, 1L) temp />
     <test with $L.lt($prev, 0L)>
         <init as 'prev' at '_grandparent' with $DATA.arith('-', $DATA.count($music_info.list), 1L) temp />
@@ -32,7 +32,7 @@
     <call on $switchToPrevMusic />
 </observe>
 
-<define as 'switchToNextMusic'>
+<define as 'switchToNextMusic' at '_runner'>
     <init as 'next' with $DATA.arith('%', $DATA.arith('+', $music_info.current, 1L), $DATA.count($music_info.list)) temp />
 
     <call on $switchToMusic with { item: $next } />

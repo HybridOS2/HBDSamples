@@ -1,4 +1,4 @@
-<init as="weatherMainData">
+<init as="weatherMainData" at="_runner">
     {
         city:"",
         current:{},
@@ -112,6 +112,15 @@
 
 <!-- **************天气卡片点击 开始****************** -->
 <observe on="#weatherCard" for="click">
+    <!--
+    <test with="$L.eq($wifiInfo.isConnected,true)">
+        <inherit>
+            $STREAM.stdout.writelines("开始调用天气接口")
+        </inherit>
+        <init as 'weatherSource' at='_runner' with undefined />
+        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:82797486, appsecret:'v5iakhCe'} via="GET" async />
+    </test>
+    -->
     <update on="$DOC.query('.weatherInfo')" at="attr.class" with="dialog weatherInfo popIn show" />
 </observe>
 <!-- **************天气卡片点击 结束****************** -->
@@ -148,6 +157,15 @@
     <update on="$DOC.query('.muiscList')" at="attr.class" with="dialog muiscList popIn show" />
 </observe>
 <observe on=".menu-weather" for="click">
+    <!--
+    <test with="$L.eq($wifiInfo.isConnected,true)">
+        <inherit>
+            $STREAM.stdout.writelines("开始调用天气接口")
+        </inherit>
+        <init as 'weatherSource' at='_runner' with undefined />
+        <init as="weatherSource" at="_runner" from="http://v1.yiketianqi.com/free/week" with={unescape:1,appid:45864835, appsecret:'skses52I'} via="GET" async />
+    </test>
+    -->
     <update on="$DOC.query('.weatherInfo')" at="attr.class" with="dialog weatherInfo popIn show" />
 </observe>
 <observe on=".menu-photo" for="click">

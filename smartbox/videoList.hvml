@@ -1,4 +1,4 @@
-<init as "videoData" from "file://$SYS.cwd/json/video-data.json" />
+<init as "videoData" from "file://$SYS.cwd/json/video-data.json"  at="_runner"/>
 <archetype name="video_item">
     <div id="$?.id" hvml-events="click" class="video-item" data="$?.url" cover="$?.cover">
         <div class="video-cover">
@@ -21,7 +21,7 @@
 </div>
 <define as="videoPlayer" from="file://$SYS.cwd/videoPlayer.hvml" />
 <div class="dialog videoPlayer">
-    <include with="$videoPlayer" />
+    <execute with="$videoPlayer" />
 </div>
 <observe on=".video-content .video-item" for="click">
     <init as index with $?.targetId />
