@@ -23,7 +23,7 @@ The `access-control` is a access control sample application implemented in HTML 
 * smartbox
 
 ```SHELL
-$ sudo mkdir -p app
+$ sudo mkdir -p /app
 $ sudo cp -r smartbox /app/cn.fmsoft.hybridos.settings
 $ sudo ln -sf  /app/cn.fmsoft.hybridos.settings /app/smartbox
 $ sudo chown -R $USER /app/cn.fmsoft*
@@ -35,7 +35,7 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.settings -r radio -v 
 * smart-panel
 
 ```SHELL
-$ sudo mkdir -p app
+$ sudo mkdir -p /app
 $ sudo cp -r smart-panel /app/cn.fmsoft.hybridos.smartcontrolpanel
 $ sudo chown -R $USER /app/cn.fmsoft*
 $ xguipro &
@@ -46,7 +46,7 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.smartcontrolpane -r s
 * instrument
 
 ```SHELL
-$ sudo mkdir -p app
+$ sudo mkdir -p /app
 $ sudo cp -r instrument /app/cn.fmsoft.hybridos.instrument
 $ sudo chown -R $USER /app/cn.fmsoft*
 $ xguipro &
@@ -57,7 +57,7 @@ $ purc  -c socket -d remote -s false -a cn.fmsoft.hybridos.instrument -r instrum
 * access-control
 
 ```SHELL
-$ sudo mkdir -p app
+$ sudo mkdir -p /app
 $ sudo cp -r access-control /app/cn.fmsoft.hybridos.ac
 $ sudo chown -R $USER /app/cn.fmsoft*
 $ cd /app/cn.fmsoft.hybridos.ac
@@ -75,7 +75,7 @@ $ ./install.sh
 
 ## Copying
 
-Copyright (C) 2023 [FMSoft Technologies]
+Copyright (C) 2023 ~ 2025 [FMSoft Technologies]
 
 All programs are licensed under the Apache License, Version 2.0.
 
